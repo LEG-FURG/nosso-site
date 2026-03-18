@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEG · FURG — Dashboard</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="global.css">
+  <script src="https://kit.fontawesome.com/0dd8fdca34.js" crossorigin="anonymous"></script>
+  <style>
+    /* ──────────────────────────────
+       LAYOUT GERAL
+    ────────────────────────────── */
+    body { background: var(--cinza-100); }
+
+    .dash-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ──────────────────────────────
+       SIDEBAR
+    ────────────────────────────── */
+    .sidebar {
+      width: 272px;
+      background: var(--cinza-800);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 400;
+      transition: transform var(--trans-slow);
+      box-shadow: 4px 0 32px rgba(0,0,0,.18);
+    }
+
+    .sidebar-header {
+      padding: 28px 24px 22px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(242,203,87,.4);
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo-txt h2 {
+      font-family: var(--fonte-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ouro-claro);
+      line-height: 1;
+      letter-spacing: .04em;
+    }
+
+    .sidebar-logo-txt span {
+      font-size: .65rem;
+      color: rgba(255,255,255,.38);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .sidebar-close {
+      display: none;
+      background: none;
+      color: rgba(255,255,255,.4);
+      font-size: 1rem;
+      padding: 4px;
+      transition: color var(--trans);
+      margin-left: auto;
+      cursor: pointer;
+      border: none;
+    }
+    .sidebar-close:hover { color: white; }
+
+    /* Seletor de ano */
+    .sidebar-ano {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .sidebar-ano-label {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.3);
+      margin-bottom: 10px;
+    }
+
+    .ano-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .ano-btn {
+      padding: 9px 6px;
+      border-radius: var(--r-md);
+      border: 1.5px solid rgba(242,203,87,.2);
+      background: transparent;
+      color: rgba(255,255,255,.45);
+      font-family: var(--fonte-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--trans);
+      text-align: center;
+    }
+
+    .ano-btn:hover {
+      border-color: var(--ouro-claro);
+      color: var(--ouro-claro);
+      background: rgba(242,203,87,.07);
+    }
+
+    .ano-btn.ativo {
+      background: var(--ouro-claro);
+      border-color: var(--ouro-claro);
+      color: var(--vinho-esc);
+      box-shadow: 0 3px 12px rgba(242,203,87,.25);
+    }
+
+    /* Nav */
+    .sidebar-nav {
+      flex: 1;
+      padding: 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 14px;
+      border-radius: var(--r-md);
+      font-size: .88rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.5);
+      cursor: pointer;
+      transition: all var(--trans);
+      text-decoration: none;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: var(--fonte-corpo);
+    }
+
+    .nav-item i { width: 16px; text-align: center; font-size: .85rem; flex-shrink: 0; }
+
+    .nav-item:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.85); }
+
+    .nav-item.ativo {
+      background: rgba(140,31,31,.5);
+      color: var(--branco);
+      font-weight: 600;
+      border-left: 2px solid var(--ouro-claro);
+    }
+
+    /* Seção de separação */
+    .nav-sep {
+      font-size: .62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.2);
+      padding: 14px 14px 6px;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--vinho);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ouro-claro);
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+
+    .user-nome { display: block; font-size: .88rem; font-weight: 600; color: var(--branco); }
+    .user-role { font-size: .7rem; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .07em; }
+
+    /* ──────────────────────────────
+       MAIN WRAPPER
+    ────────────────────────────── */
+    .main-wrap {
+      margin-left: 272px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      transition: margin-left var(--trans-slow);
+    }
+
+    /* Topbar */
+    .topbar {
+      height: 68px;
+      background: var(--branco);
+      border-bottom: 1px solid var(--cinza-200);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--sombra-sm);
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      color: var(--cinza-600);
+      padding: 8px;
+      border-radius: var(--r-sm);
+      transition: all var(--trans);
+      cursor: pointer;
+    }
+    .menu-toggle:hover { background: var(--cinza-100); color: var(--vinho); }
+
+    .topbar-titulo {
+      font-family: var(--fonte-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--texto);
+      flex: 1;
+    }
+
+    .topbar-ano-pill {
+      padding: 5px 16px;
+      background: var(--ouro-pale);
+      color: var(--ouro);
+      border: 1px solid rgba(200,148,26,.25);
+      border-radius: 40px;
+      font-size: .78rem;
+      font-weight: 700;
+      font-family: var(--fonte-display);
+      letter-spacing: .04em;
+    }
+
+    .btn-dash-novo {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 20px;
+      background: var(--vinho);
+      color: var(--branco);
+      border: none;
+      border-radius: var(--r-md);
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--trans);
+      box-shadow: var(--sombra-vinho);
+      font-family: var(--fonte-corpo);
+    }
+
+    .btn-dash-novo:hover {
+      background: var(--vinho-claro);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(140,31,31,.35);
+    }
+
+    .btn-topbar-icon {
+      background: none;
+      border: none;
+      color: var(--cinza-400);
+      font-size: 1rem;
+      padding: 8px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: all var(--trans);
+    }
+    .btn-topbar-icon:hover { background: var(--cinza-100); color: var(--vinho); }
+
+    /* ──────────────────────────────
+       CONTEÚDO
+    ────────────────────────────── */
+    .content {
+      padding: 32px;
+      flex: 1;
+    }
+
+    /* Views */
+    .view { animation: viewIn .3s ease both; }
+    .oculto { display: none !important; }
+
+    @keyframes viewIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cabeçalho da view */
+    .view-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .view-head-eyebrow {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ouro);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .view-head-eyebrow::before {
+      content: '';
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--ouro-claro);
+      border-radius: 2px;
+    }
+
+    .view-head h2 {
+      font-family: var(--fonte-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--texto);
+      line-height: 1.15;
+    }
+
+    .view-head h2 em { font-style: italic; color: var(--vinho); }
+    .view-head p { font-size: .88rem; color: var(--cinza-600); margin-top: 4px; }
+
+    /* STATS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--branco);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      border: 1px solid var(--cinza-200);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--sombra-sm);
+      transition: all var(--trans);
+    }
+
+    .stat-card:hover { box-shadow: var(--sombra-md); transform: translateY(-2px); }
+
+    .stat-ico {
+      width: 46px;
+      height: 46px;
+      border-radius: var(--r-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .stat-ico.vinho  { background: rgba(140,31,31,.1); color: var(--vinho); }
+    .stat-ico.ouro   { background: var(--ouro-pale); color: var(--ouro); }
+    .stat-ico.cinza  { background: var(--cinza-100); color: var(--cinza-600); }
+
+    .stat-num {
+      font-family: var(--fonte-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--texto);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--cinza-400);
+      margin-top: 3px;
+    }
+
+    /* GRID DE POSTS */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* Card de post */
+    .post-card {
+      background: var(--branco);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      border: 1px solid var(--cinza-200);
+      box-shadow: var(--sombra-sm);
+      transition: all var(--trans-slow);
+      animation: cardIn .35s ease both;
+    }
+
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(18px) scale(.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    .post-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sombra-md);
+      border-color: rgba(140,31,31,.15);
+    }
+
+    .post-card-img { width: 100%; height: 170px; object-fit: cover; display: block; }
+
+    .post-card-img-vazio {
+      width: 100%;
+      height: 170px;
+      background: linear-gradient(135deg, var(--cinza-100), var(--cinza-200));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--cinza-400);
+    }
+
+    .post-card-body { padding: 18px 20px; }
+
+    .post-card-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--ouro-pale);
+      color: var(--ouro);
+      border: 1px solid rgba(200,148,26,.2);
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      padding: 3px 10px;
+      border-radius: 40px;
+      margin-bottom: 10px;
+    }
+
+    .post-card-titulo {
+      font-family: var(--fonte-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--texto);
+      margin-bottom: 8px;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .post-card-texto {
+      font-size: .83rem;
+      color: var(--cinza-600);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .post-card-data {
+      font-size: .73rem;
+      color: var(--cinza-400);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    .post-card-acoes {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--cinza-200);
+      padding-top: 14px;
+    }
+
+    .btn-editar, .btn-excluir {
+      flex: 1;
+      padding: 9px;
+      border-radius: var(--r-sm);
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all var(--trans);
+      font-family: var(--fonte-corpo);
+    }
+
+    .btn-editar {
+      background: var(--cinza-100);
+      color: var(--cinza-600);
+      border: 1.5px solid var(--cinza-200);
+    }
+    .btn-editar:hover { background: var(--vinho); color: var(--branco); border-color: var(--vinho); }
+
+    .btn-excluir {
+      background: rgba(140,31,31,.06);
+      color: var(--vinho);
+      border: 1.5px solid rgba(140,31,31,.2);
+    }
+    .btn-excluir:hover { background: var(--vinho); color: var(--branco); border-color: var(--vinho); }
+
+    /* Empty state */
+    .empty-state {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 72px 24px;
+      background: var(--branco);
+      border-radius: var(--r-xl);
+      border: 2px dashed var(--cinza-200);
+    }
+
+    .empty-ico {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--cinza-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--cinza-400);
+      margin: 0 auto 18px;
+    }
+
+    .empty-state h3 {
+      font-family: var(--fonte-display);
+      font-size: 1.4rem;
+      color: var(--texto);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p { font-size: .88rem; color: var(--cinza-400); margin-bottom: 22px; }
+
+    /* ──────────────────────────────
+       FORMULÁRIO DE POST
+    ────────────────────────────── */
+    .form-card {
+      background: var(--branco);
+      border-radius: var(--r-xl);
+      padding: 32px 36px;
+      border: 1px solid var(--cinza-200);
+      box-shadow: var(--sombra-sm);
+      max-width: 860px;
+    }
+
+    /* Seletor de ano no form */
+    .form-ano-bloco {
+      background: var(--ouro-pale);
+      border: 1px solid rgba(200,148,26,.25);
+      border-radius: var(--r-lg);
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+
+    .form-ano-bloco p {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ouro);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-ano-radios { display: flex; gap: 10px; }
+
+    .ano-radio-label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border-radius: var(--r-md);
+      border: 2px solid rgba(140,31,31,.2);
+      cursor: pointer;
+      transition: all var(--trans);
+      font-family: var(--fonte-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cinza-600);
+      background: var(--branco);
+    }
+
+    .ano-radio-label input { display: none; }
+    .ano-radio-label:hover { border-color: var(--vinho); color: var(--vinho); }
+    .ano-radio-label.sel { background: var(--vinho); border-color: var(--vinho); color: var(--branco); box-shadow: var(--sombra-vinho); }
+
+    /* Campos do form */
+    .f-grupo {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 20px;
+    }
+
+    .f-label {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--cinza-600);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .f-label i { color: var(--vinho); font-size: .68rem; }
+
+    .f-input, .f-textarea {
+      background: var(--cinza-100);
+      border: 1.5px solid var(--cinza-200);
+      border-radius: var(--r-md);
+      padding: 12px 16px;
+      font-size: .93rem;
+      color: var(--texto);
+      font-family: var(--fonte-corpo);
+      outline: none;
+      transition: all var(--trans);
+      width: 100%;
+    }
+
+    .f-input:focus, .f-textarea:focus {
+      border-color: var(--vinho);
+      background: var(--branco);
+      box-shadow: 0 0 0 3px rgba(140,31,31,.08);
+    }
+
+    .f-input.erro { border-color: var(--vinho); }
+    .f-textarea { resize: vertical; min-height: 120px; }
+    .f-erro { font-size: .75rem; color: var(--vinho); font-weight: 600; min-height: 14px; display: block; }
+
+    .dois-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+    /* Upload */
+    .upload-zone {
+      border: 2px dashed var(--cinza-200);
+      border-radius: var(--r-md);
+      padding: 22px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--trans);
+      position: relative;
+      min-height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--cinza-100);
+    }
+
+    .upload-zone:hover, .upload-zone.drag { border-color: var(--vinho); background: rgba(140,31,31,.04); }
+
+    .file-input {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      border: none !important; padding: 0 !important; background: none !important;
+    }
+
+    .upload-ph { pointer-events: none; }
+    .upload-ph i { font-size: 1.8rem; color: var(--cinza-400); display: block; margin-bottom: 8px; }
+    .upload-ph span { font-size: .85rem; color: var(--cinza-600); display: block; }
+    .upload-ph small { font-size: .75rem; color: var(--cinza-400); }
+
+    .img-preview { width: 100%; height: 150px; object-fit: cover; border-radius: var(--r-sm); }
+
+    .btn-remover-img {
+      position: absolute; top: 8px; right: 8px;
+      width: 26px; height: 26px;
+      background: var(--vinho); color: var(--branco);
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; cursor: pointer;
+      transition: all var(--trans); z-index: 5;
+    }
+    .btn-remover-img:hover { background: var(--vinho-claro); transform: scale(1.1); }
+
+    .btn-url-prev {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .78rem; font-weight: 600;
+      color: var(--vinho); background: none;
+      border: 1.5px solid rgba(140,31,31,.3);
+      border-radius: var(--r-sm); padding: 7px 14px;
+      cursor: pointer; margin-top: 8px;
+      transition: all var(--trans); font-family: var(--fonte-corpo);
+    }
+    .btn-url-prev:hover { background: var(--vinho); color: var(--branco); }
+
+    /* Ações do form */
+    .form-acoes {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding-top: 24px;
+      border-top: 1px solid var(--cinza-200);
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-cancelar {
+      padding: 11px 24px;
+      background: transparent;
+      color: var(--cinza-600);
+      border: 1.5px solid var(--cinza-200);
+      border-radius: var(--r-md);
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: all var(--trans); font-family: var(--fonte-corpo);
+    }
+    .btn-cancelar:hover { border-color: var(--vinho); color: var(--vinho); }
+
+    .btn-salvar {
+      padding: 11px 28px;
+      background: var(--vinho);
+      color: var(--branco);
+      border: none;
+      border-radius: var(--r-md);
+      font-family: var(--fonte-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      transition: all var(--trans);
+      box-shadow: var(--sombra-vinho);
+    }
+    .btn-salvar:hover { background: var(--vinho-claro); transform: translateY(-2px); }
+
+    /* ──────────────────────────────
+       MODAL
+    ────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(28,25,21,.55);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      animation: fadeIn .2s ease;
+    }
+
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+    .modal {
+      background: var(--branco);
+      border-radius: var(--r-xl);
+      padding: 40px 32px;
+      max-width: 390px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--sombra-lg);
+      animation: scaleIn .22s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    @keyframes scaleIn { from { opacity:0; transform:scale(.88); } to { opacity:1; transform:scale(1); } }
+
+    .modal-ico {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(140,31,31,.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--vinho);
+      margin: 0 auto 20px;
+    }
+
+    .modal h3 {
+      font-family: var(--fonte-display);
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--texto); margin-bottom: 10px;
+    }
+
+    .modal p { font-size: .88rem; color: var(--cinza-600); margin-bottom: 28px; line-height: 1.6; }
+
+    .modal-acoes { display: flex; gap: 10px; }
+    .modal-acoes button {
+      flex: 1; padding: 12px; border-radius: var(--r-md);
+      font-weight: 600; font-size: .88rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      gap: 7px; transition: all var(--trans); font-family: var(--fonte-corpo);
+    }
+
+    .btn-modal-cancel {
+      background: var(--cinza-100); color: var(--cinza-600);
+      border: 1.5px solid var(--cinza-200);
+    }
+    .btn-modal-cancel:hover { border-color: var(--cinza-600); color: var(--texto); }
+
+    .btn-modal-confirmar {
+      background: var(--vinho); color: var(--branco); border: none;
+      box-shadow: var(--sombra-vinho);
+    }
+    .btn-modal-confirmar:hover { background: var(--vinho-claro); transform: translateY(-1px); }
+
+    /* ──────────────────────────────
+       OVERLAY + TOAST
+    ────────────────────────────── */
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.45); z-index: 350;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-overlay.show { display: block; }
+
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      padding: 13px 20px; border-radius: var(--r-lg);
+      color: var(--branco); font-weight: 600; font-size: .88rem;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: var(--sombra-lg);
+      transform: translateY(80px); opacity: 0;
+      transition: all var(--trans-slow); z-index: 9999;
+      max-width: 340px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #27ae60; }
+    .toast.error   { background: var(--vinho); }
+    .toast.aviso   { background: var(--ouro); color: var(--vinho-esc); }
+
+    /* ──────────────────────────────
+       RESPONSIVO
+    ────────────────────────────── */
+    @media (max-width: 960px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.aberta { transform: translateX(0); }
+      .sidebar-close { display: flex; }
+      .main-wrap { margin-left: 0; }
+      .menu-toggle { display: flex; }
+      .content { padding: 20px 16px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .dois-col { grid-template-columns: 1fr; }
+      .form-card { padding: 22px 20px; }
+    }
+
+    @media (max-width: 600px) {
+      .stats-row { grid-template-columns: 1fr; }
+      .posts-grid { grid-template-columns: 1fr; }
+      .view-head { flex-direction: column; align-items: stretch; }
+      .view-head .btn-dash-novo { width: 100%; justify-content: center; }
+      .form-acoes { flex-direction: column; }
+      .form-acoes button { width: 100%; justify-content: center; }
+      .topbar { padding: 0 16px; }
+      .toast { bottom: 14px; right: 12px; left: 12px; max-width: none; }
+      .modal-acoes { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="dash-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="imagens/logo-imagem.jpeg" alt="LEG" class="sidebar-logo-img"
+             onerror="this.style.display='none'">
+        <div class="sidebar-logo-txt">
+          <h2>LEG · FURG</h2>
+          <span>Painel Admin</span>
+        </div>
+        <button class="sidebar-close" id="fecharSidebar"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <!-- Seletor de ano -->
+    <div class="sidebar-ano">
+      <div class="sidebar-ano-label"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> Ano ativo</div>
+      <div class="ano-btns">
+        <button class="ano-btn ativo" data-ano="2025">2025</button>
+        <button class="ano-btn" data-ano="2026">2026</button>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-sep">Gestão</span>
+      <button class="nav-item ativo" data-view="posts">
+        <i class="fa-solid fa-newspaper"></i> Posts
+      </button>
+      <button class="nav-item" data-view="novo">
+        <i class="fa-solid fa-plus"></i> Novo Post
+      </button>
+
+      <span class="nav-sep" style="margin-top:8px;">Pesquisas</span>
+      <button class="nav-item" data-view="pesquisas">
+        <i class="fa-solid fa-microscope"></i> Pesquisas
+      </button>
+      <button class="nav-item" data-view="nova-pesquisa">
+        <i class="fa-solid fa-flask"></i> Nova Pesquisa
+      </button>
+
+      <span class="nav-sep" style="margin-top:8px;">Site</span>
+      <a href="index.html" class="nav-item" target="_blank">
+        <i class="fa-solid fa-globe"></i> Ver site
+      </a>
+      <button class="nav-item" id="btnLogout">
+        <i class="fa-solid fa-right-from-bracket"></i> Sair
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+        <div>
+          <span class="user-nome" id="userNome">Admin</span>
+          <span class="user-role">Administrador</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── MAIN ── -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-titulo" id="topbarTitulo">Posts · 2025</div>
+      <span class="topbar-ano-pill" id="topbarAnoPill">2025</span>
+      <button class="btn-dash-novo" id="topbarNovo">
+        <i class="fa-solid fa-plus"></i> Novo Post
+      </button>
+      <button class="btn-topbar-icon" id="topbarLogout" title="Sair">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </header>
+
+    <main class="content">
+
+      <!-- ── VIEW POSTS ── -->
+      <section class="view" id="viewPosts">
+        <div class="view-head">
+          <div>
+            <div class="view-head-eyebrow"><i class="fa-solid fa-newspaper"></i> Gerenciamento</div>
+            <h2 id="tituloListagem">Posts de <em>2025</em></h2>
+            <p>Crie, edite e remova publicações da LEG</p>
+          </div>
+          <button class="btn-dash-novo" id="btnNovoPosts">
+            <i class="fa-solid fa-plus"></i> Criar Post
+          </button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-ico vinho"><i class="fa-solid fa-newspaper"></i></div>
+            <div>
+              <div class="stat-num" id="statPostsAno">0</div>
+              <div class="stat-lbl">Posts do ano</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico ouro"><i class="fa-solid fa-layer-group"></i></div>
+            <div>
+              <div class="stat-num" id="statTotal">0</div>
+              <div class="stat-lbl">Total geral</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico cinza"><i class="fa-regular fa-clock"></i></div>
+            <div>
+              <div class="stat-num" style="font-size:1rem;line-height:1.4;" id="statUltima">—</div>
+              <div class="stat-lbl">Última publicação</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="posts-grid" id="postsGrid"></div>
+      </section>
+
+      <!-- ── VIEW FORM ── -->
+      <section class="view oculto" id="viewForm">
+        <div class="view-head">
+          <div>
+            <div class="view-head-eyebrow"><i class="fa-solid fa-pen-nib"></i> Publicação</div>
+            <h2 id="formTitulo">Novo <em>Post</em></h2>
+            <p id="formSub">Preencha os dados da publicação</p>
+          </div>
+          <button class="btn-cancelar" id="btnVoltar">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+          </button>
+        </div>
+
+        <div class="form-card">
+          <form id="postForm" novalidate>
+            <input type="hidden" id="postId">
+
+            <!-- Seletor de ano -->
+            <div class="form-ano-bloco">
+              <p><i class="fa-regular fa-calendar"></i> Em qual ano este post será publicado?</p>
+              <div class="form-ano-radios">
+                <label class="ano-radio-label sel" id="labelAno25">
+                  <input type="radio" name="postAno" value="2025" id="radio25" checked>
+                  <i class="fa-regular fa-calendar"></i> 2025
+                </label>
+                <label class="ano-radio-label" id="labelAno26">
+                  <input type="radio" name="postAno" value="2026" id="radio26">
+                  <i class="fa-regular fa-calendar"></i> 2026
+                </label>
+              </div>
+            </div>
+
+            <div class="f-grupo">
+              <label class="f-label" for="postTitulo"><i class="fa-solid fa-heading"></i> Título *</label>
+              <input type="text" id="postTitulo" class="f-input" placeholder="Título da publicação..." maxlength="120">
+              <span class="f-erro" id="erroTitulo"></span>
+            </div>
+
+            <div class="f-grupo">
+              <label class="f-label" for="postTexto"><i class="fa-solid fa-align-left"></i> Descrição *</label>
+              <textarea id="postTexto" class="f-textarea" rows="5" placeholder="Escreva o conteúdo..."></textarea>
+              <span class="f-erro" id="erroTexto"></span>
+            </div>
+
+            <div class="dois-col">
+              <div class="f-grupo">
+                <label class="f-label"><i class="fa-solid fa-image"></i> Upload de imagem</label>
+                <div class="upload-zone" id="uploadZone">
+                  <input type="file" id="imgUpload" accept="image/*" class="file-input">
+                  <div class="upload-ph" id="uploadPh">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Arraste ou clique para enviar</span>
+                    <small>PNG, JPG, WEBP — máx. 5MB</small>
+                  </div>
+                  <img id="imgPreview" class="img-preview oculto" alt="Preview">
+                  <button type="button" class="btn-remover-img oculto" id="btnRemoverImg">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="f-grupo">
+                <label class="f-label" for="postImgUrl"><i class="fa-solid fa-link"></i> Ou URL da imagem</label>
+                <input type="url" id="postImgUrl" class="f-input" placeholder="https://...">
+                <button type="button" class="btn-url-prev" id="btnPrevUrl">
+                  <i class="fa-solid fa-eye"></i> Ver preview
+                </button>
+              </div>
+            </div>
+
+            <div class="form-acoes">
+              <button type="button" class="btn-cancelar" id="btnCancelarForm">
+                <i class="fa-solid fa-xmark"></i> Cancelar
+              </button>
+              <button type="submit" class="btn-salvar">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span id="txtSalvar">Salvar Post</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ── VIEW PESQUISAS ── -->
+      <section class="view oculto" id="viewPesquisas">
+        <div class="view-head">
+          <div>
+            <div class="view-head-eyebrow"><i class="fa-solid fa-microscope"></i> Gestão</div>
+            <h2>Pesquisas <em>Científicas</em></h2>
+            <p>Gerencie as produções científicas e trabalhos da LEG</p>
+          </div>
+          <button class="btn-dash-novo" id="btnNovaPesquisa">
+            <i class="fa-solid fa-plus"></i> Nova Pesquisa
+          </button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-ico vinho"><i class="fa-solid fa-microscope"></i></div>
+            <div>
+              <div class="stat-num" id="statTotalPesq">0</div>
+              <div class="stat-lbl">Pesquisas publicadas</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico ouro"><i class="fa-solid fa-link"></i></div>
+            <div>
+              <div class="stat-num" id="statComLink">0</div>
+              <div class="stat-lbl">Com link externo</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico cinza"><i class="fa-regular fa-clock"></i></div>
+            <div>
+              <div class="stat-num" style="font-size:1rem;line-height:1.4;" id="statUltimaPesq">—</div>
+              <div class="stat-lbl">Última publicação</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="posts-grid" id="pesquisasGrid"></div>
+      </section>
+
+      <!-- ── VIEW FORM PESQUISA ── -->
+      <section class="view oculto" id="viewFormPesquisa">
+        <div class="view-head">
+          <div>
+            <div class="view-head-eyebrow"><i class="fa-solid fa-flask"></i> Pesquisa Científica</div>
+            <h2 id="formPesqTitulo">Nova <em>Pesquisa</em></h2>
+            <p id="formPesqSub">Preencha os dados da produção científica</p>
+          </div>
+          <button class="btn-cancelar" id="btnVoltarPesq">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+          </button>
+        </div>
+
+        <div class="form-card">
+          <form id="pesqForm" novalidate>
+            <input type="hidden" id="pesqId">
+
+            <div class="f-grupo">
+              <label class="f-label" for="pesqTitulo"><i class="fa-solid fa-heading"></i> Título da pesquisa *</label>
+              <input type="text" id="pesqTitulo" class="f-input" placeholder="Ex: Qualidade de vida em idosos institucionalizados..." maxlength="200">
+              <span class="f-erro" id="erroPesqTitulo"></span>
+            </div>
+
+            <div class="f-grupo">
+              <label class="f-label" for="pesqSubtitulo"><i class="fa-solid fa-minus"></i> Subtítulo / Complemento</label>
+              <input type="text" id="pesqSubtitulo" class="f-input" placeholder="Subtítulo opcional..." maxlength="200">
+            </div>
+
+            <div class="f-grupo">
+              <label class="f-label" for="pesqAutores"><i class="fa-solid fa-user-pen"></i> Autores</label>
+              <input type="text" id="pesqAutores" class="f-input" placeholder="Ex: Silva, J. A.; Santos, M. R.">
+            </div>
+
+            <div class="f-grupo">
+              <label class="f-label" for="pesqResumo"><i class="fa-solid fa-quote-left"></i> Resumo *</label>
+              <textarea id="pesqResumo" class="f-textarea" rows="4" placeholder="Resumo da pesquisa (abstract)..."></textarea>
+              <span class="f-erro" id="erroPesqResumo"></span>
+            </div>
+
+            <div class="f-grupo">
+              <label class="f-label" for="pesqTexto"><i class="fa-solid fa-align-left"></i> Texto completo / Descrição adicional</label>
+              <textarea id="pesqTexto" class="f-textarea" rows="5" placeholder="Conteúdo adicional, metodologia, conclusões..."></textarea>
+            </div>
+
+            <div class="f-grupo">
+              <label class="f-label" for="pesqLink"><i class="fa-solid fa-link"></i> Link / DOI externo</label>
+              <input type="url" id="pesqLink" class="f-input" placeholder="https://doi.org/... ou link do repositório">
+            </div>
+
+            <div class="dois-col" style="margin-top:4px;">
+              <div class="f-grupo">
+                <label class="f-label"><i class="fa-solid fa-image"></i> Imagem de capa (upload)</label>
+                <div class="upload-zone" id="uploadZonePesq">
+                  <input type="file" id="imgUploadPesq" accept="image/*" class="file-input">
+                  <div class="upload-ph" id="uploadPhPesq">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Arraste ou clique para enviar</span>
+                    <small>PNG, JPG, WEBP — máx. 5MB</small>
+                  </div>
+                  <img id="imgPreviewPesq" class="img-preview oculto" alt="Preview">
+                  <button type="button" class="btn-remover-img oculto" id="btnRemoverImgPesq">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="f-grupo">
+                <label class="f-label" for="pesqImgUrl"><i class="fa-solid fa-link"></i> Ou URL da imagem</label>
+                <input type="url" id="pesqImgUrl" class="f-input" placeholder="https://...">
+                <button type="button" class="btn-url-prev" id="btnPrevUrlPesq">
+                  <i class="fa-solid fa-eye"></i> Ver preview
+                </button>
+              </div>
+            </div>
+
+            <div class="form-acoes">
+              <button type="button" class="btn-cancelar" id="btnCancelarPesqForm">
+                <i class="fa-solid fa-xmark"></i> Cancelar
+              </button>
+              <button type="submit" class="btn-salvar">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span id="txtSalvarPesq">Salvar Pesquisa</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL EXCLUSÃO -->
+<div class="modal-overlay oculto" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-ico"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h3>Excluir este post?</h3>
+    <p>Esta ação é permanente. O post será removido da página de atividades e não poderá ser recuperado.</p>
+    <div class="modal-acoes">
+      <button class="btn-modal-cancel" id="modalCancelar">Cancelar</button>
+      <button class="btn-modal-confirmar" id="modalConfirmar">
+        <i class="fa-solid fa-trash"></i> Excluir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i id="toastIco" class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+'use strict';
+
+const CHAVE_SESSAO = 'legfurg_sessao';
+const CHAVE_POSTS  = 'legfurg_posts';
+
+// Proteção de rota
+function getSessao() {
+  try { const r = localStorage.getItem(CHAVE_SESSAO) || sessionStorage.getItem(CHAVE_SESSAO); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+const sessao = getSessao();
+if (!sessao) window.location.href = 'admin-login.html';
+
+// Nome do usuário
+const nomeEl = document.getElementById('userNome');
+if (nomeEl && sessao) nomeEl.textContent = sessao.email.split('@')[0];
+
+// ── ANO ──
+let anoAtivo = 2025;
+
+// ── POSTS ──
+const Posts = {
+  _d: [],
+  load()  { try { const r = localStorage.getItem(CHAVE_POSTS); this._d = r ? JSON.parse(r) : []; } catch { this._d = []; } },
+  save()  { localStorage.setItem(CHAVE_POSTS, JSON.stringify(this._d)); },
+  byAno(a){ return [...this._d].filter(p => p.ano == a).sort((x,y) => y.criadoEm - x.criadoEm); },
+  all()   { return [...this._d]; },
+  get(id) { return this._d.find(p => p.id === id) || null; },
+  create(d) {
+    const p = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), titulo: d.titulo.trim(), texto: d.texto.trim(), imagem: d.imagem || '', ano: d.ano, criadoEm: Date.now(), atualizadoEm: Date.now() };
+    this._d.unshift(p); this.save(); return p;
+  },
+  update(id, d) {
+    const i = this._d.findIndex(p => p.id === id); if (i < 0) return null;
+    this._d[i] = { ...this._d[i], titulo: d.titulo.trim(), texto: d.texto.trim(), imagem: d.imagem !== undefined ? d.imagem : this._d[i].imagem, ano: d.ano, atualizadoEm: Date.now() };
+    this.save(); return this._d[i];
+  },
+  delete(id) { const b = this._d.length; this._d = this._d.filter(p => p.id !== id); this.save(); return this._d.length < b; }
+};
+
+Posts.load();
+
+// ── UTILS ──
+function esc(s) { const d = document.createElement('div'); d.appendChild(document.createTextNode(String(s))); return d.innerHTML; }
+function fmtData(ts) { return new Date(ts).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }); }
+function toast(msg, tipo='success') {
+  const el = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  const icos = { success:'fa-circle-check', error:'fa-circle-xmark', aviso:'fa-triangle-exclamation' };
+  document.getElementById('toastIco').className = `fa-solid ${icos[tipo]||'fa-circle-check'}`;
+  el.className = `toast ${tipo} show`;
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ── SIDEBAR MOBILE ──
+const sidebar  = document.getElementById('sidebar');
+const overlay  = document.getElementById('sidebarOverlay');
+
+function abrirSidebar()  { sidebar.classList.add('aberta');  overlay.classList.add('show');  document.body.style.overflow='hidden'; }
+function fecharSidebar() { sidebar.classList.remove('aberta'); overlay.classList.remove('show'); document.body.style.overflow=''; }
+
+document.getElementById('menuToggle').addEventListener('click', abrirSidebar);
+document.getElementById('fecharSidebar').addEventListener('click', fecharSidebar);
+overlay.addEventListener('click', fecharSidebar);
+
+// ── ANO BTNS ──
+document.querySelectorAll('.ano-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    anoAtivo = parseInt(btn.dataset.ano);
+    document.querySelectorAll('.ano-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.ano) === anoAtivo));
+    atualizarAnoUI();
+    mostrarViewPosts();
+    fecharSidebar();
+  });
+});
+
+function atualizarAnoUI() {
+  document.getElementById('topbarTitulo').textContent = `Posts · ${anoAtivo}`;
+  document.getElementById('topbarAnoPill').textContent = anoAtivo;
+  document.getElementById('tituloListagem').innerHTML = `Posts de <em>${anoAtivo}</em>`;
+  sincRadioAno(anoAtivo);
+}
+
+function sincRadioAno(ano) {
+  document.getElementById('radio25').checked = (ano == 2025);
+  document.getElementById('radio26').checked = (ano == 2026);
+  document.getElementById('labelAno25').classList.toggle('sel', ano == 2025);
+  document.getElementById('labelAno26').classList.toggle('sel', ano == 2026);
+}
+
+document.querySelectorAll('input[name="postAno"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('labelAno25').classList.toggle('sel', r.value == '2025');
+    document.getElementById('labelAno26').classList.toggle('sel', r.value == '2026');
+  });
+});
+
+// ── NAV ITEMS ──
+document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+  item.addEventListener('click', () => {
+    const v = item.dataset.view;
+    if (v === 'novo')           abrirFormNovo();
+    else if (v === 'pesquisas') mostrarViewPesquisas();
+    else if (v === 'nova-pesquisa') abrirFormNovaPesquisa();
+    else                        mostrarViewPosts();
+    fecharSidebar();
+  });
+});
+
+// ── LOGOUT ──
+function logout() {
+  localStorage.removeItem(CHAVE_SESSAO);
+  sessionStorage.removeItem(CHAVE_SESSAO);
+  toast('Sessão encerrada. Até logo!', 'aviso');
+  setTimeout(() => window.location.href = 'admin-login.html', 900);
+}
+document.getElementById('btnLogout').addEventListener('click', logout);
+document.getElementById('topbarLogout').addEventListener('click', logout);
+
+// ── BOTÕES NOVO ──
+['topbarNovo','btnNovoPosts'].forEach(id => document.getElementById(id).addEventListener('click', abrirFormNovo));
+document.getElementById('btnNovaPesquisa').addEventListener('click', abrirFormNovaPesquisa);
+
+// ── VOLTAR / CANCELAR ──
+['btnVoltar','btnCancelarForm'].forEach(id => document.getElementById(id).addEventListener('click', mostrarViewPosts));
+['btnVoltarPesq','btnCancelarPesqForm'].forEach(id => document.getElementById(id).addEventListener('click', mostrarViewPesquisas));
+
+// ── UPLOAD ──
+let imgBase64 = '';
+const uploadZone = document.getElementById('uploadZone');
+const fileInput  = document.getElementById('imgUpload');
+const imgPreview = document.getElementById('imgPreview');
+const uploadPh   = document.getElementById('uploadPh');
+const btnRemImg  = document.getElementById('btnRemoverImg');
+
+uploadZone.addEventListener('click', e => { if (e.target === btnRemImg || btnRemImg.contains(e.target)) return; fileInput.click(); });
+fileInput.addEventListener('change', e => { if (e.target.files[0]) processarImg(e.target.files[0]); });
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) processarImg(f); });
+btnRemImg.addEventListener('click', e => { e.stopPropagation(); limparPreview(); });
+document.getElementById('btnPrevUrl').addEventListener('click', () => { const u = document.getElementById('postImgUrl').value.trim(); if (!u) { toast('Insira uma URL primeiro', 'aviso'); return; } carregarPreview(u); imgBase64 = ''; });
+
+function processarImg(file) {
+  if (file.size > 5*1024*1024) { toast('Imagem muito grande (máx. 5MB)', 'error'); return; }
+  const r = new FileReader();
+  r.onload = ev => { imgBase64 = ev.target.result; carregarPreview(ev.target.result); document.getElementById('postImgUrl').value = ''; };
+  r.readAsDataURL(file);
+}
+
+function carregarPreview(src) {
+  imgPreview.src = src;
+  imgPreview.onload = () => { uploadPh.classList.add('oculto'); imgPreview.classList.remove('oculto'); btnRemImg.classList.remove('oculto'); };
+  imgPreview.onerror = () => { toast('Não foi possível carregar a imagem', 'error'); limparPreview(); };
+}
+
+function limparPreview() {
+  imgPreview.src = ''; imgPreview.classList.add('oculto');
+  uploadPh.classList.remove('oculto'); btnRemImg.classList.add('oculto');
+  fileInput.value = ''; imgBase64 = ''; document.getElementById('postImgUrl').value = '';
+}
+
+// ── VIEWS ──
+function mostrarViewPosts() {
+  document.getElementById('viewPosts').classList.remove('oculto');
+  document.getElementById('viewForm').classList.add('oculto');
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'posts'));
+  atualizarAnoUI();
+  renderPosts();
+}
+
+function mostrarViewForm() {
+  document.getElementById('viewPosts').classList.add('oculto');
+  document.getElementById('viewForm').classList.remove('oculto');
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'novo'));
+  document.getElementById('topbarTitulo').textContent = document.getElementById('postId').value ? 'Editar Post' : 'Novo Post';
+}
+
+function abrirFormNovo() {
+  document.getElementById('postForm').reset();
+  document.getElementById('postId').value = '';
+  imgBase64 = ''; limparPreview(); limparErros();
+  document.getElementById('formTitulo').innerHTML = 'Novo <em>Post</em>';
+  document.getElementById('formSub').textContent = 'Preencha os dados da publicação';
+  document.getElementById('txtSalvar').textContent = 'Salvar Post';
+  sincRadioAno(anoAtivo);
+  mostrarViewForm();
+  setTimeout(() => document.getElementById('postTitulo').focus(), 80);
+}
+
+function abrirFormEditar(id) {
+  const p = Posts.get(id); if (!p) return;
+  document.getElementById('postId').value = p.id;
+  document.getElementById('postTitulo').value = p.titulo;
+  document.getElementById('postTexto').value = p.texto;
+  document.getElementById('postImgUrl').value = '';
+  imgBase64 = ''; limparPreview(); limparErros();
+  if (p.imagem) { carregarPreview(p.imagem); if (p.imagem.startsWith('http')) document.getElementById('postImgUrl').value = p.imagem; else imgBase64 = p.imagem; }
+  sincRadioAno(p.ano || anoAtivo);
+  document.getElementById('formTitulo').innerHTML = 'Editar <em>Post</em>';
+  document.getElementById('formSub').textContent = `Editando: ${p.titulo.slice(0,45)}`;
+  document.getElementById('txtSalvar').textContent = 'Atualizar Post';
+  mostrarViewForm();
+  setTimeout(() => document.getElementById('postTitulo').focus(), 80);
+}
+
+// ── SUBMIT ──
+document.getElementById('postForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const titulo = document.getElementById('postTitulo').value.trim();
+  const texto  = document.getElementById('postTexto').value.trim();
+  const url    = document.getElementById('postImgUrl').value.trim();
+  const ano    = parseInt(document.querySelector('input[name="postAno"]:checked').value);
+  let ok = true; limparErros();
+  if (!titulo)       { erroF('postTitulo','erroTitulo','Título obrigatório'); ok=false; }
+  else if (titulo.length < 3) { erroF('postTitulo','erroTitulo','Título muito curto'); ok=false; }
+  if (!texto)        { erroF('postTexto','erroTexto','Descrição obrigatória'); ok=false; }
+  else if (texto.length < 8) { erroF('postTexto','erroTexto','Descrição muito curta'); ok=false; }
+  if (!ok) return;
+  const imagem = imgBase64 || url || '';
+  const id = document.getElementById('postId').value;
+  if (id) { Posts.update(id, { titulo, texto, imagem, ano }); toast('✏️ Post atualizado!', 'success'); }
+  else    { Posts.create({ titulo, texto, imagem, ano });    toast(`✅ Post criado para ${ano}!`, 'success'); }
+  anoAtivo = ano;
+  document.querySelectorAll('.ano-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.ano) === anoAtivo));
+  mostrarViewPosts();
+});
+
+function erroF(inputId, erroId, msg) {
+  document.getElementById(inputId).classList.add('erro');
+  document.getElementById(erroId).textContent = msg;
+  document.getElementById(inputId).addEventListener('input', () => { document.getElementById(inputId).classList.remove('erro'); document.getElementById(erroId).textContent=''; }, { once:true });
+}
+
+function limparErros() {
+  ['postTitulo','postTexto'].forEach(id => document.getElementById(id).classList.remove('erro'));
+  ['erroTitulo','erroTexto'].forEach(id => document.getElementById(id).textContent='');
+}
+
+// ── RENDERIZAR ──
+function renderPosts() {
+  const grid = document.getElementById('postsGrid');
+  const lista = Posts.byAno(anoAtivo);
+  const todos = Posts.all();
+  document.getElementById('statPostsAno').textContent = lista.length;
+  document.getElementById('statTotal').textContent = todos.length;
+  document.getElementById('statUltima').textContent = lista.length ? fmtData(lista[0].criadoEm) : '—';
+  grid.innerHTML = '';
+  if (!lista.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-ico"><i class="fa-solid fa-newspaper"></i></div>
+      <h3>Nenhum post em ${anoAtivo}</h3>
+      <p>Crie a primeira publicação para este ano!</p>
+      <button class="btn-dash-novo" onclick="abrirFormNovo()" style="margin:0 auto;">
+        <i class="fa-solid fa-plus"></i> Criar post
+      </button>
+    </div>`;
+    return;
+  }
+  lista.forEach((post, i) => {
+    const card = document.createElement('div');
+    card.className = 'post-card';
+    card.style.animationDelay = `${i*55}ms`;
+    const img = post.imagem
+      ? `<img class="post-card-img" src="${esc(post.imagem)}" alt="${esc(post.titulo)}" loading="lazy" onerror="this.outerHTML='<div class=\\"post-card-img-vazio\\"><i class=\\"fa-solid fa-image\\"></i></div>'">`
+      : `<div class="post-card-img-vazio"><i class="fa-solid fa-image"></i></div>`;
+    card.innerHTML = `${img}
+      <div class="post-card-body">
+        <span class="post-card-pill"><i class="fa-regular fa-calendar"></i> ${post.ano}</span>
+        <h3 class="post-card-titulo">${esc(post.titulo)}</h3>
+        <p class="post-card-texto">${esc(post.texto)}</p>
+        <div class="post-card-data"><i class="fa-regular fa-clock"></i> ${fmtData(post.criadoEm)}</div>
+        <div class="post-card-acoes">
+          <button class="btn-editar" data-id="${post.id}"><i class="fa-solid fa-pen"></i> Editar</button>
+          <button class="btn-excluir" data-id="${post.id}"><i class="fa-solid fa-trash"></i> Excluir</button>
+        </div>
+      </div>`;
+    card.querySelector('.btn-editar').addEventListener('click', () => abrirFormEditar(post.id));
+    card.querySelector('.btn-excluir').addEventListener('click', () => { postParaExcluir = post.id; document.getElementById('modalOverlay').classList.remove('oculto'); document.body.style.overflow='hidden'; });
+    grid.appendChild(card);
+  });
+}
+
+// ── MODAL ──
+let postParaExcluir = null;
+let excluindoPesquisa = false;
+document.getElementById('modalCancelar').addEventListener('click', fecharModal);
+document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('modalOverlay')) fecharModal(); });
+document.getElementById('modalConfirmar').addEventListener('click', () => {
+  if (!postParaExcluir) return;
+  if (excluindoPesquisa) { Pesquisas.delete(postParaExcluir); fecharModal(); renderPesquisas(); toast('Pesquisa removida', 'aviso'); }
+  else                   { Posts.delete(postParaExcluir);    fecharModal(); renderPosts();    toast('Post removido', 'aviso'); }
+});
+function fecharModal() { document.getElementById('modalOverlay').classList.add('oculto'); document.body.style.overflow=''; postParaExcluir=null; excluindoPesquisa=false; }
+document.addEventListener('keydown', e => { if (e.key==='Escape' && !document.getElementById('modalOverlay').classList.contains('oculto')) fecharModal(); });
+
+// ── PESQUISAS CRUD ──
+const CHAVE_PESQ = 'legfurg_pesquisas';
+
+const Pesquisas = {
+  _d: [],
+  load()  { try { const r = localStorage.getItem(CHAVE_PESQ); this._d = r ? JSON.parse(r) : []; } catch { this._d = []; } },
+  save()  { localStorage.setItem(CHAVE_PESQ, JSON.stringify(this._d)); },
+  all()   { return [...this._d].sort((a,b) => b.criadoEm - a.criadoEm); },
+  get(id) { return this._d.find(p => p.id === id) || null; },
+  create(d) {
+    const p = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), titulo: d.titulo.trim(), subtitulo: d.subtitulo || '', autores: d.autores || '', resumo: d.resumo.trim(), texto: d.texto || '', link: d.link || '', imagem: d.imagem || '', criadoEm: Date.now(), atualizadoEm: Date.now() };
+    this._d.unshift(p); this.save(); return p;
+  },
+  update(id, d) {
+    const i = this._d.findIndex(p => p.id === id); if (i < 0) return null;
+    this._d[i] = { ...this._d[i], titulo: d.titulo.trim(), subtitulo: d.subtitulo || '', autores: d.autores || '', resumo: d.resumo.trim(), texto: d.texto || '', link: d.link || '', imagem: d.imagem !== undefined ? d.imagem : this._d[i].imagem, atualizadoEm: Date.now() };
+    this.save(); return this._d[i];
+  },
+  delete(id) { this._d = this._d.filter(p => p.id !== id); this.save(); }
+};
+
+Pesquisas.load();
+
+// Upload pesquisa
+let imgBase64Pesq = '';
+const uploadZonePesq = document.getElementById('uploadZonePesq');
+const fileInputPesq  = document.getElementById('imgUploadPesq');
+const imgPreviewPesq = document.getElementById('imgPreviewPesq');
+const uploadPhPesq   = document.getElementById('uploadPhPesq');
+const btnRemImgPesq  = document.getElementById('btnRemoverImgPesq');
+
+uploadZonePesq.addEventListener('click', e => { if (e.target === btnRemImgPesq || btnRemImgPesq.contains(e.target)) return; fileInputPesq.click(); });
+fileInputPesq.addEventListener('change', e => { if (e.target.files[0]) processarImgPesq(e.target.files[0]); });
+uploadZonePesq.addEventListener('dragover', e => { e.preventDefault(); uploadZonePesq.classList.add('drag'); });
+uploadZonePesq.addEventListener('dragleave', () => uploadZonePesq.classList.remove('drag'));
+uploadZonePesq.addEventListener('drop', e => { e.preventDefault(); uploadZonePesq.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) processarImgPesq(f); });
+btnRemImgPesq.addEventListener('click', e => { e.stopPropagation(); limparPreviewPesq(); });
+document.getElementById('btnPrevUrlPesq').addEventListener('click', () => { const u = document.getElementById('pesqImgUrl').value.trim(); if (!u) { toast('Insira uma URL primeiro', 'aviso'); return; } carregarPreviewPesq(u); imgBase64Pesq = ''; });
+
+function processarImgPesq(file) {
+  if (file.size > 5*1024*1024) { toast('Imagem muito grande (máx. 5MB)', 'error'); return; }
+  const r = new FileReader();
+  r.onload = ev => { imgBase64Pesq = ev.target.result; carregarPreviewPesq(ev.target.result); document.getElementById('pesqImgUrl').value = ''; };
+  r.readAsDataURL(file);
+}
+
+function carregarPreviewPesq(src) {
+  imgPreviewPesq.src = src;
+  imgPreviewPesq.onload = () => { uploadPhPesq.classList.add('oculto'); imgPreviewPesq.classList.remove('oculto'); btnRemImgPesq.classList.remove('oculto'); };
+  imgPreviewPesq.onerror = () => { toast('Não foi possível carregar a imagem', 'error'); limparPreviewPesq(); };
+}
+
+function limparPreviewPesq() {
+  imgPreviewPesq.src = ''; imgPreviewPesq.classList.add('oculto');
+  uploadPhPesq.classList.remove('oculto'); btnRemImgPesq.classList.add('oculto');
+  fileInputPesq.value = ''; imgBase64Pesq = ''; document.getElementById('pesqImgUrl').value = '';
+}
+
+// Views pesquisa
+function mostrarViewPesquisas() {
+  ['viewPosts','viewForm','viewFormPesquisa'].forEach(id => document.getElementById(id).classList.add('oculto'));
+  document.getElementById('viewPesquisas').classList.remove('oculto');
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'pesquisas'));
+  document.getElementById('topbarTitulo').textContent = 'Pesquisas Científicas';
+  document.getElementById('topbarAnoPill').textContent = 'LEG';
+  renderPesquisas();
+}
+
+function abrirFormNovaPesquisa() {
+  document.getElementById('pesqForm').reset();
+  document.getElementById('pesqId').value = '';
+  imgBase64Pesq = ''; limparPreviewPesq(); limparErrosPesq();
+  document.getElementById('formPesqTitulo').innerHTML = 'Nova <em>Pesquisa</em>';
+  document.getElementById('formPesqSub').textContent = 'Preencha os dados da produção científica';
+  document.getElementById('txtSalvarPesq').textContent = 'Salvar Pesquisa';
+  ['viewPosts','viewForm','viewPesquisas'].forEach(id => document.getElementById(id).classList.add('oculto'));
+  document.getElementById('viewFormPesquisa').classList.remove('oculto');
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'nova-pesquisa'));
+  document.getElementById('topbarTitulo').textContent = 'Nova Pesquisa';
+  setTimeout(() => document.getElementById('pesqTitulo').focus(), 80);
+}
+
+function abrirFormEditarPesquisa(id) {
+  const p = Pesquisas.get(id); if (!p) return;
+  document.getElementById('pesqId').value        = p.id;
+  document.getElementById('pesqTitulo').value    = p.titulo;
+  document.getElementById('pesqSubtitulo').value = p.subtitulo || '';
+  document.getElementById('pesqAutores').value   = p.autores || '';
+  document.getElementById('pesqResumo').value    = p.resumo;
+  document.getElementById('pesqTexto').value     = p.texto || '';
+  document.getElementById('pesqLink').value      = p.link || '';
+  document.getElementById('pesqImgUrl').value    = '';
+  imgBase64Pesq = ''; limparPreviewPesq(); limparErrosPesq();
+  if (p.imagem) { carregarPreviewPesq(p.imagem); if (p.imagem.startsWith('http')) document.getElementById('pesqImgUrl').value = p.imagem; else imgBase64Pesq = p.imagem; }
+  document.getElementById('formPesqTitulo').innerHTML = 'Editar <em>Pesquisa</em>';
+  document.getElementById('formPesqSub').textContent = `Editando: ${p.titulo.slice(0,45)}`;
+  document.getElementById('txtSalvarPesq').textContent = 'Atualizar Pesquisa';
+  ['viewPosts','viewForm','viewPesquisas'].forEach(id => document.getElementById(id).classList.add('oculto'));
+  document.getElementById('viewFormPesquisa').classList.remove('oculto');
+  document.getElementById('topbarTitulo').textContent = 'Editar Pesquisa';
+  setTimeout(() => document.getElementById('pesqTitulo').focus(), 80);
+}
+
+// Submit pesquisa
+document.getElementById('pesqForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const titulo   = document.getElementById('pesqTitulo').value.trim();
+  const subtitulo= document.getElementById('pesqSubtitulo').value.trim();
+  const autores  = document.getElementById('pesqAutores').value.trim();
+  const resumo   = document.getElementById('pesqResumo').value.trim();
+  const texto    = document.getElementById('pesqTexto').value.trim();
+  const link     = document.getElementById('pesqLink').value.trim();
+  const urlImg   = document.getElementById('pesqImgUrl').value.trim();
+  let ok = true; limparErrosPesq();
+
+  if (!titulo) { erroFP('pesqTitulo','erroPesqTitulo','Título obrigatório'); ok=false; }
+  if (!resumo) { erroFP('pesqResumo','erroPesqResumo','Resumo obrigatório'); ok=false; }
+  if (!ok) return;
+
+  const imagem = imgBase64Pesq || urlImg || '';
+  const id = document.getElementById('pesqId').value;
+  if (id) { Pesquisas.update(id, { titulo, subtitulo, autores, resumo, texto, link, imagem }); toast('✏️ Pesquisa atualizada!', 'success'); }
+  else    { Pesquisas.create({ titulo, subtitulo, autores, resumo, texto, link, imagem });    toast('✅ Pesquisa publicada!', 'success'); }
+  mostrarViewPesquisas();
+});
+
+function erroFP(inputId, erroId, msg) {
+  document.getElementById(inputId).classList.add('erro');
+  document.getElementById(erroId).textContent = msg;
+  document.getElementById(inputId).addEventListener('input', () => { document.getElementById(inputId).classList.remove('erro'); document.getElementById(erroId).textContent=''; }, { once:true });
+}
+
+function limparErrosPesq() {
+  ['pesqTitulo','pesqResumo'].forEach(id => document.getElementById(id).classList.remove('erro'));
+  ['erroPesqTitulo','erroPesqResumo'].forEach(id => document.getElementById(id).textContent='');
+}
+
+// Render pesquisas
+function renderPesquisas() {
+  const grid = document.getElementById('pesquisasGrid');
+  const lista = Pesquisas.all();
+  document.getElementById('statTotalPesq').textContent = lista.length;
+  document.getElementById('statComLink').textContent   = lista.filter(p => p.link).length;
+  document.getElementById('statUltimaPesq').textContent = lista.length ? fmtData(lista[0].criadoEm) : '—';
+  grid.innerHTML = '';
+
+  if (!lista.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-ico"><i class="fa-solid fa-microscope"></i></div>
+      <h3>Nenhuma pesquisa publicada</h3>
+      <p>Adicione a primeira produção científica da LEG!</p>
+      <button class="btn-dash-novo" onclick="abrirFormNovaPesquisa()" style="margin:0 auto;">
+        <i class="fa-solid fa-plus"></i> Nova Pesquisa
+      </button>
+    </div>`;
+    return;
+  }
+
+  lista.forEach((pesq, i) => {
+    const card = document.createElement('div');
+    card.className = 'post-card';
+    card.style.animationDelay = `${i*55}ms`;
+
+    const img = pesq.imagem
+      ? `<img class="post-card-img" src="${esc(pesq.imagem)}" alt="${esc(pesq.titulo)}" loading="lazy" onerror="this.outerHTML='<div class=\\"post-card-img-vazio\\"><i class=\\"fa-solid fa-microscope\\"></i></div>'">`
+      : `<div class="post-card-img-vazio"><i class="fa-solid fa-microscope"></i></div>`;
+
+    card.innerHTML = `${img}
+      <div class="post-card-body">
+        <span class="post-card-pill"><i class="fa-solid fa-microscope"></i> Pesquisa</span>
+        <h3 class="post-card-titulo">${esc(pesq.titulo)}</h3>
+        <p class="post-card-texto" style="font-style:italic;">${esc(pesq.resumo)}</p>
+        ${pesq.autores ? `<div class="post-card-data"><i class="fa-solid fa-user-pen"></i> ${esc(pesq.autores)}</div>` : ''}
+        <div class="post-card-data"><i class="fa-regular fa-clock"></i> ${fmtData(pesq.criadoEm)}</div>
+        <div class="post-card-acoes">
+          <button class="btn-editar" data-id="${pesq.id}"><i class="fa-solid fa-pen"></i> Editar</button>
+          <button class="btn-excluir" data-id="${pesq.id}"><i class="fa-solid fa-trash"></i> Excluir</button>
+        </div>
+      </div>`;
+
+    card.querySelector('.btn-editar').addEventListener('click', () => abrirFormEditarPesquisa(pesq.id));
+    card.querySelector('.btn-excluir').addEventListener('click', () => {
+      postParaExcluir = pesq.id;
+      excluindoPesquisa = true;
+      document.getElementById('modalOverlay').classList.remove('oculto');
+      document.body.style.overflow = 'hidden';
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ── INIT ──
+anoAtivo = 2026;
+document.querySelectorAll('.ano-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.ano) === anoAtivo));
+atualizarAnoUI();
+mostrarViewPosts();
+</script>
+</body>
+</html>

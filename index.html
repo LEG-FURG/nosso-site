@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEG · FURG — Liga Estudantil de Gerontologia</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="global.css">
+  <script src="https://kit.fontawesome.com/0dd8fdca34.js" crossorigin="anonymous"></script>
+  <style>
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--cinza-800);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('imagens/idoso-lendo.png');
+      background-size: cover;
+      background-position: center 30%;
+      opacity: .38;
+      transform: scale(1.04);
+      transition: transform 8s ease;
+    }
+
+    .hero-bg.carregado { transform: scale(1); }
+
+    /* Gradiente sobre a imagem */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(28,25,21,.85) 0%,
+        rgba(92,18,18,.55) 55%,
+        rgba(28,25,21,.2) 100%
+      );
+    }
+
+    .hero-conteudo {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      width: 100%;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(242,203,87,.15);
+      border: 1px solid rgba(242,203,87,.35);
+      color: var(--ouro-claro);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: .78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 28px;
+      backdrop-filter: blur(8px);
+      animation: fadeSlide .8s ease .1s both;
+    }
+
+    .hero-tag i { font-size: .75rem; }
+
+    .hero-h1 {
+      font-family: var(--fonte-display);
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 700;
+      color: var(--branco);
+      line-height: 1.12;
+      margin-bottom: 24px;
+      max-width: 760px;
+      animation: fadeSlide .8s ease .2s both;
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--ouro-claro);
+    }
+
+    .hero-p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.75);
+      line-height: 1.75;
+      max-width: 520px;
+      margin-bottom: 40px;
+      animation: fadeSlide .8s ease .3s both;
+    }
+
+    .hero-acoes {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeSlide .8s ease .4s both;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,.45);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      animation: fadeSlide 1s ease .8s both;
+    }
+
+    .hero-scroll-linha {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%,100% { opacity: .4; transform: scaleY(1); }
+      50%      { opacity: 1;  transform: scaleY(1.2); }
+    }
+
+    @keyframes fadeSlide {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ══════════════════════════════
+       NÚMEROS / DESTAQUE
+    ══════════════════════════════ */
+    .numeros {
+      background: var(--vinho);
+      padding: 56px 32px;
+    }
+
+    .numeros-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .numero-item {
+      text-align: center;
+      color: var(--branco);
+    }
+
+    .numero-val {
+      font-family: var(--fonte-display);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--ouro-claro);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .numero-lbl {
+      font-size: .82rem;
+      color: rgba(255,255,255,.65);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .numero-div {
+      width: 1px;
+      background: rgba(255,255,255,.15);
+      align-self: stretch;
+      display: none;
+    }
+
+    /* ══════════════════════════════
+       OBJETIVO
+    ══════════════════════════════ */
+    .objetivo {
+      background: var(--branco);
+    }
+
+    .objetivo-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .objetivo-img-wrap {
+      position: relative;
+    }
+
+    .objetivo-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      border-radius: var(--r-xl);
+      box-shadow: var(--sombra-lg);
+    }
+
+    /* Moldura decorativa */
+    .objetivo-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -16px -16px auto auto;
+      width: 180px;
+      height: 180px;
+      border: 3px solid var(--ouro-claro);
+      border-radius: var(--r-lg);
+      z-index: -1;
+      opacity: .5;
+    }
+
+    .objetivo-img-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: -16px;
+      width: 120px;
+      height: 120px;
+      background: var(--vinho);
+      border-radius: var(--r-lg);
+      z-index: -1;
+      opacity: .12;
+    }
+
+    /* Badge flutuante */
+    .objetivo-badge {
+      position: absolute;
+      bottom: 28px;
+      right: -20px;
+      background: var(--vinho);
+      color: var(--branco);
+      padding: 16px 22px;
+      border-radius: var(--r-lg);
+      box-shadow: var(--sombra-vinho);
+      text-align: center;
+    }
+
+    .objetivo-badge-num {
+      font-family: var(--fonte-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--ouro-claro);
+      line-height: 1;
+    }
+
+    .objetivo-badge-txt {
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      opacity: .8;
+      margin-top: 4px;
+    }
+
+    .objetivo-lista {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .objetivo-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--cinza-100);
+      border-radius: var(--r-md);
+      border-left: 3px solid var(--ouro-claro);
+      transition: all var(--trans);
+    }
+
+    .objetivo-item:hover {
+      background: var(--ouro-pale);
+      border-left-color: var(--vinho);
+      transform: translateX(4px);
+    }
+
+    .objetivo-item-icone {
+      width: 36px;
+      height: 36px;
+      background: var(--vinho);
+      border-radius: var(--r-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ouro-claro);
+      font-size: .85rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .objetivo-item-txt strong {
+      display: block;
+      font-size: .92rem;
+      font-weight: 600;
+      color: var(--texto);
+      margin-bottom: 3px;
+    }
+
+    .objetivo-item-txt p {
+      font-size: .83rem;
+      color: var(--cinza-600);
+      line-height: 1.55;
+    }
+
+    /* ══════════════════════════════
+       O QUE FAZEMOS
+    ══════════════════════════════ */
+    .oque {
+      background: var(--creme);
+    }
+
+    .oque-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .oque-img {
+      width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+      border-radius: var(--r-xl);
+      box-shadow: var(--sombra-lg);
+    }
+
+    .oque-texto { font-size: 1.05rem; color: var(--cinza-600); line-height: 1.8; margin-bottom: 28px; }
+
+    /* ══════════════════════════════
+       SERVIÇOS / CARDS
+    ══════════════════════════════ */
+    .servicos {
+      background: var(--branco);
+    }
+
+    .servicos-head {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 64px;
+    }
+
+    .servicos-head .secao-label { justify-content: center; }
+    .servicos-head .secao-label::before { display:none; }
+    .servicos-head .secao-label::after {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: var(--ouro-claro);
+      border-radius: 2px;
+    }
+
+    .servicos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .servico-card {
+      position: relative;
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      background: var(--cinza-100);
+      border: 1px solid var(--cinza-200);
+      transition: all var(--trans-slow);
+      cursor: pointer;
+    }
+
+    .servico-card:hover {
+      box-shadow: var(--sombra-lg);
+      transform: translateY(-6px);
+      border-color: transparent;
+    }
+
+    .servico-card:hover .servico-img { transform: scale(1.05); }
+    .servico-card:hover .servico-overlay { opacity: 1; }
+    .servico-card:hover .servico-expandido { max-height: 200px; opacity: 1; }
+
+    .servico-img-wrap {
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .servico-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--trans-slow);
+    }
+
+    .servico-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent 30%, rgba(92,18,18,.7) 100%);
+      opacity: 0;
+      transition: opacity var(--trans-slow);
+    }
+
+    .servico-corpo {
+      padding: 24px;
+    }
+
+    .servico-icone {
+      width: 44px;
+      height: 44px;
+      background: var(--vinho);
+      border-radius: var(--r-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ouro-claro);
+      font-size: .95rem;
+      margin-bottom: 14px;
+    }
+
+    .servico-titulo {
+      font-family: var(--fonte-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--texto);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .servico-resumo {
+      font-size: .85rem;
+      color: var(--cinza-600);
+      line-height: 1.6;
+    }
+
+    .servico-expandido {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height .5s ease, opacity .4s ease;
+    }
+
+    .servico-expandido p {
+      font-size: .85rem;
+      color: var(--cinza-600);
+      line-height: 1.65;
+      padding-top: 12px;
+      border-top: 1px solid var(--cinza-200);
+      margin-top: 12px;
+    }
+
+    .servico-mais {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--vinho);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-top: 14px;
+      transition: gap var(--trans);
+    }
+
+    .servico-card:hover .servico-mais { gap: 10px; }
+    .servico-mais i { font-size: .7rem; transition: transform var(--trans); }
+    .servico-card:hover .servico-mais i { transform: rotate(90deg); }
+
+    /* ══════════════════════════════
+       RESPONSIVO
+    ══════════════════════════════ */
+    @media (max-width: 1024px) {
+      .objetivo-inner { grid-template-columns: 1fr; gap: 40px; }
+      .objetivo-img-wrap { max-width: 500px; margin: 0 auto; }
+      .objetivo-badge { right: 20px; }
+      .oque-grid { grid-template-columns: 1fr; gap: 36px; }
+    }
+
+    @media (max-width: 768px) {
+      .numeros-inner { grid-template-columns: 1fr 1fr; }
+      .hero-h1 { font-size: 2.2rem; }
+      .hero-conteudo { padding: 0 20px; }
+    }
+
+    @media (max-width: 600px) {
+      .servicos-grid { grid-template-columns: 1fr; }
+      .numeros-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .hero { min-height: 88vh; }
+      .hero-acoes { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 400px) {
+      .numeros-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVEGAÇÃO ── -->
+  <nav class="nav-global" id="navGlobal">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="imagens/logo-imagem.jpeg" alt="LEG Logo" class="nav-logo-img"
+             onerror="this.style.display='none'">
+        <div class="nav-logo-texto">
+          <span class="nav-logo-nome">LEG · FURG</span>
+          <span class="nav-logo-sub">Liga Est. de Gerontologia</span>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html" class="nav-link ativo">
+          <i class="fa-regular fa-house"></i> Início
+        </a>
+        <a href="atividades.html" class="nav-link">
+          <i class="fa-solid fa-brain"></i> Atividades
+        </a>
+        <a href="sobre-nos.html" class="nav-link">
+          <i class="fa-solid fa-book-open"></i> Sobre Nós
+        </a>
+        <a href="admin-login.html" class="nav-link-login"><i class="fa-solid fa-lock"></i> Admin</a>
+      </div>
+
+      
+      <button class="nav-hamburguer" id="hamburguer" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <a href="index.html" class="nav-link ativo"><i class="fa-regular fa-house"></i> Início</a>
+      <a href="atividades.html" class="nav-link"><i class="fa-solid fa-brain"></i> Atividades</a>
+      <a href="sobre-nos.html" class="nav-link"><i class="fa-solid fa-book-open"></i> Sobre Nós</a>
+      <a href="admin-login.html" class="nav-link-login" style="margin:8px 0 0;justify-content:center;width:100%;"><i class="fa-solid fa-lock"></i> Área Admin</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-conteudo">
+      <div class="hero-tag">
+        <i class="fa-solid fa-heart-pulse"></i>
+        FURG · Universidade Federal do Rio Grande
+      </div>
+
+      <h1 class="hero-h1">
+        Cuidando do <em>envelhecimento</em><br>com ciência e humanidade
+      </h1>
+
+      <p class="hero-p">
+        Promovemos ações de saúde e bem-estar para a comunidade idosa,
+        unindo acadêmicos e profissionais dedicados. Junte-se a nós e
+        faça a diferença!
+      </p>
+
+      <div class="hero-acoes">
+        <a href="sobre-nos.html#participar" class="btn btn-ouro">
+          <i class="fa-solid fa-users"></i> Faça parte da LEG
+        </a>
+        <a href="atividades.html" class="btn btn-outline" style="color:rgba(255,255,255,.85); border-color:rgba(255,255,255,.35);">
+          <i class="fa-solid fa-brain"></i> Ver atividades
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="hero-scroll-linha"></div>
+      <span>Rolar</span>
+    </div>
+  </section>
+
+  <!-- ── NÚMEROS ── -->
+  <section class="numeros">
+    <div class="numeros-inner">
+      <div class="numero-item reveal">
+        <div class="numero-val">2024</div>
+        <div class="numero-lbl">Ano de fundação</div>
+      </div>
+      <div class="numero-item reveal reveal-delay-1">
+        <div class="numero-val">3</div>
+        <div class="numero-lbl">Eixos de atuação</div>
+      </div>
+      <div class="numero-item reveal reveal-delay-2">
+        <div class="numero-val">4+</div>
+        <div class="numero-lbl">Tipos de serviços</div>
+      </div>
+      <div class="numero-item reveal reveal-delay-3">
+        <div class="numero-val">FURG</div>
+        <div class="numero-lbl">Instituição vinculada</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OBJETIVO ── -->
+  <section class="secao objetivo">
+    <div class="secao-inner objetivo-inner">
+      <!-- Imagem -->
+      <div class="objetivo-img-wrap reveal">
+        <img
+          src="imagens/maos-unidas-representando cuidado e conexao.jpg"
+          alt="Mãos unidas representando cuidado e conexão"
+          class="objetivo-img"
+          onerror="this.src='imagens/logo-imagem.jpeg'"
+        >
+        <div class="objetivo-badge">
+          <div class="objetivo-badge-num">LEG</div>
+          <div class="objetivo-badge-txt">FURG · Psicologia</div>
+        </div>
+      </div>
+
+      <!-- Texto -->
+      <div class="reveal reveal-delay-1">
+        <span class="secao-label">
+          <i class="fa-solid fa-seedling"></i> Nosso Objetivo
+        </span>
+        <h2 class="secao-titulo">
+          Promover saúde e <em>bem-estar</em> na terceira idade
+        </h2>
+        <p class="secao-texto">
+          Promovemos a saúde e o bem-estar de pessoas idosas por meio de
+          ações inter e multidisciplinares que favoreçam as interlocuções
+          acerca do envelhecimento e a defesa dos direitos desta população.
+        </p>
+        <p class="secao-texto" style="margin-top:14px;">
+          Desenvolvemos projetos que visam atender as necessidades específicas
+          da população idosa, buscando sempre a inclusão social e a valorização
+          da experiência de vida.
+        </p>
+
+        <div class="objetivo-lista">
+          <div class="objetivo-item">
+            <div class="objetivo-item-icone"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="objetivo-item-txt">
+              <strong>Ensino</strong>
+              <p>Leituras constantes e troca de experiências dentro e fora da instituição.</p>
+            </div>
+          </div>
+          <div class="objetivo-item">
+            <div class="objetivo-item-icone"><i class="fa-solid fa-microscope"></i></div>
+            <div class="objetivo-item-txt">
+              <strong>Pesquisa</strong>
+              <p>Divulgação de informações científicas para contribuir com a saúde idosa.</p>
+            </div>
+          </div>
+          <div class="objetivo-item">
+            <div class="objetivo-item-icone"><i class="fa-solid fa-handshake-angle"></i></div>
+            <div class="objetivo-item-txt">
+              <strong>Extensão</strong>
+              <p>Aproximação com a população promovendo qualidade de vida e conhecimento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── O QUE FAZEMOS ── -->
+  <section class="secao oque">
+    <div class="secao-inner oque-grid">
+      <div class="reveal">
+        <span class="secao-label">
+          <i class="fa-solid fa-circle-info"></i> O que fazemos
+        </span>
+        <h2 class="secao-titulo">
+          Uma organização <em>interdisciplinar</em> a serviço da longevidade
+        </h2>
+        <p class="oque-texto">
+          A Liga de Gerontologia é uma organização interdisciplinar e multiprofissional
+          que se dedica a promover ações de saúde e bem-estar para a comunidade idosa.
+          Composta por acadêmicos, professores e instituições, buscamos fomentar o
+          conhecimento e a prática em gerontologia, sempre com foco na valorização da
+          vida para esta faixa etária.
+        </p>
+        <a href="atividades.html" class="btn btn-primario">
+          <i class="fa-solid fa-arrow-right"></i> Ver nossas atividades
+        </a>
+      </div>
+
+      <div class="reveal reveal-delay-2">
+        <img
+          src="imagens/idosos-participando-de-atividades-coletiva.jpg"
+          alt="Idosos participando de atividade coletiva"
+          class="oque-img"
+          onerror="this.src='imagens/logo-imagem.jpeg'"
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVIÇOS ── -->
+  <section class="secao servicos" id="servicos">
+    <div class="secao-inner">
+      <div class="servicos-head reveal">
+        <span class="secao-label">
+          <i class="fa-solid fa-star"></i> Serviços
+        </span>
+        <h2 class="secao-titulo">
+          O que oferecemos à<br><em>comunidade idosa</em>
+        </h2>
+        <p class="secao-texto" style="margin:0 auto;">
+          Atividades e programas que promovem saúde, bem-estar e inclusão
+          para idosos, cuidadores e familiares.
+        </p>
+      </div>
+
+      <div class="servicos-grid">
+
+        <div class="servico-card reveal">
+          <div class="servico-img-wrap">
+            <img src="imagens/roda-de-conversa.jpg" alt="Roda de conversa" class="servico-img"
+                 onerror="this.src='imagens/logo-imagem.jpeg'">
+          </div>
+          <div class="servico-overlay"></div>
+          <div class="servico-corpo">
+            <div class="servico-icone"><i class="fa-solid fa-comments"></i></div>
+            <h3 class="servico-titulo">Roda de Conversa</h3>
+            <p class="servico-resumo">Espaços de debate e troca de experiências sobre envelhecimento saudável.</p>
+            <div class="servico-expandido">
+              <p>As rodas de conversa estimulam o debate na comunidade acadêmica e para a população idosa, cuidadores e familiares. Tornamos temas mais acessíveis e incentivamos o gerenciamento de uma longevidade saudável.</p>
+            </div>
+            <span class="servico-mais">Saiba mais <i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+        </div>
+
+        <div class="servico-card reveal reveal-delay-1">
+          <div class="servico-img-wrap">
+            <img src="imagens/intervencao-supervisionada.jpg"
+                 alt="Intervenções supervisionadas" class="servico-img"
+                 onerror="this.src='imagens/logo-imagem.jpeg'">
+          </div>
+          <div class="servico-overlay"></div>
+          <div class="servico-corpo">
+            <div class="servico-icone"><i class="fa-solid fa-stethoscope"></i></div>
+            <h3 class="servico-titulo">Intervenções Supervisionadas</h3>
+            <p class="servico-resumo">Eventos com profissionais capacitados que beneficiam idosos e estagiários.</p>
+            <div class="servico-expandido">
+              <p>Com profissionais capacitados, realizamos aferições de medidas, escuta ativa e orientações nos mais diversos assuntos — inclusive acolhimento de familiares.</p>
+            </div>
+            <span class="servico-mais">Saiba mais <i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+        </div>
+
+        <div class="servico-card reveal reveal-delay-2">
+          <div class="servico-img-wrap">
+            <img src="imagens/capacitacao-cursos.jpg"
+                 alt="Capacitações e Cursos" class="servico-img"
+                 onerror="this.src='imagens/logo-imagem.jpeg'">
+          </div>
+          <div class="servico-overlay"></div>
+          <div class="servico-corpo">
+            <div class="servico-icone"><i class="fa-solid fa-certificate"></i></div>
+            <h3 class="servico-titulo">Capacitações e Cursos</h3>
+            <p class="servico-resumo">Cursos e capacitações ministrados por especialistas dedicados à causa idosa.</p>
+            <div class="servico-expandido">
+              <p>Contamos com profissionais que se dedicam à causa da pessoa idosa para promover cursos e capacitações para acadêmicos, cuidadores e idosos, com certificação.</p>
+            </div>
+            <span class="servico-mais">Saiba mais <i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+        </div>
+
+        <div class="servico-card reveal reveal-delay-3">
+          <div class="servico-img-wrap">
+            <img src="imagens/grupo-de-estudos.jpg"
+                 alt="Grupos de Estudos" class="servico-img"
+                 onerror="this.src='imagens/logo-imagem.jpeg'">
+          </div>
+          <div class="servico-overlay"></div>
+          <div class="servico-corpo">
+            <div class="servico-icone"><i class="fa-solid fa-book-open-reader"></i></div>
+            <h3 class="servico-titulo">Grupos de Estudo</h3>
+            <p class="servico-resumo">Discussões sobre políticas públicas, doenças crônicas, autonomia e muito mais.</p>
+            <div class="servico-expandido">
+              <p>Debatemos políticas públicas dos idosos, doenças crônicas, manutenção da autonomia, prevenção de demências, quedas, medicamentos e muitas outras pautas relevantes.</p>
+            </div>
+            <span class="servico-mais">Saiba mais <i class="fa-solid fa-chevron-down"></i></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer-global">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-marca">
+          <h3>LEG · FURG</h3>
+          <p>Liga Estudantil de Gerontologia — promovendo saúde, bem-estar e direitos para a comunidade idosa de Rio Grande e região.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="index.html"><i class="fa-regular fa-house"></i> Início</a></li>
+            <li><a href="atividades.html"><i class="fa-solid fa-brain"></i> Atividades</a></li>
+            <li><a href="sobre-nos.html"><i class="fa-solid fa-book-open"></i> Sobre Nós</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="mailto:leggerontologiafurg@gmail.com"><i class="fa-solid fa-envelope"></i> leggerontologiafurg@gmail.com</a></li>
+            <li><a href="https://chat.whatsapp.com/LBdOIAjzvQ4ET9H0cDNx68" target="_blank"><i class="fa-brands fa-whatsapp"></i> Grupo WhatsApp</a></li>
+            <li><a href="#"><i class="fa-solid fa-map-pin"></i> Rio Grande, RS</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 LEG · FURG — Todos os direitos reservados.</p>
+        <p>Desenvolvido com <i class="fa-solid fa-heart" style="color:var(--ouro-claro)"></i> por
+          <a href="https://john-alexandre.github.io/Portfolio/" target="_blank" rel="nofollow">John Alexandre</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll nav
+    const nav = document.getElementById('navGlobal');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Hamburguer
+    const btn = document.getElementById('hamburguer');
+    const mob = document.getElementById('navMobile');
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('aberto');
+      mob.classList.toggle('aberto');
+    });
+
+    // Hero bg parallax
+    const heroBg = document.getElementById('heroBg');
+    setTimeout(() => heroBg.classList.add('carregado'), 100);
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      heroBg.style.transform = `scale(1) translateY(${y * .18}px)`;
+    });
+
+    // Reveal on scroll
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visivel'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

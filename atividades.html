@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEG · FURG — Atividades</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="global.css">
+  <script src="https://kit.fontawesome.com/0dd8fdca34.js" crossorigin="anonymous"></script>
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--vinho-esc) 0%, var(--vinho) 60%, #a83030 100%);
+      padding: 80px 32px 72px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('imagens/maos.webp');
+      background-size: cover;
+      background-position: center;
+      opacity: .07;
+    }
+
+    .page-hero-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
+    .page-hero .secao-label { justify-content: center; color: var(--ouro-claro); }
+    .page-hero .secao-label::before { background: var(--ouro-claro); }
+
+    .page-hero h1 {
+      font-family: var(--fonte-display);
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      font-weight: 700;
+      color: var(--branco);
+      line-height: 1.18;
+      margin-bottom: 18px;
+    }
+
+    .page-hero h1 em { font-style: italic; color: var(--ouro-claro); }
+
+    .page-hero p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.72);
+      line-height: 1.75;
+    }
+
+    /* ── SELETOR DE ANO ── */
+    .ano-selecao {
+      background: var(--branco);
+      border-bottom: 1px solid var(--cinza-200);
+      position: sticky;
+      top: 72px;
+      z-index: 200;
+      box-shadow: var(--sombra-sm);
+    }
+
+    .ano-selecao-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 60px;
+    }
+
+    .ano-selecao p {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--cinza-600);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+
+    .ano-tab {
+      padding: 8px 24px;
+      border-radius: 40px;
+      border: 2px solid var(--cinza-200);
+      background: transparent;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--cinza-600);
+      cursor: pointer;
+      transition: all var(--trans);
+      font-family: var(--fonte-corpo);
+    }
+
+    .ano-tab:hover { border-color: var(--vinho); color: var(--vinho); }
+
+    .ano-tab.ativo {
+      background: var(--vinho);
+      border-color: var(--vinho);
+      color: var(--branco);
+      box-shadow: var(--sombra-vinho);
+    }
+
+    /* ── REGISTROS (ensino, pesquisa, extensão) ── */
+    .registros {
+      background: var(--creme);
+    }
+
+    .registros-head {
+      margin-bottom: 56px;
+    }
+
+    .registros-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 80px;
+    }
+
+    .registro-card {
+      background: var(--branco);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      border: 1px solid var(--cinza-200);
+      box-shadow: var(--sombra-sm);
+      transition: all var(--trans-slow);
+    }
+
+    .registro-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--sombra-lg);
+      border-color: transparent;
+    }
+
+    .registro-card:hover .registro-img { transform: scale(1.04); }
+
+    .registro-img-wrap {
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .registro-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--trans-slow);
+    }
+
+    .registro-corpo {
+      padding: 24px;
+    }
+
+    .registro-num {
+      font-family: var(--fonte-display);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: rgba(140,31,31,.12);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .registro-titulo {
+      font-family: var(--fonte-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--vinho);
+      margin-bottom: 12px;
+    }
+
+    .registro-texto {
+      font-size: .88rem;
+      color: var(--cinza-600);
+      line-height: 1.7;
+    }
+
+    /* ── POSTS SEÇÃO ── */
+    .posts-secao {
+      background: var(--branco);
+    }
+
+    .posts-secao-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .posts-grid-pub {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* CARD POST */
+    .pub-card {
+      background: var(--creme);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      border: 1px solid var(--cinza-200);
+      box-shadow: var(--sombra-sm);
+      transition: all var(--trans-slow);
+      text-decoration: none;
+      display: block;
+      color: inherit;
+      animation: cardIn .4s ease both;
+    }
+
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(20px) scale(.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    .pub-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--sombra-lg);
+      border-color: transparent;
+    }
+
+    .pub-card:hover .pub-card-img { transform: scale(1.05); }
+    .pub-card:hover .pub-ler-mais { gap: 10px; color: var(--vinho-claro); }
+
+    .pub-img-wrap { height: 200px; overflow: hidden; }
+
+    .pub-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform var(--trans-slow);
+    }
+
+    .pub-img-vazio {
+      width: 100%; height: 200px;
+      background: linear-gradient(135deg, var(--cinza-100), var(--cinza-200));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cinza-400); font-size: 2rem;
+    }
+
+    .pub-card-corpo { padding: 22px; }
+
+    .pub-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pub-tag-ano {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--ouro-pale); color: var(--ouro);
+      border: 1px solid rgba(200,148,26,.25);
+      font-size: .7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    .pub-data { font-size: .75rem; color: var(--cinza-400); display:flex; align-items:center; gap:4px; }
+
+    .pub-titulo {
+      font-family: var(--fonte-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--texto);
+      line-height: 1.35;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .pub-texto {
+      font-size: .85rem;
+      color: var(--cinza-600);
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .pub-rodape {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--cinza-200);
+      padding-top: 14px;
+    }
+
+    .pub-ler-mais {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .82rem; font-weight: 700;
+      color: var(--vinho); transition: all var(--trans);
+    }
+
+    .pub-ler-mais i { font-size: .72rem; }
+
+    /* Estado vazio */
+    .posts-vazio {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--cinza-100);
+      border-radius: var(--r-xl);
+      border: 2px dashed var(--cinza-200);
+    }
+
+    .posts-vazio i { font-size: 2.8rem; color: var(--cinza-400); display:block; margin-bottom:18px; }
+
+    .posts-vazio h3 {
+      font-family: var(--fonte-display);
+      font-size: 1.6rem;
+      color: var(--cinza-600);
+      margin-bottom: 8px;
+    }
+
+    .posts-vazio p { font-size: .9rem; color: var(--cinza-400); }
+
+    /* ── ANO NAV BOTÃO ── */
+    .ano-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+
+    .ano-card {
+      padding: 36px 28px;
+      border-radius: var(--r-xl);
+      border: 2px solid var(--cinza-200);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--trans-slow);
+      background: var(--branco);
+      box-shadow: var(--sombra-sm);
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+
+    .ano-card:hover, .ano-card.ativo {
+      border-color: var(--vinho);
+      background: var(--vinho);
+      color: var(--branco);
+      transform: translateY(-4px);
+      box-shadow: var(--sombra-vinho);
+    }
+
+    .ano-card-num {
+      font-family: var(--fonte-display);
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--vinho);
+      line-height: 1;
+      margin-bottom: 8px;
+      transition: color var(--trans-slow);
+    }
+
+    .ano-card:hover .ano-card-num,
+    .ano-card.ativo .ano-card-num { color: var(--ouro-claro); }
+
+    .ano-card-txt {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--cinza-600);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      transition: color var(--trans-slow);
+    }
+
+    .ano-card:hover .ano-card-txt,
+    .ano-card.ativo .ano-card-txt { color: rgba(255,255,255,.75); }
+
+    /* ── SEÇÃO PESQUISAS ── */
+    .pesquisas-secao {
+      background: var(--creme);
+    }
+
+    .pesquisas-secao-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .pesquisas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    /* Card de pesquisa */
+    .pesq-card {
+      background: var(--branco);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      border: 1px solid var(--cinza-200);
+      box-shadow: var(--sombra-sm);
+      transition: all var(--trans-slow);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      color: inherit;
+      animation: cardIn .4s ease both;
+    }
+
+    .pesq-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--sombra-lg);
+      border-color: transparent;
+    }
+
+    .pesq-card:hover .pesq-card-img { transform: scale(1.05); }
+    .pesq-card:hover .pesq-ler-mais { gap: 10px; color: var(--vinho-claro); }
+
+    .pesq-img-wrap { height: 200px; overflow: hidden; flex-shrink: 0; }
+
+    .pesq-card-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform var(--trans-slow);
+    }
+
+    .pesq-img-vazio {
+      width: 100%; height: 200px;
+      background: linear-gradient(135deg, rgba(140,31,31,.06), rgba(140,31,31,.14));
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(140,31,31,.3); font-size: 2rem;
+    }
+
+    .pesq-card-corpo {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .pesq-card-meta {
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap; margin-bottom: 12px;
+    }
+
+    .pesq-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(140,31,31,.08);
+      color: var(--vinho);
+      border: 1px solid rgba(140,31,31,.18);
+      font-size: .7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    .pesq-badge-autores {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--ouro-pale); color: var(--ouro);
+      border: 1px solid rgba(200,148,26,.2);
+      font-size: .7rem; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px;
+      max-width: 200px; overflow: hidden;
+      white-space: nowrap; text-overflow: ellipsis;
+    }
+
+    .pesq-card-titulo {
+      font-family: var(--fonte-display);
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--texto); line-height: 1.35;
+      margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .pesq-card-resumo {
+      font-size: .85rem; color: var(--cinza-600); line-height: 1.65;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+      margin-bottom: 16px; flex: 1;
+      font-style: italic;
+    }
+
+    .pesq-card-rodape {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--cinza-200); padding-top: 14px;
+    }
+
+    .pesq-data-card { font-size: .75rem; color: var(--cinza-400); display: flex; align-items: center; gap: 4px; }
+
+    .pesq-ler-mais {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .82rem; font-weight: 700;
+      color: var(--vinho); transition: all var(--trans);
+    }
+    .pesq-ler-mais i { font-size: .72rem; }
+
+    /* Tem link externo */
+    .pesq-tem-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: .72rem; color: var(--cinza-400);
+    }
+
+    /* Vazio */
+    .pesquisas-vazio {
+      grid-column: 1/-1;
+      text-align: center; padding: 80px 20px;
+      background: var(--cinza-100); border-radius: var(--r-xl);
+      border: 2px dashed var(--cinza-200);
+    }
+    .pesquisas-vazio i { font-size: 2.8rem; color: var(--cinza-400); display:block; margin-bottom:18px; }
+    .pesquisas-vazio h3 { font-family: var(--fonte-display); font-size: 1.6rem; color: var(--cinza-600); margin-bottom: 8px; }
+    .pesquisas-vazio p  { font-size: .9rem; color: var(--cinza-400); }
+
+    @media (max-width: 900px) {
+      .registros-grid { grid-template-columns: 1fr; }
+      .ano-selecao { top: 0; }
+    }
+
+    @media (max-width: 600px) {
+      .page-hero { padding: 60px 20px 56px; }
+      .ano-selecao-inner { padding: 0 16px; overflow-x: auto; }
+      .ano-cards { grid-template-columns: 1fr; max-width: 300px; }
+      .pesquisas-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVEGAÇÃO ── -->
+  <nav class="nav-global" id="navGlobal">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="imagens/logo-imagem.jpeg" alt="LEG Logo" class="nav-logo-img" onerror="this.style.display='none'">
+        <div class="nav-logo-texto">
+          <span class="nav-logo-nome">LEG · FURG</span>
+          <span class="nav-logo-sub">Liga Est. de Gerontologia</span>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link"><i class="fa-regular fa-house"></i> Início</a>
+        <a href="atividades.html" class="nav-link ativo"><i class="fa-solid fa-brain"></i> Atividades</a>
+        <a href="sobre-nos.html" class="nav-link"><i class="fa-solid fa-book-open"></i> Sobre Nós</a>
+      </div>
+      <a href="admin-login.html" class="nav-link-login"><i class="fa-solid fa-lock"></i> Admin</a>
+      <button class="nav-hamburguer" id="hamburguer"><span></span><span></span><span></span></button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <a href="index.html" class="nav-link"><i class="fa-regular fa-house"></i> Início</a>
+      <a href="atividades.html" class="nav-link ativo"><i class="fa-solid fa-brain"></i> Atividades</a>
+      <a href="sobre-nos.html" class="nav-link"><i class="fa-solid fa-book-open"></i> Sobre Nós</a>
+          <a href="admin-login.html" class="nav-link-login" style="margin:8px 0 0;justify-content:center;width:100%;"><i class="fa-solid fa-lock"></i> Área Admin</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <span class="secao-label"><i class="fa-solid fa-brain"></i> Atividades</span>
+      <h1>Nossos <em>registros</em></h1>
+      <p>Acompanhe tudo o que a LEG faz pela comunidade idosa — eventos, publicações e ações de ensino, pesquisa e extensão.</p>
+    </div>
+  </div>
+
+  <!-- SELETOR DE ANO STICKY -->
+  <div class="ano-selecao" id="anoSelecao">
+    <div class="ano-selecao-inner">
+      <p><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> Ano:</p>
+      <button class="ano-tab ativo" data-ano="2025" id="tab2025">2025</button>
+      <button class="ano-tab" data-ano="2026" id="tab2026">2026</button>
+    </div>
+  </div>
+
+  
+
+  <!-- POSTS POR ANO -->
+  <section class="secao posts-secao" id="secaoPosts">
+    <div class="secao-inner">
+      <div class="posts-secao-head">
+        <div>
+          <span class="secao-label reveal"><i class="fa-solid fa-newspaper"></i> Publicações</span>
+          <h2 class="secao-titulo reveal" id="tituloPostsAno">Posts de 2025</h2>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-outline" data-ano="2025" id="verAno2025" style="display:none;">Ver 2025</button>
+          <button class="btn btn-outline" data-ano="2026" id="verAno2026" style="display:none;">Ver 2026</button>
+        </div>
+      </div>
+
+      <div class="posts-grid-pub" id="gridPosts"></div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO DE PESQUISAS -->
+  <section class="secao pesquisas-secao" id="secaoPesquisas">
+    <div class="secao-inner">
+      <div class="pesquisas-secao-head">
+        <div>
+          <span class="secao-label reveal"><i class="fa-solid fa-microscope"></i> Ciência</span>
+          <h2 class="secao-titulo reveal">Nossas <em>Pesquisas</em></h2>
+          <p class="secao-texto reveal" style="max-width:520px; margin-top:4px;">Produções científicas e trabalhos acadêmicos desenvolvidos pela LEG e seus membros.</p>
+        </div>
+      </div>
+      <div class="pesquisas-grid" id="gridPesquisas"></div>
+    </div>
+  </section>
+  <!-- REGISTROS -->
+  <section class="secao registros">
+    <div class="secao-inner">
+      <div class="registros-head reveal">
+        <span class="secao-label"><i class="fa-solid fa-layer-group"></i> Nossos registros de atividades</span>
+        <h2 class="secao-titulo">Ensino, pesquisa <em>e extensão</em></h2>
+        <p class="secao-texto">Saiba tudo sobre o que fazemos em cada um dos nossos eixos de atuação.</p>
+      </div>
+
+      <div class="registros-grid">
+        <div class="registro-card reveal">
+          <div class="registro-img-wrap">
+            <img src="imagens/idoso lendo.jpg" alt="Senhora lendo" class="registro-img" onerror="this.src='imagens/logo-imagem.jpeg'">
+          </div>
+          <div class="registro-corpo">
+            <div class="registro-num">01</div>
+            <h3 class="registro-titulo">Ensino</h3>
+            <p class="registro-texto">
+              Temos o incentivo de realizar leituras constantes e trocar experiências com
+              professores dentro da nossa Instituição de Ensino e fora dela. A cada evento
+              proporcionado, existe uma certificação que nos permite ampliar nosso currículo
+              e expertise.
+            </p>
+          </div>
+        </div>
+
+        <div class="registro-card reveal reveal-delay-1">
+          <div class="registro-img-wrap">
+            <img src="imagens/idosa.jpeg" alt="Idosos" class="registro-img" onerror="this.src='imagens/logo-imagem.jpeg'">
+          </div>
+          <div class="registro-corpo">
+            <div class="registro-num">02</div>
+            <h3 class="registro-titulo">Pesquisa</h3>
+            <p class="registro-texto">
+              Contamos com profissionais que nos incentivam a divulgar informações científicas
+              para a comunidade idosa, contribuindo para a criação de estratégias para a
+              melhoria da saúde e bem-estar nessa faixa etária.
+            </p>
+          </div>
+        </div>
+
+        <div class="registro-card reveal reveal-delay-2">
+          <div class="registro-img-wrap">
+            <img src="imagens/maos unidas extensao.jpg" alt="Mãos unidas" class="registro-img" onerror="this.src='imagens/logo-imagem.jpeg'">
+          </div>
+          <div class="registro-corpo">
+            <div class="registro-num">03</div>
+            <h3 class="registro-titulo">Extensão</h3>
+            <p class="registro-texto">
+              Através de nossas ações, nos aproximamos da população idosa,
+              promovendo mais qualidade de vida e conhecimento para quem
+              mais precisa de cuidado e atenção.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-global">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-marca">
+          <h3>LEG · FURG</h3>
+          <p>Liga Estudantil de Gerontologia — promovendo saúde, bem-estar e direitos para a comunidade idosa de Rio Grande e região.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="index.html"><i class="fa-regular fa-house"></i> Início</a></li>
+            <li><a href="atividades.html"><i class="fa-solid fa-brain"></i> Atividades</a></li>
+            <li><a href="sobre-nos.html"><i class="fa-solid fa-book-open"></i> Sobre Nós</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="mailto:leggerontologiafurg@gmail.com"><i class="fa-solid fa-envelope"></i> leggerontologiafurg@gmail.com</a></li>
+            <li><a href="https://chat.whatsapp.com/LBdOIAjzvQ4ET9H0cDNx68" target="_blank"><i class="fa-brands fa-whatsapp"></i> Grupo WhatsApp</a></li>
+            <li><a href="#"><i class="fa-solid fa-map-pin"></i> Rio Grande, RS</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 LEG · FURG — Todos os direitos reservados.</p>
+        <p>Desenvolvido com <i class="fa-solid fa-heart" style="color:var(--ouro-claro)"></i> por
+          <a href="https://john-alexandre.github.io/Portfolio/" target="_blank" rel="nofollow">John Alexandre</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // NAV
+    const nav = document.getElementById('navGlobal');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+    document.getElementById('hamburguer').addEventListener('click', function() {
+      this.classList.toggle('aberto');
+      document.getElementById('navMobile').classList.toggle('aberto');
+    });
+
+    // REVEAL
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visivel'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // POSTS
+    const CHAVE = 'legfurg_posts';
+    let anoAtivo = 2025;
+
+    function lerPosts() {
+      try { const r = localStorage.getItem(CHAVE); return r ? JSON.parse(r) : []; } catch { return []; }
+    }
+
+    function esc(str) {
+      const d = document.createElement('div');
+      d.appendChild(document.createTextNode(String(str)));
+      return d.innerHTML;
+    }
+
+    function fmtData(ts) {
+      return new Date(ts).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
+    }
+
+    function renderPosts(ano) {
+      anoAtivo = ano;
+      const grid = document.getElementById('gridPosts');
+      document.getElementById('tituloPostsAno').textContent = `Posts de ${ano}`;
+
+      // Atualiza tabs
+      document.querySelectorAll('.ano-tab').forEach(t => t.classList.toggle('ativo', parseInt(t.dataset.ano) === ano));
+
+      const posts = lerPosts().filter(p => p.ano == ano).sort((a,b) => b.criadoEm - a.criadoEm);
+      grid.innerHTML = '';
+
+      if (!posts.length) {
+        grid.innerHTML = `<div class="posts-vazio">
+          <i class="fa-regular fa-calendar-xmark"></i>
+          <h3>Nenhuma publicação em ${ano}</h3>
+          <p>Em breve novos conteúdos serão publicados aqui!</p>
+        </div>`;
+        return;
+      }
+
+      posts.forEach((post, i) => {
+        const card = document.createElement('a');
+        card.className = 'pub-card reveal';
+        card.href = `post.html?id=${post.id}`;
+        card.style.animationDelay = `${i * 65}ms`;
+
+        const img = post.imagem
+          ? `<div class="pub-img-wrap"><img class="pub-card-img" src="${esc(post.imagem)}" alt="${esc(post.titulo)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"pub-img-vazio\\"><i class=\\"fa-solid fa-image\\"></i></div>'"></div>`
+          : `<div class="pub-img-vazio"><i class="fa-solid fa-image"></i></div>`;
+
+        card.innerHTML = `${img}
+          <div class="pub-card-corpo">
+            <div class="pub-meta">
+              <span class="pub-tag-ano"><i class="fa-regular fa-calendar"></i> ${post.ano}</span>
+              <span class="pub-data"><i class="fa-regular fa-clock"></i> ${fmtData(post.criadoEm)}</span>
+            </div>
+            <h3 class="pub-titulo">${esc(post.titulo)}</h3>
+            <p class="pub-texto">${esc(post.texto)}</p>
+            <div class="pub-rodape">
+              <span class="pub-ler-mais">Ler post completo <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </div>`;
+
+        grid.appendChild(card);
+
+        // re-observe card
+        obs.observe(card);
+      });
+    }
+
+    // Tabs de ano
+    document.querySelectorAll('.ano-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        renderPosts(parseInt(tab.dataset.ano));
+        document.getElementById('secaoPosts').scrollIntoView({ behavior:'smooth', block:'start' });
+      });
+    });
+
+    renderPosts(2026);
+    window.addEventListener('focus', () => renderPosts(anoAtivo));
+    window.addEventListener('storage', e => { if (e.key === CHAVE) renderPosts(anoAtivo); });
+
+    // ── PESQUISAS ──
+    const CHAVE_PESQ = 'legfurg_pesquisas';
+
+    function lerPesquisas() {
+      try { const r = localStorage.getItem(CHAVE_PESQ); return r ? JSON.parse(r) : []; } catch { return []; }
+    }
+
+    function renderPesquisas() {
+      const grid = document.getElementById('gridPesquisas');
+      const lista = lerPesquisas().sort((a, b) => b.criadoEm - a.criadoEm);
+      grid.innerHTML = '';
+
+      if (!lista.length) {
+        grid.innerHTML = `<div class="pesquisas-vazio">
+          <i class="fa-solid fa-microscope"></i>
+          <h3>Nenhuma pesquisa publicada</h3>
+          <p>Em breve produções científicas da LEG serão disponibilizadas aqui!</p>
+        </div>`;
+        return;
+      }
+
+      lista.forEach((pesq, i) => {
+        const card = document.createElement('a');
+        card.className = 'pesq-card reveal';
+        card.href = `pesquisa.html?id=${pesq.id}`;
+        card.style.animationDelay = `${i * 65}ms`;
+
+        const img = pesq.imagem
+          ? `<div class="pesq-img-wrap"><img class="pesq-card-img" src="${esc(pesq.imagem)}" alt="${esc(pesq.titulo)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\"pesq-img-vazio\\"><i class=\\"fa-solid fa-microscope\\"></i></div>'"></div>`
+          : `<div class="pesq-img-vazio"><i class="fa-solid fa-microscope"></i></div>`;
+
+        const autoresHTML = pesq.autores
+          ? `<span class="pesq-badge-autores"><i class="fa-solid fa-user-pen"></i> ${esc(pesq.autores)}</span>`
+          : '';
+
+        const linkHTML = pesq.link
+          ? `<span class="pesq-tem-link"><i class="fa-solid fa-link"></i> Link disponível</span>`
+          : '';
+
+        card.innerHTML = `${img}
+          <div class="pesq-card-corpo">
+            <div class="pesq-card-meta">
+              <span class="pesq-badge"><i class="fa-solid fa-microscope"></i> Pesquisa</span>
+              ${autoresHTML}
+            </div>
+            <h3 class="pesq-card-titulo">${esc(pesq.titulo)}</h3>
+            <p class="pesq-card-resumo">${esc(pesq.resumo || pesq.texto || '')}</p>
+            <div class="pesq-card-rodape">
+              <span class="pesq-data-card"><i class="fa-regular fa-clock"></i> ${fmtData(pesq.criadoEm)}</span>
+              ${linkHTML}
+              <span class="pesq-ler-mais">Ler mais <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </div>`;
+
+        grid.appendChild(card);
+        obs.observe(card);
+      });
+    }
+
+    renderPesquisas();
+    window.addEventListener('focus', renderPesquisas);
+    window.addEventListener('storage', e => { if (e.key === CHAVE_PESQ) renderPesquisas(); });
+  </script>
+</body>
+</html>

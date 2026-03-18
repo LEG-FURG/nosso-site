@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEG · FURG — Área Administrativa</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="global.css">
+  <script src="https://kit.fontawesome.com/0dd8fdca34.js" crossorigin="anonymous"></script>
+  <style>
+    /* ── LAYOUT ── */
+    .login-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── PAINEL ESQUERDO — visual ── */
+    .login-visual {
+      background: linear-gradient(135deg, var(--vinho-esc) 0%, var(--vinho) 60%, #a83030 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 52px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Grade decorativa de pontos */
+    .login-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(242,203,87,.18) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    /* Círculo grande decorativo */
+    .login-visual::after {
+      content: '';
+      position: absolute;
+      bottom: -120px;
+      right: -120px;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      border: 60px solid rgba(242,203,87,.07);
+      pointer-events: none;
+    }
+
+    .visual-topo {
+      position: relative;
+      z-index: 1;
+    }
+
+    .visual-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .visual-logo-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(242,203,87,.5);
+    }
+
+    .visual-logo-txt h2 {
+      font-family: var(--fonte-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ouro-claro);
+      line-height: 1;
+    }
+
+    .visual-logo-txt span {
+      font-size: .68rem;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .visual-centro {
+      position: relative;
+      z-index: 1;
+    }
+
+    .visual-quote {
+      font-family: var(--fonte-display);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--branco);
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+
+    .visual-quote em {
+      color: var(--ouro-claro);
+      font-style: italic;
+    }
+
+    .visual-desc {
+      font-size: .9rem;
+      color: rgba(255,255,255,.6);
+      line-height: 1.7;
+      max-width: 340px;
+    }
+
+    .visual-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .visual-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.07);
+      color: rgba(255,255,255,.7);
+      font-size: .75rem;
+      font-weight: 500;
+      backdrop-filter: blur(4px);
+    }
+
+    .visual-tag i { color: var(--ouro-claro); font-size: .7rem; }
+
+    .visual-rodape {
+      position: relative;
+      z-index: 1;
+      font-size: .75rem;
+      color: rgba(255,255,255,.3);
+    }
+
+    /* ── PAINEL DIREITO — formulário ── */
+    .login-form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 72px;
+      background: var(--creme);
+      position: relative;
+    }
+
+    .form-topo {
+      margin-bottom: 44px;
+    }
+
+    .form-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--ouro);
+      margin-bottom: 14px;
+    }
+
+    .form-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--ouro-claro);
+      border-radius: 2px;
+    }
+
+    .form-titulo {
+      font-family: var(--fonte-display);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--texto);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .form-titulo em { font-style: italic; color: var(--vinho); }
+
+    .form-subtitulo {
+      font-size: .92rem;
+      color: var(--cinza-600);
+    }
+
+    /* Campos */
+    .campo-grupo {
+      margin-bottom: 22px;
+    }
+
+    .campo-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--cinza-600);
+      margin-bottom: 8px;
+    }
+
+    .campo-label i { color: var(--vinho); font-size: .72rem; }
+
+    .campo-input-wrap { position: relative; }
+
+    .campo-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--branco);
+      border: 1.5px solid var(--cinza-200);
+      border-radius: var(--r-md);
+      font-size: .95rem;
+      color: var(--texto);
+      font-family: var(--fonte-corpo);
+      outline: none;
+      transition: all var(--trans);
+    }
+
+    .campo-input:focus {
+      border-color: var(--vinho);
+      box-shadow: 0 0 0 3px rgba(140,31,31,.1);
+      background: var(--branco);
+    }
+
+    .campo-input.erro {
+      border-color: var(--vinho);
+      background: #fff8f8;
+    }
+
+    .campo-input::placeholder { color: var(--cinza-400); }
+
+    /* Botão de ver senha */
+    .btn-olho {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--cinza-400);
+      padding: 4px;
+      font-size: .9rem;
+      transition: color var(--trans);
+      cursor: pointer;
+    }
+
+    .btn-olho:hover { color: var(--vinho); }
+
+    .campo-erro {
+      display: block;
+      font-size: .75rem;
+      color: var(--vinho);
+      font-weight: 600;
+      margin-top: 6px;
+      min-height: 14px;
+    }
+
+    /* Lembrar */
+    .campo-check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: .88rem;
+      color: var(--cinza-600);
+      margin-bottom: 28px;
+      cursor: pointer;
+    }
+
+    .campo-check input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--vinho);
+      cursor: pointer;
+    }
+
+    /* Botão submit */
+    .btn-entrar {
+      width: 100%;
+      padding: 15px;
+      background: var(--vinho);
+      color: var(--branco);
+      border: none;
+      border-radius: var(--r-md);
+      font-family: var(--fonte-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all var(--trans);
+      box-shadow: var(--sombra-vinho);
+    }
+
+    .btn-entrar:hover {
+      background: var(--vinho-claro);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(140,31,31,.35);
+    }
+
+    .btn-entrar:disabled {
+      opacity: .65;
+      transform: none;
+      cursor: wait;
+    }
+
+    /* Dica de acesso */
+    .acesso-dica {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 22px;
+      padding: 14px 16px;
+      background: var(--ouro-pale);
+      border: 1px solid rgba(200,148,26,.2);
+      border-left: 3px solid var(--ouro-claro);
+      border-radius: var(--r-md);
+      font-size: .8rem;
+      color: var(--cinza-600);
+      line-height: 1.55;
+    }
+
+    .acesso-dica i { color: var(--ouro); margin-top: 2px; flex-shrink: 0; }
+    .acesso-dica strong { color: var(--texto); }
+
+    /* Link voltar site */
+    .link-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 28px;
+      font-size: .83rem;
+      font-weight: 600;
+      color: var(--cinza-400);
+      transition: all var(--trans);
+    }
+
+    .link-voltar:hover { color: var(--vinho); gap: 10px; }
+    .link-voltar i { font-size: .72rem; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      padding: 14px 20px;
+      border-radius: var(--r-lg);
+      color: var(--branco);
+      font-weight: 600;
+      font-size: .88rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--sombra-lg);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all var(--trans-slow);
+      z-index: 9999;
+      max-width: 320px;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #27ae60; }
+    .toast.error   { background: var(--vinho); }
+
+    /* ── RESPONSIVO ── */
+    @media (max-width: 900px) {
+      .login-page { grid-template-columns: 1fr; }
+      .login-visual { display: none; }
+      .login-form-panel { padding: 52px 40px; justify-content: flex-start; padding-top: 48px; }
+    }
+
+    @media (max-width: 480px) {
+      .login-form-panel { padding: 40px 24px; }
+      .form-titulo { font-size: 2rem; }
+      .toast { bottom: 16px; right: 12px; left: 12px; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-page">
+
+    <!-- ── PAINEL VISUAL ── -->
+    <div class="login-visual">
+      <div class="visual-topo">
+        <div class="visual-logo">
+          <img src="imagens/logo-imagem.jpeg" alt="LEG" class="visual-logo-img"
+               onerror="this.style.display='none'">
+          <div class="visual-logo-txt">
+            <h2>LEG · FURG</h2>
+            <span>Liga Est. de Gerontologia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual-centro">
+        <p class="visual-quote">
+          "Cuidar do <em>envelhecimento</em><br>
+          é cuidar do futuro<br>de todos nós."
+        </p>
+        <p class="visual-desc">
+          Área exclusiva para administradores da LEG. Gerencie posts,
+          atividades e publicações do site institucional.
+        </p>
+        <div class="visual-tags">
+          <span class="visual-tag"><i class="fa-solid fa-newspaper"></i> Gestão de posts</span>
+          <span class="visual-tag"><i class="fa-solid fa-calendar"></i> Atividades 2025/2026</span>
+          <span class="visual-tag"><i class="fa-solid fa-shield-halved"></i> Acesso seguro</span>
+        </div>
+      </div>
+
+      <div class="visual-rodape">
+        © 2025 LEG · FURG — Universidade Federal do Rio Grande
+      </div>
+    </div>
+
+    <!-- ── FORMULÁRIO ── -->
+    <div class="login-form-panel">
+      <div class="form-topo">
+        <span class="form-eyebrow"><i class="fa-solid fa-lock"></i> Acesso restrito</span>
+        <h1 class="form-titulo">Bem-vindo de <em>volta</em></h1>
+        <p class="form-subtitulo">Entre com suas credenciais para acessar o painel</p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="campo-grupo">
+          <label class="campo-label" for="email">
+            <i class="fa-solid fa-envelope"></i> Endereço de e-mail
+          </label>
+          <input
+            type="email"
+            id="email"
+            class="campo-input"
+            placeholder="seu@email.com"
+            autocomplete="email"
+          >
+          <span class="campo-erro" id="erroEmail"></span>
+        </div>
+
+        <div class="campo-grupo">
+          <label class="campo-label" for="senha">
+            <i class="fa-solid fa-lock"></i> Senha
+          </label>
+          <div class="campo-input-wrap">
+            <input
+              type="password"
+              id="senha"
+              class="campo-input"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              style="padding-right: 48px;"
+            >
+            <button type="button" class="btn-olho" id="btnOlho">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <span class="campo-erro" id="erroSenha"></span>
+        </div>
+
+        <label class="campo-check">
+          <input type="checkbox" id="lembrar"> Lembrar de mim neste dispositivo
+        </label>
+
+        <button type="submit" class="btn-entrar" id="btnEntrar">
+          <span id="btnTxt">Entrar no painel</span>
+          <i class="fa-solid fa-arrow-right" id="btnIco"></i>
+        </button>
+
+        <div class="acesso-dica">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>Acesso demo — e-mail: <strong>admin@leg.com</strong> &nbsp;·&nbsp; senha: <strong>leg2024</strong></span>
+        </div>
+      </form>
+
+      <a href="index.html" class="link-voltar">
+        <i class="fa-solid fa-arrow-left"></i> Voltar ao site
+      </a>
+    </div>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <i id="toastIco" class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    const CRED   = { email: 'admin@leg.com', senha: 'leg2024' };
+    const CHAVE  = 'legfurg_sessao';
+
+    function getSessao() {
+      try {
+        const r = localStorage.getItem(CHAVE) || sessionStorage.getItem(CHAVE);
+        return r ? JSON.parse(r) : null;
+      } catch { return null; }
+    }
+
+    if (getSessao()) window.location.href = 'admin-dashboard.html';
+
+    function toast(msg, tipo = 'success') {
+      const el = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toastIco').className =
+        tipo === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark';
+      el.className = `toast ${tipo} show`;
+      setTimeout(() => el.classList.remove('show'), 3500);
+    }
+
+    // Toggle senha
+    document.getElementById('btnOlho').addEventListener('click', function() {
+      const inp = document.getElementById('senha');
+      const ver = inp.type === 'password';
+      inp.type = ver ? 'text' : 'password';
+      this.innerHTML = ver
+        ? '<i class="fa-solid fa-eye-slash"></i>'
+        : '<i class="fa-solid fa-eye"></i>';
+    });
+
+    // Limpa erros ao digitar
+    ['email', 'senha'].forEach(id => {
+      document.getElementById(id).addEventListener('input', function() {
+        this.classList.remove('erro');
+        const err = document.getElementById('erro' + id.charAt(0).toUpperCase() + id.slice(1));
+        if (err) err.textContent = '';
+      });
+    });
+
+    // Submit
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email  = document.getElementById('email').value.trim();
+      const senha  = document.getElementById('senha').value;
+      const lembrar= document.getElementById('lembrar').checked;
+      let ok = true;
+
+      if (!email) { erroC('email', 'erroEmail', 'Informe seu e-mail'); ok = false; }
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { erroC('email', 'erroEmail', 'E-mail inválido'); ok = false; }
+      if (!senha) { erroC('senha', 'erroSenha', 'Informe sua senha'); ok = false; }
+      if (!ok) return;
+
+      const btn = document.getElementById('btnEntrar');
+      btn.disabled = true;
+      document.getElementById('btnTxt').textContent = 'Verificando...';
+      document.getElementById('btnIco').className = 'fa-solid fa-spinner fa-spin';
+
+      setTimeout(() => {
+        if (email === CRED.email && senha === CRED.senha) {
+          const payload = JSON.stringify({ email, ts: Date.now() });
+          if (lembrar) localStorage.setItem(CHAVE, payload);
+          else sessionStorage.setItem(CHAVE, payload);
+          toast('Acesso autorizado! Redirecionando...', 'success');
+          setTimeout(() => window.location.href = 'admin-dashboard.html', 900);
+        } else {
+          btn.disabled = false;
+          document.getElementById('btnTxt').textContent = 'Entrar no painel';
+          document.getElementById('btnIco').className = 'fa-solid fa-arrow-right';
+          erroC('email', 'erroEmail', 'Credenciais incorretas');
+          erroC('senha', 'erroSenha', ' ');
+          toast('E-mail ou senha incorretos', 'error');
+        }
+      }, 750);
+    });
+
+    function erroC(inputId, erroId, msg) {
+      document.getElementById(inputId).classList.add('erro');
+      document.getElementById(erroId).textContent = msg;
+    }
+  </script>
+</body>
+</html>
