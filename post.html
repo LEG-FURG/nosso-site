@@ -297,10 +297,9 @@
         <a href="index.html" class="nav-link"><i class="fa-regular fa-house"></i> Início</a>
         <a href="atividades.html" class="nav-link"><i class="fa-solid fa-brain"></i> Atividades</a>
         <a href="sobre-nos.html" class="nav-link"><i class="fa-solid fa-book-open"></i> Sobre Nós</a>
-        <a href="admin-login.html" class="nav-link-login"><i class="fa-solid fa-lock"></i> Admin</a>
       </div>
-      
-      
+      <a href="admin-login.html" class="nav-link-login"><i class="fa-solid fa-lock"></i> Admin</a>
+      <a href="admin-login.html" class="nav-link-login"><i class="fa-solid fa-lock"></i> Admin</a>
       <button class="nav-hamburguer" id="hamburguer"><span></span><span></span><span></span></button>
     </div>
     <div class="nav-mobile" id="navMobile">
@@ -346,8 +345,21 @@
     </div>
   </footer>
 
-  <script>
-    // NAV
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, collection, getDocs, query, orderBy }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const FB = {
+      apiKey:"AIzaSyCerNmqmhQ96h2ljzgmzL71FFcVPlEfH5E",
+      authDomain:"leg-furg.firebaseapp.com",
+      projectId:"leg-furg",
+      storageBucket:"leg-furg.firebasestorage.app",
+      messagingSenderId:"763827146370",
+      appId:"1:763827146370:web:36431aea52963ec0816e9b"
+    };
+    const db = getFirestore(initializeApp(FB));
+
     const navEl = document.getElementById('navGlobal');
     window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', window.scrollY > 40));
     document.getElementById('hamburguer').addEventListener('click', function() {
@@ -355,122 +367,54 @@
       document.getElementById('navMobile').classList.toggle('aberto');
     });
 
-    // POST
-    const CHAVE = 'legfurg_posts';
+    function esc(str) { const d=document.createElement('div'); d.appendChild(document.createTextNode(String(str))); return d.innerHTML; }
+    function fmtData(ts) { if(!ts) return ''; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}); }
 
-    function lerPosts() {
-      try { const r = localStorage.getItem(CHAVE); return r ? JSON.parse(r) : []; } catch { return []; }
-    }
-
-    function esc(str) {
-      const d = document.createElement('div');
-      d.appendChild(document.createTextNode(String(str)));
-      return d.innerHTML;
-    }
-
-    function fmtData(ts) {
-      return new Date(ts).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
-    }
-
-    function render() {
+    async function render() {
       const root = document.getElementById('root');
       const id   = new URLSearchParams(window.location.search).get('id');
-      const todos = lerPosts().sort((a,b) => b.criadoEm - a.criadoEm);
 
-      if (!id || !todos.length) { mostrarErro(root); return; }
+      root.innerHTML = '<div style="text-align:center;padding:80px 20px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;color:var(--cinza-400);"></i></div>';
 
-      const idx = todos.findIndex(p => p.id === id);
-      if (idx === -1) { mostrarErro(root); return; }
+      if (!id) { mostrarErro(root); return; }
 
-      const post     = todos[idx];
-      const anterior = todos[idx + 1] || null;
-      const proximo  = todos[idx - 1] || null;
+      try {
+        const q    = query(collection(db,'posts'), orderBy('criadoEm','desc'));
+        const snap = await getDocs(q);
+        const todos = snap.docs.map(d=>({id:d.id,...d.data()}));
+        const idx  = todos.findIndex(p => p.id === id);
+        if (idx === -1) { mostrarErro(root); return; }
 
-      document.title = `LEG · FURG — ${post.titulo}`;
+        const post     = todos[idx];
+        const anterior = todos[idx+1] || null;
+        const proximo  = todos[idx-1] || null;
 
-      // Imagem hero
-      const heroHTML = post.imagem
-        ? `<div class="post-hero">
-             <img class="post-hero-img" src="${esc(post.imagem)}" alt="${esc(post.titulo)}"
-                  onerror="this.parentElement.innerHTML='<div class=\\"post-hero-vazio\\"><i class=\\"fa-solid fa-image\\"></i></div>'">
-           </div>`
-        : `<div class="post-hero"><div class="post-hero-vazio"><i class="fa-solid fa-image"></i></div></div>`;
+        document.title = 'LEG · FURG — ' + post.titulo;
 
-      // Botão anterior
-      const btnAnterior = anterior
-        ? `<a href="post.html?id=${anterior.id}" class="nav-post-btn esquerda">
-             <div class="nav-post-icone"><i class="fa-solid fa-arrow-left"></i></div>
-             <div class="nav-post-info">
-               <span class="nav-post-label">Anterior</span>
-               <span class="nav-post-titulo" title="${esc(anterior.titulo)}">${esc(anterior.titulo)}</span>
-             </div>
-           </a>`
-        : `<span class="nav-post-btn esquerda desativado">
-             <div class="nav-post-icone"><i class="fa-solid fa-arrow-left"></i></div>
-             <div class="nav-post-info">
-               <span class="nav-post-label">Anterior</span>
-               <span class="nav-post-titulo">Primeiro post</span>
-             </div>
-           </span>`;
+        const heroHTML = post.imagem
+          ? '<div class="post-hero"><img class="post-hero-img" src="'+esc(post.imagem)+'" alt="'+esc(post.titulo)+'"></div>'
+          : '<div class="post-hero"><div class="post-hero-vazio"><i class="fa-solid fa-image"></i></div></div>';
 
-      // Botão próximo
-      const btnProximo = proximo
-        ? `<a href="post.html?id=${proximo.id}" class="nav-post-btn direita">
-             <div class="nav-post-info">
-               <span class="nav-post-label">Próximo</span>
-               <span class="nav-post-titulo" title="${esc(proximo.titulo)}">${esc(proximo.titulo)}</span>
-             </div>
-             <div class="nav-post-icone"><i class="fa-solid fa-arrow-right"></i></div>
-           </a>`
-        : `<span class="nav-post-btn direita desativado">
-             <div class="nav-post-info">
-               <span class="nav-post-label">Próximo</span>
-               <span class="nav-post-titulo">Último post</span>
-             </div>
-             <div class="nav-post-icone"><i class="fa-solid fa-arrow-right"></i></div>
-           </span>`;
+        const btnAnterior = anterior
+          ? '<a href="post.html?id='+anterior.id+'" class="nav-post-btn esquerda"><div class="nav-post-icone"><i class="fa-solid fa-arrow-left"></i></div><div><span class="nav-post-label">Anterior</span><span class="nav-post-titulo" title="'+esc(anterior.titulo)+'">'+esc(anterior.titulo)+'</span></div></a>'
+          : '<span class="nav-post-btn esquerda desativado"><div class="nav-post-icone"><i class="fa-solid fa-arrow-left"></i></div><div><span class="nav-post-label">Anterior</span><span class="nav-post-titulo">Primeiro post</span></div></span>';
 
-      root.innerHTML = `
-        ${heroHTML}
-        <div class="post-wrapper">
-          <div class="post-meta">
-            <span class="post-tag-ano"><i class="fa-regular fa-calendar"></i> ${post.ano}</span>
-            <span class="post-meta-data"><i class="fa-regular fa-clock"></i> ${fmtData(post.criadoEm)}</span>
-            <a href="atividades.html" class="post-meta-voltar">
-              <i class="fa-solid fa-arrow-left"></i> Voltar às atividades
-            </a>
-          </div>
+        const btnProximo = proximo
+          ? '<a href="post.html?id='+proximo.id+'" class="nav-post-btn direita"><div><span class="nav-post-label">Próximo</span><span class="nav-post-titulo" title="'+esc(proximo.titulo)+'">'+esc(proximo.titulo)+'</span></div><div class="nav-post-icone"><i class="fa-solid fa-arrow-right"></i></div></a>'
+          : '<span class="nav-post-btn direita desativado"><div><span class="nav-post-label">Próximo</span><span class="nav-post-titulo">Último post</span></div><div class="nav-post-icone"><i class="fa-solid fa-arrow-right"></i></div></span>';
 
-          <h1 class="post-titulo">${esc(post.titulo)}</h1>
-          <div class="post-divisor"></div>
-          <p class="post-texto">${esc(post.texto)}</p>
+        root.innerHTML = heroHTML + '<div class="post-wrapper"><div class="post-meta"><span class="post-tag-ano"><i class="fa-regular fa-calendar"></i> '+post.ano+'</span><span class="post-meta-data"><i class="fa-regular fa-clock"></i> '+fmtData(post.criadoEm)+'</span><a href="atividades.html" class="post-meta-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar às atividades</a></div><h1 class="post-titulo">'+esc(post.titulo)+'</h1><div class="post-divisor"></div><p class="post-texto">'+esc(post.texto)+'</p><nav class="post-nav">'+btnAnterior+'<a href="index.html" class="nav-inicio-btn"><i class="fa-regular fa-house"></i><span>Início</span></a>'+btnProximo+'</nav></div>';
 
-          <nav class="post-nav">
-            ${btnAnterior}
-
-            <a href="index.html" class="nav-inicio-btn">
-              <i class="fa-regular fa-house"></i>
-              <span>Início</span>
-            </a>
-
-            ${btnProximo}
-          </nav>
-        </div>`;
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top:0,behavior:'smooth'});
+      } catch(err) {
+        console.error(err);
+        mostrarErro(root);
+      }
     }
 
     function mostrarErro(root) {
       document.title = 'LEG · FURG — Post não encontrado';
-      root.innerHTML = `
-        <div class="post-erro">
-          <div class="post-erro-icone"><i class="fa-solid fa-file-circle-question"></i></div>
-          <h2>Post não encontrado</h2>
-          <p>O post que você procura não existe ou foi removido.</p>
-          <a href="atividades.html" class="btn btn-primario">
-            <i class="fa-solid fa-arrow-left"></i> Ver atividades
-          </a>
-        </div>`;
+      root.innerHTML = '<div class="post-erro"><div class="post-erro-ico"><i class="fa-solid fa-file-circle-question"></i></div><h2>Post não encontrado</h2><p>O post que você procura não existe ou foi removido.</p><a href="atividades.html" class="btn btn-primario"><i class="fa-solid fa-arrow-left"></i> Ver atividades</a></div>';
     }
 
     render();

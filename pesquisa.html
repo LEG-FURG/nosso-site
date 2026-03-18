@@ -351,8 +351,21 @@
     </div>
   </footer>
 
-  <script>
-    // NAV
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, collection, getDocs, query, orderBy }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const FB = {
+      apiKey:"AIzaSyCerNmqmhQ96h2ljzgmzL71FFcVPlEfH5E",
+      authDomain:"leg-furg.firebaseapp.com",
+      projectId:"leg-furg",
+      storageBucket:"leg-furg.firebasestorage.app",
+      messagingSenderId:"763827146370",
+      appId:"1:763827146370:web:36431aea52963ec0816e9b"
+    };
+    const db = getFirestore(initializeApp(FB));
+
     const navEl = document.getElementById('navGlobal');
     window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', window.scrollY > 40));
     document.getElementById('hamburguer').addEventListener('click', function() {
@@ -360,140 +373,62 @@
       document.getElementById('navMobile').classList.toggle('aberto');
     });
 
-    const CHAVE = 'legfurg_pesquisas';
+    function esc(str) { const d=document.createElement('div'); d.appendChild(document.createTextNode(String(str))); return d.innerHTML; }
+    function fmtData(ts) { if(!ts) return ''; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}); }
 
-    function esc(str) {
-      const d = document.createElement('div');
-      d.appendChild(document.createTextNode(String(str)));
-      return d.innerHTML;
-    }
-
-    function fmtData(ts) {
-      return new Date(ts).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-    }
-
-    function lerPesquisas() {
-      try { const r = localStorage.getItem(CHAVE); return r ? JSON.parse(r) : []; } catch { return []; }
-    }
-
-    function render() {
+    async function render() {
       const root = document.getElementById('root');
       const id   = new URLSearchParams(window.location.search).get('id');
-      const todas = lerPesquisas().sort((a, b) => b.criadoEm - a.criadoEm);
 
-      if (!id || !todas.length) { mostrarErro(root); return; }
+      root.innerHTML = '<div style="text-align:center;padding:80px 20px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;color:var(--cinza-400);"></i></div>';
 
-      const idx = todas.findIndex(p => p.id === id);
-      if (idx === -1) { mostrarErro(root); return; }
+      if (!id) { mostrarErro(root); return; }
 
-      const pesq     = todas[idx];
-      const anterior = todas[idx + 1] || null;
-      const proximo  = todas[idx - 1] || null;
+      try {
+        const q    = query(collection(db,'pesquisas'), orderBy('criadoEm','desc'));
+        const snap = await getDocs(q);
+        const todas = snap.docs.map(d=>({id:d.id,...d.data()}));
+        const idx   = todas.findIndex(p => p.id === id);
+        if (idx === -1) { mostrarErro(root); return; }
 
-      document.title = `LEG · FURG — ${pesq.titulo}`;
+        const pesq     = todas[idx];
+        const anterior = todas[idx+1] || null;
+        const proximo  = todas[idx-1] || null;
 
-      // Imagem hero
-      const heroHTML = pesq.imagem
-        ? `<div class="pesq-hero">
-             <img class="pesq-hero-img" src="${esc(pesq.imagem)}" alt="${esc(pesq.titulo)}"
-                  onerror="this.parentElement.innerHTML='<div class=\\"pesq-hero-vazio\\"><i class=\\"fa-solid fa-microscope\\"></i></div>'">
-           </div>`
-        : `<div class="pesq-hero"><div class="pesq-hero-vazio"><i class="fa-solid fa-microscope"></i></div></div>`;
+        document.title = 'LEG · FURG — ' + pesq.titulo;
 
-      // Bloco de resumo
-      const resumoHTML = pesq.resumo
-        ? `<div class="pesq-resumo-box">
-             <div class="pesq-resumo-label"><i class="fa-solid fa-quote-left"></i> Resumo</div>
-             <p class="pesq-resumo-txt">${esc(pesq.resumo)}</p>
-           </div>`
-        : '';
+        const heroHTML = pesq.imagem
+          ? '<div class="pesq-hero"><img class="pesq-hero-img" src="'+esc(pesq.imagem)+'" alt="'+esc(pesq.titulo)+'"></div>'
+          : '<div class="pesq-hero"><div class="pesq-hero-vazio"><i class="fa-solid fa-microscope"></i></div></div>';
 
-      // Link externo (DOI / URL)
-      const linkHTML = pesq.link
-        ? `<div class="pesq-link-box">
-             <div class="pesq-link-ico"><i class="fa-solid fa-link"></i></div>
-             <div class="pesq-link-txt">
-               <strong>Acesso à pesquisa completa</strong>
-               <span class="pesq-link-url">${esc(pesq.link)}</span>
-             </div>
-             <a href="${esc(pesq.link)}" target="_blank" rel="nofollow" class="pesq-link-btn">
-               <i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar
-             </a>
-           </div>`
-        : '';
+        const resumoHTML = pesq.resumo
+          ? '<div class="pesq-resumo-box"><div class="pesq-resumo-label"><i class="fa-solid fa-quote-left"></i> Resumo</div><p class="pesq-resumo-txt">'+esc(pesq.resumo)+'</p></div>'
+          : '';
 
-      // Botão anterior
-      const btnAnterior = anterior
-        ? `<a href="pesquisa.html?id=${anterior.id}" class="nav-pesq-btn esquerda">
-             <div class="nav-pesq-ico"><i class="fa-solid fa-arrow-left"></i></div>
-             <div><span class="nav-pesq-label">Anterior</span>
-             <span class="nav-pesq-titulo" title="${esc(anterior.titulo)}">${esc(anterior.titulo)}</span></div>
-           </a>`
-        : `<span class="nav-pesq-btn esquerda desativado">
-             <div class="nav-pesq-ico"><i class="fa-solid fa-arrow-left"></i></div>
-             <div><span class="nav-pesq-label">Anterior</span>
-             <span class="nav-pesq-titulo">Primeira pesquisa</span></div>
-           </span>`;
+        const linkHTML = pesq.link
+          ? '<div class="pesq-link-box"><div class="pesq-link-ico"><i class="fa-solid fa-link"></i></div><div class="pesq-link-txt"><strong>Acesso à pesquisa completa</strong><span class="pesq-link-url">'+esc(pesq.link)+'</span></div><a href="'+esc(pesq.link)+'" target="_blank" rel="nofollow" class="pesq-link-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a></div>'
+          : '';
 
-      // Botão próximo
-      const btnProximo = proximo
-        ? `<a href="pesquisa.html?id=${proximo.id}" class="nav-pesq-btn direita">
-             <div><span class="nav-pesq-label">Próxima</span>
-             <span class="nav-pesq-titulo" title="${esc(proximo.titulo)}">${esc(proximo.titulo)}</span></div>
-             <div class="nav-pesq-ico"><i class="fa-solid fa-arrow-right"></i></div>
-           </a>`
-        : `<span class="nav-pesq-btn direita desativado">
-             <div><span class="nav-pesq-label">Próxima</span>
-             <span class="nav-pesq-titulo">Última pesquisa</span></div>
-             <div class="nav-pesq-ico"><i class="fa-solid fa-arrow-right"></i></div>
-           </span>`;
+        const btnAnterior = anterior
+          ? '<a href="pesquisa.html?id='+anterior.id+'" class="nav-pesq-btn esquerda"><div class="nav-pesq-ico"><i class="fa-solid fa-arrow-left"></i></div><div><span class="nav-pesq-label">Anterior</span><span class="nav-pesq-titulo">'+esc(anterior.titulo)+'</span></div></a>'
+          : '<span class="nav-pesq-btn esquerda desativado"><div class="nav-pesq-ico"><i class="fa-solid fa-arrow-left"></i></div><div><span class="nav-pesq-label">Anterior</span><span class="nav-pesq-titulo">Primeira pesquisa</span></div></span>';
 
-      root.innerHTML = `
-        ${heroHTML}
-        <div class="pesq-wrapper">
-          <div class="pesq-meta">
-            <span class="pesq-tag"><i class="fa-solid fa-microscope"></i> Pesquisa</span>
-            ${pesq.autores ? `<span class="pesq-autores"><i class="fa-solid fa-user-pen"></i> ${esc(pesq.autores)}</span>` : ''}
-            <span class="pesq-data"><i class="fa-regular fa-clock"></i> ${fmtData(pesq.criadoEm)}</span>
-            <a href="atividades.html#secaoPesquisas" class="pesq-voltar">
-              <i class="fa-solid fa-arrow-left"></i> Voltar às pesquisas
-            </a>
-          </div>
+        const btnProximo = proximo
+          ? '<a href="pesquisa.html?id='+proximo.id+'" class="nav-pesq-btn direita"><div><span class="nav-pesq-label">Próxima</span><span class="nav-pesq-titulo">'+esc(proximo.titulo)+'</span></div><div class="nav-pesq-ico"><i class="fa-solid fa-arrow-right"></i></div></a>'
+          : '<span class="nav-pesq-btn direita desativado"><div><span class="nav-pesq-label">Próxima</span><span class="nav-pesq-titulo">Última pesquisa</span></div><div class="nav-pesq-ico"><i class="fa-solid fa-arrow-right"></i></div></span>';
 
-          <h1 class="pesq-titulo">${esc(pesq.titulo)}</h1>
-          ${pesq.subtitulo ? `<p class="pesq-subtitulo">${esc(pesq.subtitulo)}</p>` : ''}
-          <div class="pesq-divisor"></div>
+        root.innerHTML = heroHTML + '<div class="pesq-wrapper"><div class="pesq-meta"><span class="pesq-tag"><i class="fa-solid fa-microscope"></i> Pesquisa</span>'+(pesq.autores?'<span class="pesq-autores"><i class="fa-solid fa-user-pen"></i> '+esc(pesq.autores)+'</span>':'')+'<span class="pesq-data"><i class="fa-regular fa-clock"></i> '+fmtData(pesq.criadoEm)+'</span><a href="atividades.html#secaoPesquisas" class="pesq-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar às pesquisas</a></div><h1 class="pesq-titulo">'+esc(pesq.titulo)+'</h1>'+(pesq.subtitulo?'<p class="pesq-subtitulo">'+esc(pesq.subtitulo)+'</p>':'')+'<div class="pesq-divisor"></div>'+resumoHTML+(pesq.texto?'<p class="pesq-texto">'+esc(pesq.texto)+'</p>':'')+linkHTML+'<nav class="pesq-nav">'+btnAnterior+'<a href="index.html" class="nav-inicio-btn"><i class="fa-regular fa-house"></i><span>Início</span></a>'+btnProximo+'</nav></div>';
 
-          ${resumoHTML}
-
-          ${pesq.texto ? `<p class="pesq-texto">${esc(pesq.texto)}</p>` : ''}
-
-          ${linkHTML}
-
-          <nav class="pesq-nav">
-            ${btnAnterior}
-            <a href="index.html" class="nav-inicio-btn">
-              <i class="fa-regular fa-house"></i>
-              <span>Início</span>
-            </a>
-            ${btnProximo}
-          </nav>
-        </div>`;
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({top:0,behavior:'smooth'});
+      } catch(err) {
+        console.error(err);
+        mostrarErro(root);
+      }
     }
 
     function mostrarErro(root) {
       document.title = 'LEG · FURG — Pesquisa não encontrada';
-      root.innerHTML = `
-        <div class="pesq-erro">
-          <div class="pesq-erro-ico"><i class="fa-solid fa-file-circle-question"></i></div>
-          <h2>Pesquisa não encontrada</h2>
-          <p>A pesquisa que você procura não existe ou foi removida.</p>
-          <a href="atividades.html" class="btn btn-primario">
-            <i class="fa-solid fa-arrow-left"></i> Ver atividades
-          </a>
-        </div>`;
+      root.innerHTML = '<div class="pesq-erro"><div class="pesq-erro-ico"><i class="fa-solid fa-file-circle-question"></i></div><h2>Pesquisa não encontrada</h2><p>A pesquisa que você procura não existe ou foi removida.</p><a href="atividades.html" class="btn btn-primario"><i class="fa-solid fa-arrow-left"></i> Ver atividades</a></div>';
     }
 
     render();
