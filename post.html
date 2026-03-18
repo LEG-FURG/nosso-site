@@ -347,7 +347,7 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getFirestore, collection, getDocs, query, orderBy }
+    import { getFirestore, collection, getDocs }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
     const FB = {
@@ -379,9 +379,9 @@
       if (!id) { mostrarErro(root); return; }
 
       try {
-        const q    = query(collection(db,'posts'), orderBy('criadoEm','desc'));
+        const q    = collection(db,'posts');
         const snap = await getDocs(q);
-        const todos = snap.docs.map(d=>({id:d.id,...d.data()}));
+        const todos = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{ const ta=a.criadoEm?.toMillis?.()||a.criadoEm||0; const tb=b.criadoEm?.toMillis?.()||b.criadoEm||0; return tb-ta; });
         const idx  = todos.findIndex(p => p.id === id);
         if (idx === -1) { mostrarErro(root); return; }
 

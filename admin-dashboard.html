@@ -924,14 +924,6 @@
         <i class="fa-solid fa-plus"></i> Novo Post
       </button>
 
-      <span class="nav-sep" style="margin-top:8px;">Pesquisas</span>
-      <button class="nav-item" data-view="pesquisas">
-        <i class="fa-solid fa-microscope"></i> Pesquisas
-      </button>
-      <button class="nav-item" data-view="nova-pesquisa">
-        <i class="fa-solid fa-flask"></i> Nova Pesquisa
-      </button>
-
       <span class="nav-sep" style="margin-top:8px;">Site</span>
       <a href="index.html" class="nav-item" target="_blank">
         <i class="fa-solid fa-globe"></i> Ver site
@@ -1093,134 +1085,6 @@
         </div>
       </section>
 
-      <!-- ── VIEW PESQUISAS ── -->
-      <section class="view oculto" id="viewPesquisas">
-        <div class="view-head">
-          <div>
-            <div class="view-head-eyebrow"><i class="fa-solid fa-microscope"></i> Gestão</div>
-            <h2>Pesquisas <em>Científicas</em></h2>
-            <p>Gerencie as produções científicas e trabalhos da LEG</p>
-          </div>
-          <button class="btn-dash-novo" id="btnNovaPesquisa">
-            <i class="fa-solid fa-plus"></i> Nova Pesquisa
-          </button>
-        </div>
-
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-ico vinho"><i class="fa-solid fa-microscope"></i></div>
-            <div>
-              <div class="stat-num" id="statTotalPesq">0</div>
-              <div class="stat-lbl">Pesquisas publicadas</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-ico ouro"><i class="fa-solid fa-link"></i></div>
-            <div>
-              <div class="stat-num" id="statComLink">0</div>
-              <div class="stat-lbl">Com link externo</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-ico cinza"><i class="fa-regular fa-clock"></i></div>
-            <div>
-              <div class="stat-num" style="font-size:1rem;line-height:1.4;" id="statUltimaPesq">—</div>
-              <div class="stat-lbl">Última publicação</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="posts-grid" id="pesquisasGrid"></div>
-      </section>
-
-      <!-- ── VIEW FORM PESQUISA ── -->
-      <section class="view oculto" id="viewFormPesquisa">
-        <div class="view-head">
-          <div>
-            <div class="view-head-eyebrow"><i class="fa-solid fa-flask"></i> Pesquisa Científica</div>
-            <h2 id="formPesqTitulo">Nova <em>Pesquisa</em></h2>
-            <p id="formPesqSub">Preencha os dados da produção científica</p>
-          </div>
-          <button class="btn-cancelar" id="btnVoltarPesq">
-            <i class="fa-solid fa-arrow-left"></i> Voltar
-          </button>
-        </div>
-
-        <div class="form-card">
-          <form id="pesqForm" novalidate>
-            <input type="hidden" id="pesqId">
-
-            <div class="f-grupo">
-              <label class="f-label" for="pesqTitulo"><i class="fa-solid fa-heading"></i> Título da pesquisa *</label>
-              <input type="text" id="pesqTitulo" class="f-input" placeholder="Ex: Qualidade de vida em idosos institucionalizados..." maxlength="200">
-              <span class="f-erro" id="erroPesqTitulo"></span>
-            </div>
-
-            <div class="f-grupo">
-              <label class="f-label" for="pesqSubtitulo"><i class="fa-solid fa-minus"></i> Subtítulo / Complemento</label>
-              <input type="text" id="pesqSubtitulo" class="f-input" placeholder="Subtítulo opcional..." maxlength="200">
-            </div>
-
-            <div class="f-grupo">
-              <label class="f-label" for="pesqAutores"><i class="fa-solid fa-user-pen"></i> Autores</label>
-              <input type="text" id="pesqAutores" class="f-input" placeholder="Ex: Silva, J. A.; Santos, M. R.">
-            </div>
-
-            <div class="f-grupo">
-              <label class="f-label" for="pesqResumo"><i class="fa-solid fa-quote-left"></i> Resumo *</label>
-              <textarea id="pesqResumo" class="f-textarea" rows="4" placeholder="Resumo da pesquisa (abstract)..."></textarea>
-              <span class="f-erro" id="erroPesqResumo"></span>
-            </div>
-
-            <div class="f-grupo">
-              <label class="f-label" for="pesqTexto"><i class="fa-solid fa-align-left"></i> Texto completo / Descrição adicional</label>
-              <textarea id="pesqTexto" class="f-textarea" rows="5" placeholder="Conteúdo adicional, metodologia, conclusões..."></textarea>
-            </div>
-
-            <div class="f-grupo">
-              <label class="f-label" for="pesqLink"><i class="fa-solid fa-link"></i> Link / DOI externo</label>
-              <input type="url" id="pesqLink" class="f-input" placeholder="https://doi.org/... ou link do repositório">
-            </div>
-
-            <div class="dois-col" style="margin-top:4px;">
-              <div class="f-grupo">
-                <label class="f-label"><i class="fa-solid fa-image"></i> Imagem de capa (upload)</label>
-                <div class="upload-zone" id="uploadZonePesq">
-                  <input type="file" id="imgUploadPesq" accept="image/*" class="file-input">
-                  <div class="upload-ph" id="uploadPhPesq">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <span>Arraste ou clique para enviar</span>
-                    <small>PNG, JPG, WEBP — máx. 5MB</small>
-                  </div>
-                  <img id="imgPreviewPesq" class="img-preview oculto" alt="Preview">
-                  <button type="button" class="btn-remover-img oculto" id="btnRemoverImgPesq">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="f-grupo">
-                <label class="f-label" for="pesqImgUrl"><i class="fa-solid fa-link"></i> Ou URL da imagem</label>
-                <input type="url" id="pesqImgUrl" class="f-input" placeholder="https://...">
-                <button type="button" class="btn-url-prev" id="btnPrevUrlPesq">
-                  <i class="fa-solid fa-eye"></i> Ver preview
-                </button>
-              </div>
-            </div>
-
-            <div class="form-acoes">
-              <button type="button" class="btn-cancelar" id="btnCancelarPesqForm">
-                <i class="fa-solid fa-xmark"></i> Cancelar
-              </button>
-              <button type="submit" class="btn-salvar">
-                <i class="fa-solid fa-floppy-disk"></i>
-                <span id="txtSalvarPesq">Salvar Pesquisa</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
     </main>
   </div>
 </div>
@@ -1246,498 +1110,249 @@
   <span id="toastMsg"></span>
 </div>
 
-<script>
+<script type="module">
 'use strict';
 
-const CHAVE_SESSAO = 'legfurg_sessao';
-const CHAVE_POSTS  = 'legfurg_posts';
+import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, doc, addDoc, updateDoc,
+         deleteDoc, getDocs, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// Proteção de rota
-function getSessao() {
-  try { const r = localStorage.getItem(CHAVE_SESSAO) || sessionStorage.getItem(CHAVE_SESSAO); return r ? JSON.parse(r) : null; } catch { return null; }
-}
+const FB = {
+  apiKey:"AIzaSyCerNmqmhQ96h2ljzgmzL71FFcVPlEfH5E",
+  authDomain:"leg-furg.firebaseapp.com",
+  projectId:"leg-furg",
+  storageBucket:"leg-furg.firebasestorage.app",
+  messagingSenderId:"763827146370",
+  appId:"1:763827146370:web:36431aea52963ec0816e9b"
+};
+const app = initializeApp(FB);
+const db  = getFirestore(app);
+
+// SESSAO
+const CHAVE_SESSAO = 'legfurg_sessao';
+function getSessao() { try { const r=localStorage.getItem(CHAVE_SESSAO)||sessionStorage.getItem(CHAVE_SESSAO); return r?JSON.parse(r):null; } catch{return null;} }
 const sessao = getSessao();
 if (!sessao) window.location.href = 'admin-login.html';
-
-// Nome do usuário
 const nomeEl = document.getElementById('userNome');
 if (nomeEl && sessao) nomeEl.textContent = sessao.email.split('@')[0];
 
-// ── ANO ──
-let anoAtivo = 2025;
+let anoAtivo = 2026;
 
-// ── POSTS ──
-const Posts = {
-  _d: [],
-  load()  { try { const r = localStorage.getItem(CHAVE_POSTS); this._d = r ? JSON.parse(r) : []; } catch { this._d = []; } },
-  save()  { localStorage.setItem(CHAVE_POSTS, JSON.stringify(this._d)); },
-  byAno(a){ return [...this._d].filter(p => p.ano == a).sort((x,y) => y.criadoEm - x.criadoEm); },
-  all()   { return [...this._d]; },
-  get(id) { return this._d.find(p => p.id === id) || null; },
-  create(d) {
-    const p = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), titulo: d.titulo.trim(), texto: d.texto.trim(), imagem: d.imagem || '', ano: d.ano, criadoEm: Date.now(), atualizadoEm: Date.now() };
-    this._d.unshift(p); this.save(); return p;
-  },
-  update(id, d) {
-    const i = this._d.findIndex(p => p.id === id); if (i < 0) return null;
-    this._d[i] = { ...this._d[i], titulo: d.titulo.trim(), texto: d.texto.trim(), imagem: d.imagem !== undefined ? d.imagem : this._d[i].imagem, ano: d.ano, atualizadoEm: Date.now() };
-    this.save(); return this._d[i];
-  },
-  delete(id) { const b = this._d.length; this._d = this._d.filter(p => p.id !== id); this.save(); return this._d.length < b; }
-};
+// UTILS
+function esc(s) { const d=document.createElement('div'); d.appendChild(document.createTextNode(String(s))); return d.innerHTML; }
+function fmtData(ts) { if(!ts) return '--'; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'}); }
+function toast(msg,tipo='success') { const el=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; const icos={success:'fa-circle-check',error:'fa-circle-xmark',aviso:'fa-triangle-exclamation'}; document.getElementById('toastIco').className='fa-solid '+(icos[tipo]||'fa-circle-check'); el.className='toast '+tipo+' show'; setTimeout(()=>el.classList.remove('show'),3500); }
+function loading(gridId) { const g=document.getElementById(gridId); if(g) g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-spinner fa-spin"></i></div><p>Carregando...</p></div>'; }
+function btnLoad(btn,txt) { btn.disabled=true; btn._orig=btn.innerHTML; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> '+txt; }
+function btnReset(btn)    { btn.disabled=false; btn.innerHTML=btn._orig||btn.innerHTML; }
 
-Posts.load();
+// FIREBASE POSTS
+async function fbPCriar(d)    { return await addDoc(collection(db,'posts'),{titulo:d.titulo,texto:d.texto,imagem:d.imagem||'',ano:d.ano,criadoEm:serverTimestamp(),atualizadoEm:serverTimestamp()}); }
+async function fbPAtualizar(id,d) { return await updateDoc(doc(db,'posts',id),{titulo:d.titulo,texto:d.texto,imagem:d.imagem,ano:d.ano,atualizadoEm:serverTimestamp()}); }
+async function fbPExcluir(id) { return await deleteDoc(doc(db,'posts',id)); }
+async function fbPListar(ano) { const s=await getDocs(collection(db,'posts')); return s.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.ano==ano).sort((a,b)=>{const ta=a.criadoEm?.toMillis?.()??0,tb=b.criadoEm?.toMillis?.()??0;return tb-ta;}); }
+async function fbPTodos()     { const s=await getDocs(collection(db,'posts')); return s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{const ta=a.criadoEm?.toMillis?.()??0,tb=b.criadoEm?.toMillis?.()??0;return tb-ta;}); }
 
-// ── UTILS ──
-function esc(s) { const d = document.createElement('div'); d.appendChild(document.createTextNode(String(s))); return d.innerHTML; }
-function fmtData(ts) { return new Date(ts).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' }); }
-function toast(msg, tipo='success') {
-  const el = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  const icos = { success:'fa-circle-check', error:'fa-circle-xmark', aviso:'fa-triangle-exclamation' };
-  document.getElementById('toastIco').className = `fa-solid ${icos[tipo]||'fa-circle-check'}`;
-  el.className = `toast ${tipo} show`;
-  setTimeout(() => el.classList.remove('show'), 3500);
-}
+// FIREBASE PESQUISAS
+async function fbQCriar(d)    { return await addDoc(collection(db,'pesquisas'),{titulo:d.titulo,subtitulo:d.subtitulo||'',autores:d.autores||'',resumo:d.resumo,texto:d.texto||'',link:d.link||'',imagem:d.imagem||'',criadoEm:serverTimestamp(),atualizadoEm:serverTimestamp()}); }
+async function fbQAtualizar(id,d) { return await updateDoc(doc(db,'pesquisas',id),{titulo:d.titulo,subtitulo:d.subtitulo||'',autores:d.autores||'',resumo:d.resumo,texto:d.texto||'',link:d.link||'',imagem:d.imagem,atualizadoEm:serverTimestamp()}); }
+async function fbQExcluir(id) { return await deleteDoc(doc(db,'pesquisas',id)); }
+async function fbQListar()    { const s=await getDocs(collection(db,'pesquisas')); return s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{const ta=a.criadoEm?.toMillis?.()??0,tb=b.criadoEm?.toMillis?.()??0;return tb-ta;}); }
 
-// ── SIDEBAR MOBILE ──
-const sidebar  = document.getElementById('sidebar');
-const overlay  = document.getElementById('sidebarOverlay');
-
+// SIDEBAR
+const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay');
 function abrirSidebar()  { sidebar.classList.add('aberta');  overlay.classList.add('show');  document.body.style.overflow='hidden'; }
 function fecharSidebar() { sidebar.classList.remove('aberta'); overlay.classList.remove('show'); document.body.style.overflow=''; }
+document.getElementById('menuToggle').addEventListener('click',abrirSidebar);
+document.getElementById('fecharSidebar').addEventListener('click',fecharSidebar);
+overlay.addEventListener('click',fecharSidebar);
 
-document.getElementById('menuToggle').addEventListener('click', abrirSidebar);
-document.getElementById('fecharSidebar').addEventListener('click', fecharSidebar);
-overlay.addEventListener('click', fecharSidebar);
-
-// ── ANO BTNS ──
-document.querySelectorAll('.ano-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    anoAtivo = parseInt(btn.dataset.ano);
-    document.querySelectorAll('.ano-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.ano) === anoAtivo));
-    atualizarAnoUI();
-    mostrarViewPosts();
-    fecharSidebar();
+// ANO
+document.querySelectorAll('.ano-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    anoAtivo=parseInt(btn.dataset.ano);
+    document.querySelectorAll('.ano-btn').forEach(b=>b.classList.toggle('ativo',parseInt(b.dataset.ano)===anoAtivo));
+    atualizarAnoUI(); mostrarViewPosts(); fecharSidebar();
   });
 });
-
 function atualizarAnoUI() {
-  document.getElementById('topbarTitulo').textContent = `Posts · ${anoAtivo}`;
-  document.getElementById('topbarAnoPill').textContent = anoAtivo;
-  document.getElementById('tituloListagem').innerHTML = `Posts de <em>${anoAtivo}</em>`;
+  document.getElementById('topbarTitulo').textContent='Posts · '+anoAtivo;
+  document.getElementById('topbarAnoPill').textContent=anoAtivo;
+  document.getElementById('tituloListagem').innerHTML='Posts de <em>'+anoAtivo+'</em>';
   sincRadioAno(anoAtivo);
 }
-
 function sincRadioAno(ano) {
-  document.getElementById('radio25').checked = (ano == 2025);
-  document.getElementById('radio26').checked = (ano == 2026);
-  document.getElementById('labelAno25').classList.toggle('sel', ano == 2025);
-  document.getElementById('labelAno26').classList.toggle('sel', ano == 2026);
+  document.getElementById('radio25').checked=(ano==2025);
+  document.getElementById('radio26').checked=(ano==2026);
+  document.getElementById('labelAno25').classList.toggle('sel',ano==2025);
+  document.getElementById('labelAno26').classList.toggle('sel',ano==2026);
 }
+document.querySelectorAll('input[name="postAno"]').forEach(r=>{ r.addEventListener('change',()=>{ document.getElementById('labelAno25').classList.toggle('sel',r.value=='2025'); document.getElementById('labelAno26').classList.toggle('sel',r.value=='2026'); }); });
 
-document.querySelectorAll('input[name="postAno"]').forEach(r => {
-  r.addEventListener('change', () => {
-    document.getElementById('labelAno25').classList.toggle('sel', r.value == '2025');
-    document.getElementById('labelAno26').classList.toggle('sel', r.value == '2026');
-  });
-});
-
-// ── NAV ITEMS ──
-document.querySelectorAll('.nav-item[data-view]').forEach(item => {
-  item.addEventListener('click', () => {
-    const v = item.dataset.view;
-    if (v === 'novo')           abrirFormNovo();
-    else if (v === 'pesquisas') mostrarViewPesquisas();
-    else if (v === 'nova-pesquisa') abrirFormNovaPesquisa();
-    else                        mostrarViewPosts();
+// NAV
+document.querySelectorAll('.nav-item[data-view]').forEach(item=>{
+  item.addEventListener('click',()=>{
+    const v=item.dataset.view;
+    if(v==='novo')abrirFormNovo();
+    else if(v==='pesquisas')mostrarViewPesquisas();
+    else if(v==='nova-pesquisa')abrirFormNovaPesquisa();
+    else mostrarViewPosts();
     fecharSidebar();
   });
 });
 
-// ── LOGOUT ──
-function logout() {
-  localStorage.removeItem(CHAVE_SESSAO);
-  sessionStorage.removeItem(CHAVE_SESSAO);
-  toast('Sessão encerrada. Até logo!', 'aviso');
-  setTimeout(() => window.location.href = 'admin-login.html', 900);
-}
-document.getElementById('btnLogout').addEventListener('click', logout);
-document.getElementById('topbarLogout').addEventListener('click', logout);
+// LOGOUT
+function logout(){ localStorage.removeItem(CHAVE_SESSAO); sessionStorage.removeItem(CHAVE_SESSAO); toast('Sessão encerrada. Até logo!','aviso'); setTimeout(()=>window.location.href='admin-login.html',900); }
+document.getElementById('btnLogout').addEventListener('click',logout);
+document.getElementById('topbarLogout').addEventListener('click',logout);
+['topbarNovo','btnNovoPosts'].forEach(id=>document.getElementById(id)?.addEventListener('click',abrirFormNovo));
+document.getElementById('btnNovaPesquisa')?.addEventListener('click',abrirFormNovaPesquisa);
+['btnVoltar','btnCancelarForm'].forEach(id=>document.getElementById(id)?.addEventListener('click',mostrarViewPosts));
+['btnVoltarPesq','btnCancelarPesqForm'].forEach(id=>document.getElementById(id)?.addEventListener('click',mostrarViewPesquisas));
 
-// ── BOTÕES NOVO ──
-['topbarNovo','btnNovoPosts'].forEach(id => document.getElementById(id).addEventListener('click', abrirFormNovo));
-document.getElementById('btnNovaPesquisa').addEventListener('click', abrirFormNovaPesquisa);
+// UPLOAD POSTS
+let imgBase64='';
+const uploadZone=document.getElementById('uploadZone'),fileInput=document.getElementById('imgUpload'),imgPrev=document.getElementById('imgPreview'),uploadPh=document.getElementById('uploadPh'),btnRemImg=document.getElementById('btnRemoverImg');
+uploadZone.addEventListener('click',e=>{if(e.target===btnRemImg||btnRemImg.contains(e.target))return;fileInput.click();});
+fileInput.addEventListener('change',e=>{if(e.target.files[0])processarImg(e.target.files[0]);});
+uploadZone.addEventListener('dragover',e=>{e.preventDefault();uploadZone.classList.add('drag');});
+uploadZone.addEventListener('dragleave',()=>uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop',e=>{e.preventDefault();uploadZone.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processarImg(f);});
+btnRemImg.addEventListener('click',e=>{e.stopPropagation();limparPreview();});
+document.getElementById('btnPrevUrl').addEventListener('click',()=>{const u=document.getElementById('postImgUrl').value.trim();if(!u){toast('Insira uma URL primeiro','aviso');return;}carregarPreview(u);imgBase64='';});
+function processarImg(file){if(file.size>5*1024*1024){toast('Imagem muito grande (máx. 5MB)','error');return;}const r=new FileReader();r.onload=ev=>{imgBase64=ev.target.result;carregarPreview(ev.target.result);document.getElementById('postImgUrl').value='';};r.readAsDataURL(file);}
+function carregarPreview(src){imgPrev.src=src;imgPrev.onload=()=>{uploadPh.classList.add('oculto');imgPrev.classList.remove('oculto');btnRemImg.classList.remove('oculto');};imgPrev.onerror=()=>{toast('Não foi possível carregar','error');limparPreview();};}
+function limparPreview(){imgPrev.src='';imgPrev.classList.add('oculto');uploadPh.classList.remove('oculto');btnRemImg.classList.add('oculto');fileInput.value='';imgBase64='';document.getElementById('postImgUrl').value='';}
 
-// ── VOLTAR / CANCELAR ──
-['btnVoltar','btnCancelarForm'].forEach(id => document.getElementById(id).addEventListener('click', mostrarViewPosts));
-['btnVoltarPesq','btnCancelarPesqForm'].forEach(id => document.getElementById(id).addEventListener('click', mostrarViewPesquisas));
+// UPLOAD PESQUISAS
+let imgBase64Pesq='';
+const uploadZonePesq=document.getElementById('uploadZonePesq'),fileInputPesq=document.getElementById('imgUploadPesq'),imgPrevPesq=document.getElementById('imgPreviewPesq'),uploadPhPesq=document.getElementById('uploadPhPesq'),btnRemImgPesq=document.getElementById('btnRemoverImgPesq');
+uploadZonePesq.addEventListener('click',e=>{if(e.target===btnRemImgPesq||btnRemImgPesq.contains(e.target))return;fileInputPesq.click();});
+fileInputPesq.addEventListener('change',e=>{if(e.target.files[0])processarImgPesq(e.target.files[0]);});
+uploadZonePesq.addEventListener('dragover',e=>{e.preventDefault();uploadZonePesq.classList.add('drag');});
+uploadZonePesq.addEventListener('dragleave',()=>uploadZonePesq.classList.remove('drag'));
+uploadZonePesq.addEventListener('drop',e=>{e.preventDefault();uploadZonePesq.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processarImgPesq(f);});
+btnRemImgPesq.addEventListener('click',e=>{e.stopPropagation();limparPreviewPesq();});
+document.getElementById('btnPrevUrlPesq').addEventListener('click',()=>{const u=document.getElementById('pesqImgUrl').value.trim();if(!u){toast('Insira uma URL primeiro','aviso');return;}carregarPreviewPesq(u);imgBase64Pesq='';});
+function processarImgPesq(file){if(file.size>5*1024*1024){toast('Imagem muito grande','error');return;}const r=new FileReader();r.onload=ev=>{imgBase64Pesq=ev.target.result;carregarPreviewPesq(ev.target.result);document.getElementById('pesqImgUrl').value='';};r.readAsDataURL(file);}
+function carregarPreviewPesq(src){imgPrevPesq.src=src;imgPrevPesq.onload=()=>{uploadPhPesq.classList.add('oculto');imgPrevPesq.classList.remove('oculto');btnRemImgPesq.classList.remove('oculto');};imgPrevPesq.onerror=()=>{toast('Não foi possível carregar','error');limparPreviewPesq();};}
+function limparPreviewPesq(){imgPrevPesq.src='';imgPrevPesq.classList.add('oculto');uploadPhPesq.classList.remove('oculto');btnRemImgPesq.classList.add('oculto');fileInputPesq.value='';imgBase64Pesq='';document.getElementById('pesqImgUrl').value='';}
 
-// ── UPLOAD ──
-let imgBase64 = '';
-const uploadZone = document.getElementById('uploadZone');
-const fileInput  = document.getElementById('imgUpload');
-const imgPreview = document.getElementById('imgPreview');
-const uploadPh   = document.getElementById('uploadPh');
-const btnRemImg  = document.getElementById('btnRemoverImg');
+// VIEWS
+const VIEWS=['viewPosts','viewForm','viewPesquisas','viewFormPesquisa'];
+function showOnly(id){ VIEWS.forEach(v=>{ const el=document.getElementById(v); if(el)el.classList.toggle('oculto',v!==id); }); }
+function mostrarViewPosts()   { showOnly('viewPosts');   document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='posts')); atualizarAnoUI(); renderPosts(); }
+function mostrarViewForm()    { showOnly('viewForm');    document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='novo')); document.getElementById('topbarTitulo').textContent=document.getElementById('postId').value?'Editar Post':'Novo Post'; }
+function mostrarViewPesquisas(){ showOnly('viewPesquisas'); document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='pesquisas')); document.getElementById('topbarTitulo').textContent='Pesquisas Científicas'; document.getElementById('topbarAnoPill').textContent='LEG'; renderPesquisas(); }
+function mostrarViewFormPesquisa(){ showOnly('viewFormPesquisa'); document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='nova-pesquisa')); }
 
-uploadZone.addEventListener('click', e => { if (e.target === btnRemImg || btnRemImg.contains(e.target)) return; fileInput.click(); });
-fileInput.addEventListener('change', e => { if (e.target.files[0]) processarImg(e.target.files[0]); });
-uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
-uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
-uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) processarImg(f); });
-btnRemImg.addEventListener('click', e => { e.stopPropagation(); limparPreview(); });
-document.getElementById('btnPrevUrl').addEventListener('click', () => { const u = document.getElementById('postImgUrl').value.trim(); if (!u) { toast('Insira uma URL primeiro', 'aviso'); return; } carregarPreview(u); imgBase64 = ''; });
-
-function processarImg(file) {
-  if (file.size > 5*1024*1024) { toast('Imagem muito grande (máx. 5MB)', 'error'); return; }
-  const r = new FileReader();
-  r.onload = ev => { imgBase64 = ev.target.result; carregarPreview(ev.target.result); document.getElementById('postImgUrl').value = ''; };
-  r.readAsDataURL(file);
-}
-
-function carregarPreview(src) {
-  imgPreview.src = src;
-  imgPreview.onload = () => { uploadPh.classList.add('oculto'); imgPreview.classList.remove('oculto'); btnRemImg.classList.remove('oculto'); };
-  imgPreview.onerror = () => { toast('Não foi possível carregar a imagem', 'error'); limparPreview(); };
-}
-
-function limparPreview() {
-  imgPreview.src = ''; imgPreview.classList.add('oculto');
-  uploadPh.classList.remove('oculto'); btnRemImg.classList.add('oculto');
-  fileInput.value = ''; imgBase64 = ''; document.getElementById('postImgUrl').value = '';
-}
-
-// ── VIEWS ──
-function mostrarViewPosts() {
-  document.getElementById('viewPosts').classList.remove('oculto');
-  document.getElementById('viewForm').classList.add('oculto');
-  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'posts'));
-  atualizarAnoUI();
-  renderPosts();
-}
-
-function mostrarViewForm() {
-  document.getElementById('viewPosts').classList.add('oculto');
-  document.getElementById('viewForm').classList.remove('oculto');
-  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'novo'));
-  document.getElementById('topbarTitulo').textContent = document.getElementById('postId').value ? 'Editar Post' : 'Novo Post';
-}
-
-function abrirFormNovo() {
-  document.getElementById('postForm').reset();
-  document.getElementById('postId').value = '';
-  imgBase64 = ''; limparPreview(); limparErros();
-  document.getElementById('formTitulo').innerHTML = 'Novo <em>Post</em>';
-  document.getElementById('formSub').textContent = 'Preencha os dados da publicação';
-  document.getElementById('txtSalvar').textContent = 'Salvar Post';
-  sincRadioAno(anoAtivo);
-  mostrarViewForm();
-  setTimeout(() => document.getElementById('postTitulo').focus(), 80);
-}
-
-function abrirFormEditar(id) {
-  const p = Posts.get(id); if (!p) return;
-  document.getElementById('postId').value = p.id;
-  document.getElementById('postTitulo').value = p.titulo;
-  document.getElementById('postTexto').value = p.texto;
-  document.getElementById('postImgUrl').value = '';
-  imgBase64 = ''; limparPreview(); limparErros();
-  if (p.imagem) { carregarPreview(p.imagem); if (p.imagem.startsWith('http')) document.getElementById('postImgUrl').value = p.imagem; else imgBase64 = p.imagem; }
-  sincRadioAno(p.ano || anoAtivo);
-  document.getElementById('formTitulo').innerHTML = 'Editar <em>Post</em>';
-  document.getElementById('formSub').textContent = `Editando: ${p.titulo.slice(0,45)}`;
-  document.getElementById('txtSalvar').textContent = 'Atualizar Post';
-  mostrarViewForm();
-  setTimeout(() => document.getElementById('postTitulo').focus(), 80);
-}
-
-// ── SUBMIT ──
-document.getElementById('postForm').addEventListener('submit', e => {
+// FORM POSTS
+function abrirFormNovo(){document.getElementById('postForm').reset();document.getElementById('postId').value='';imgBase64='';limparPreview();limparErros();document.getElementById('formTitulo').innerHTML='Novo <em>Post</em>';document.getElementById('formSub').textContent='Preencha os dados da publicação';document.getElementById('txtSalvar').textContent='Salvar Post';sincRadioAno(anoAtivo);mostrarViewForm();setTimeout(()=>document.getElementById('postTitulo').focus(),80);}
+function abrirFormEditar(post){document.getElementById('postId').value=post.id;document.getElementById('postTitulo').value=post.titulo;document.getElementById('postTexto').value=post.texto;document.getElementById('postImgUrl').value='';imgBase64='';limparPreview();limparErros();if(post.imagem){carregarPreview(post.imagem);if(post.imagem.startsWith('http'))document.getElementById('postImgUrl').value=post.imagem;else imgBase64=post.imagem;}sincRadioAno(post.ano||anoAtivo);document.getElementById('formTitulo').innerHTML='Editar <em>Post</em>';document.getElementById('formSub').textContent='Editando: '+post.titulo.slice(0,45);document.getElementById('txtSalvar').textContent='Atualizar Post';mostrarViewForm();setTimeout(()=>document.getElementById('postTitulo').focus(),80);}
+document.getElementById('postForm').addEventListener('submit',async e=>{
   e.preventDefault();
-  const titulo = document.getElementById('postTitulo').value.trim();
-  const texto  = document.getElementById('postTexto').value.trim();
-  const url    = document.getElementById('postImgUrl').value.trim();
-  const ano    = parseInt(document.querySelector('input[name="postAno"]:checked').value);
-  let ok = true; limparErros();
-  if (!titulo)       { erroF('postTitulo','erroTitulo','Título obrigatório'); ok=false; }
-  else if (titulo.length < 3) { erroF('postTitulo','erroTitulo','Título muito curto'); ok=false; }
-  if (!texto)        { erroF('postTexto','erroTexto','Descrição obrigatória'); ok=false; }
-  else if (texto.length < 8) { erroF('postTexto','erroTexto','Descrição muito curta'); ok=false; }
-  if (!ok) return;
-  const imagem = imgBase64 || url || '';
-  const id = document.getElementById('postId').value;
-  if (id) { Posts.update(id, { titulo, texto, imagem, ano }); toast('✏️ Post atualizado!', 'success'); }
-  else    { Posts.create({ titulo, texto, imagem, ano });    toast(`✅ Post criado para ${ano}!`, 'success'); }
-  anoAtivo = ano;
-  document.querySelectorAll('.ano-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.ano) === anoAtivo));
-  mostrarViewPosts();
+  const titulo=document.getElementById('postTitulo').value.trim(),texto=document.getElementById('postTexto').value.trim(),url=document.getElementById('postImgUrl').value.trim(),ano=parseInt(document.querySelector('input[name="postAno"]:checked').value);
+  let ok=true;limparErros();
+  if(!titulo||titulo.length<3){erroF('postTitulo','erroTitulo','Título obrigatório (mín. 3 caracteres)');ok=false;}
+  if(!texto||texto.length<8){erroF('postTexto','erroTexto','Descrição obrigatória (mín. 8 caracteres)');ok=false;}
+  if(!ok)return;
+  const imagem=imgBase64||url||'',id=document.getElementById('postId').value;
+  const btnSalvar=document.querySelector('#viewForm .btn-salvar');btnLoad(btnSalvar,'Salvando...');
+  try{
+    if(id){await fbPAtualizar(id,{titulo,texto,imagem,ano});toast('✏️ Post atualizado!','success');}
+    else{await fbPCriar({titulo,texto,imagem,ano});toast('✅ Post criado para '+ano+'!','success');}
+    anoAtivo=ano;document.querySelectorAll('.ano-btn').forEach(b=>b.classList.toggle('ativo',parseInt(b.dataset.ano)===anoAtivo));mostrarViewPosts();
+  }catch(err){console.error(err);toast('Erro ao salvar.','error');btnReset(btnSalvar);}
 });
+function erroF(i,e,m){document.getElementById(i).classList.add('erro');document.getElementById(e).textContent=m;document.getElementById(i).addEventListener('input',()=>{document.getElementById(i).classList.remove('erro');document.getElementById(e).textContent='';},{once:true});}
+function limparErros(){['postTitulo','postTexto'].forEach(i=>document.getElementById(i).classList.remove('erro'));['erroTitulo','erroTexto'].forEach(i=>document.getElementById(i).textContent='');}
 
-function erroF(inputId, erroId, msg) {
-  document.getElementById(inputId).classList.add('erro');
-  document.getElementById(erroId).textContent = msg;
-  document.getElementById(inputId).addEventListener('input', () => { document.getElementById(inputId).classList.remove('erro'); document.getElementById(erroId).textContent=''; }, { once:true });
-}
-
-function limparErros() {
-  ['postTitulo','postTexto'].forEach(id => document.getElementById(id).classList.remove('erro'));
-  ['erroTitulo','erroTexto'].forEach(id => document.getElementById(id).textContent='');
-}
-
-// ── RENDERIZAR ──
-function renderPosts() {
-  const grid = document.getElementById('postsGrid');
-  const lista = Posts.byAno(anoAtivo);
-  const todos = Posts.all();
-  document.getElementById('statPostsAno').textContent = lista.length;
-  document.getElementById('statTotal').textContent = todos.length;
-  document.getElementById('statUltima').textContent = lista.length ? fmtData(lista[0].criadoEm) : '—';
-  grid.innerHTML = '';
-  if (!lista.length) {
-    grid.innerHTML = `<div class="empty-state">
-      <div class="empty-ico"><i class="fa-solid fa-newspaper"></i></div>
-      <h3>Nenhum post em ${anoAtivo}</h3>
-      <p>Crie a primeira publicação para este ano!</p>
-      <button class="btn-dash-novo" onclick="abrirFormNovo()" style="margin:0 auto;">
-        <i class="fa-solid fa-plus"></i> Criar post
-      </button>
-    </div>`;
-    return;
-  }
-  lista.forEach((post, i) => {
-    const card = document.createElement('div');
-    card.className = 'post-card';
-    card.style.animationDelay = `${i*55}ms`;
-    const img = post.imagem
-      ? `<img class="post-card-img" src="${esc(post.imagem)}" alt="${esc(post.titulo)}" loading="lazy" onerror="this.outerHTML='<div class=\\"post-card-img-vazio\\"><i class=\\"fa-solid fa-image\\"></i></div>'">`
-      : `<div class="post-card-img-vazio"><i class="fa-solid fa-image"></i></div>`;
-    card.innerHTML = `${img}
-      <div class="post-card-body">
-        <span class="post-card-pill"><i class="fa-regular fa-calendar"></i> ${post.ano}</span>
-        <h3 class="post-card-titulo">${esc(post.titulo)}</h3>
-        <p class="post-card-texto">${esc(post.texto)}</p>
-        <div class="post-card-data"><i class="fa-regular fa-clock"></i> ${fmtData(post.criadoEm)}</div>
-        <div class="post-card-acoes">
-          <button class="btn-editar" data-id="${post.id}"><i class="fa-solid fa-pen"></i> Editar</button>
-          <button class="btn-excluir" data-id="${post.id}"><i class="fa-solid fa-trash"></i> Excluir</button>
-        </div>
-      </div>`;
-    card.querySelector('.btn-editar').addEventListener('click', () => abrirFormEditar(post.id));
-    card.querySelector('.btn-excluir').addEventListener('click', () => { postParaExcluir = post.id; document.getElementById('modalOverlay').classList.remove('oculto'); document.body.style.overflow='hidden'; });
-    grid.appendChild(card);
-  });
-}
-
-// ── MODAL ──
-let postParaExcluir = null;
-let excluindoPesquisa = false;
-document.getElementById('modalCancelar').addEventListener('click', fecharModal);
-document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('modalOverlay')) fecharModal(); });
-document.getElementById('modalConfirmar').addEventListener('click', () => {
-  if (!postParaExcluir) return;
-  if (excluindoPesquisa) { Pesquisas.delete(postParaExcluir); fecharModal(); renderPesquisas(); toast('Pesquisa removida', 'aviso'); }
-  else                   { Posts.delete(postParaExcluir);    fecharModal(); renderPosts();    toast('Post removido', 'aviso'); }
-});
-function fecharModal() { document.getElementById('modalOverlay').classList.add('oculto'); document.body.style.overflow=''; postParaExcluir=null; excluindoPesquisa=false; }
-document.addEventListener('keydown', e => { if (e.key==='Escape' && !document.getElementById('modalOverlay').classList.contains('oculto')) fecharModal(); });
-
-// ── PESQUISAS CRUD ──
-const CHAVE_PESQ = 'legfurg_pesquisas';
-
-const Pesquisas = {
-  _d: [],
-  load()  { try { const r = localStorage.getItem(CHAVE_PESQ); this._d = r ? JSON.parse(r) : []; } catch { this._d = []; } },
-  save()  { localStorage.setItem(CHAVE_PESQ, JSON.stringify(this._d)); },
-  all()   { return [...this._d].sort((a,b) => b.criadoEm - a.criadoEm); },
-  get(id) { return this._d.find(p => p.id === id) || null; },
-  create(d) {
-    const p = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,5), titulo: d.titulo.trim(), subtitulo: d.subtitulo || '', autores: d.autores || '', resumo: d.resumo.trim(), texto: d.texto || '', link: d.link || '', imagem: d.imagem || '', criadoEm: Date.now(), atualizadoEm: Date.now() };
-    this._d.unshift(p); this.save(); return p;
-  },
-  update(id, d) {
-    const i = this._d.findIndex(p => p.id === id); if (i < 0) return null;
-    this._d[i] = { ...this._d[i], titulo: d.titulo.trim(), subtitulo: d.subtitulo || '', autores: d.autores || '', resumo: d.resumo.trim(), texto: d.texto || '', link: d.link || '', imagem: d.imagem !== undefined ? d.imagem : this._d[i].imagem, atualizadoEm: Date.now() };
-    this.save(); return this._d[i];
-  },
-  delete(id) { this._d = this._d.filter(p => p.id !== id); this.save(); }
-};
-
-Pesquisas.load();
-
-// Upload pesquisa
-let imgBase64Pesq = '';
-const uploadZonePesq = document.getElementById('uploadZonePesq');
-const fileInputPesq  = document.getElementById('imgUploadPesq');
-const imgPreviewPesq = document.getElementById('imgPreviewPesq');
-const uploadPhPesq   = document.getElementById('uploadPhPesq');
-const btnRemImgPesq  = document.getElementById('btnRemoverImgPesq');
-
-uploadZonePesq.addEventListener('click', e => { if (e.target === btnRemImgPesq || btnRemImgPesq.contains(e.target)) return; fileInputPesq.click(); });
-fileInputPesq.addEventListener('change', e => { if (e.target.files[0]) processarImgPesq(e.target.files[0]); });
-uploadZonePesq.addEventListener('dragover', e => { e.preventDefault(); uploadZonePesq.classList.add('drag'); });
-uploadZonePesq.addEventListener('dragleave', () => uploadZonePesq.classList.remove('drag'));
-uploadZonePesq.addEventListener('drop', e => { e.preventDefault(); uploadZonePesq.classList.remove('drag'); const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) processarImgPesq(f); });
-btnRemImgPesq.addEventListener('click', e => { e.stopPropagation(); limparPreviewPesq(); });
-document.getElementById('btnPrevUrlPesq').addEventListener('click', () => { const u = document.getElementById('pesqImgUrl').value.trim(); if (!u) { toast('Insira uma URL primeiro', 'aviso'); return; } carregarPreviewPesq(u); imgBase64Pesq = ''; });
-
-function processarImgPesq(file) {
-  if (file.size > 5*1024*1024) { toast('Imagem muito grande (máx. 5MB)', 'error'); return; }
-  const r = new FileReader();
-  r.onload = ev => { imgBase64Pesq = ev.target.result; carregarPreviewPesq(ev.target.result); document.getElementById('pesqImgUrl').value = ''; };
-  r.readAsDataURL(file);
-}
-
-function carregarPreviewPesq(src) {
-  imgPreviewPesq.src = src;
-  imgPreviewPesq.onload = () => { uploadPhPesq.classList.add('oculto'); imgPreviewPesq.classList.remove('oculto'); btnRemImgPesq.classList.remove('oculto'); };
-  imgPreviewPesq.onerror = () => { toast('Não foi possível carregar a imagem', 'error'); limparPreviewPesq(); };
-}
-
-function limparPreviewPesq() {
-  imgPreviewPesq.src = ''; imgPreviewPesq.classList.add('oculto');
-  uploadPhPesq.classList.remove('oculto'); btnRemImgPesq.classList.add('oculto');
-  fileInputPesq.value = ''; imgBase64Pesq = ''; document.getElementById('pesqImgUrl').value = '';
-}
-
-// Views pesquisa
-function mostrarViewPesquisas() {
-  ['viewPosts','viewForm','viewFormPesquisa'].forEach(id => document.getElementById(id).classList.add('oculto'));
-  document.getElementById('viewPesquisas').classList.remove('oculto');
-  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'pesquisas'));
-  document.getElementById('topbarTitulo').textContent = 'Pesquisas Científicas';
-  document.getElementById('topbarAnoPill').textContent = 'LEG';
-  renderPesquisas();
-}
-
-function abrirFormNovaPesquisa() {
-  document.getElementById('pesqForm').reset();
-  document.getElementById('pesqId').value = '';
-  imgBase64Pesq = ''; limparPreviewPesq(); limparErrosPesq();
-  document.getElementById('formPesqTitulo').innerHTML = 'Nova <em>Pesquisa</em>';
-  document.getElementById('formPesqSub').textContent = 'Preencha os dados da produção científica';
-  document.getElementById('txtSalvarPesq').textContent = 'Salvar Pesquisa';
-  ['viewPosts','viewForm','viewPesquisas'].forEach(id => document.getElementById(id).classList.add('oculto'));
-  document.getElementById('viewFormPesquisa').classList.remove('oculto');
-  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.toggle('ativo', n.dataset.view === 'nova-pesquisa'));
-  document.getElementById('topbarTitulo').textContent = 'Nova Pesquisa';
-  setTimeout(() => document.getElementById('pesqTitulo').focus(), 80);
-}
-
-function abrirFormEditarPesquisa(id) {
-  const p = Pesquisas.get(id); if (!p) return;
-  document.getElementById('pesqId').value        = p.id;
-  document.getElementById('pesqTitulo').value    = p.titulo;
-  document.getElementById('pesqSubtitulo').value = p.subtitulo || '';
-  document.getElementById('pesqAutores').value   = p.autores || '';
-  document.getElementById('pesqResumo').value    = p.resumo;
-  document.getElementById('pesqTexto').value     = p.texto || '';
-  document.getElementById('pesqLink').value      = p.link || '';
-  document.getElementById('pesqImgUrl').value    = '';
-  imgBase64Pesq = ''; limparPreviewPesq(); limparErrosPesq();
-  if (p.imagem) { carregarPreviewPesq(p.imagem); if (p.imagem.startsWith('http')) document.getElementById('pesqImgUrl').value = p.imagem; else imgBase64Pesq = p.imagem; }
-  document.getElementById('formPesqTitulo').innerHTML = 'Editar <em>Pesquisa</em>';
-  document.getElementById('formPesqSub').textContent = `Editando: ${p.titulo.slice(0,45)}`;
-  document.getElementById('txtSalvarPesq').textContent = 'Atualizar Pesquisa';
-  ['viewPosts','viewForm','viewPesquisas'].forEach(id => document.getElementById(id).classList.add('oculto'));
-  document.getElementById('viewFormPesquisa').classList.remove('oculto');
-  document.getElementById('topbarTitulo').textContent = 'Editar Pesquisa';
-  setTimeout(() => document.getElementById('pesqTitulo').focus(), 80);
-}
-
-// Submit pesquisa
-document.getElementById('pesqForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const titulo   = document.getElementById('pesqTitulo').value.trim();
-  const subtitulo= document.getElementById('pesqSubtitulo').value.trim();
-  const autores  = document.getElementById('pesqAutores').value.trim();
-  const resumo   = document.getElementById('pesqResumo').value.trim();
-  const texto    = document.getElementById('pesqTexto').value.trim();
-  const link     = document.getElementById('pesqLink').value.trim();
-  const urlImg   = document.getElementById('pesqImgUrl').value.trim();
-  let ok = true; limparErrosPesq();
-
-  if (!titulo) { erroFP('pesqTitulo','erroPesqTitulo','Título obrigatório'); ok=false; }
-  if (!resumo) { erroFP('pesqResumo','erroPesqResumo','Resumo obrigatório'); ok=false; }
-  if (!ok) return;
-
-  const imagem = imgBase64Pesq || urlImg || '';
-  const id = document.getElementById('pesqId').value;
-  if (id) { Pesquisas.update(id, { titulo, subtitulo, autores, resumo, texto, link, imagem }); toast('✏️ Pesquisa atualizada!', 'success'); }
-  else    { Pesquisas.create({ titulo, subtitulo, autores, resumo, texto, link, imagem });    toast('✅ Pesquisa publicada!', 'success'); }
-  mostrarViewPesquisas();
-});
-
-function erroFP(inputId, erroId, msg) {
-  document.getElementById(inputId).classList.add('erro');
-  document.getElementById(erroId).textContent = msg;
-  document.getElementById(inputId).addEventListener('input', () => { document.getElementById(inputId).classList.remove('erro'); document.getElementById(erroId).textContent=''; }, { once:true });
-}
-
-function limparErrosPesq() {
-  ['pesqTitulo','pesqResumo'].forEach(id => document.getElementById(id).classList.remove('erro'));
-  ['erroPesqTitulo','erroPesqResumo'].forEach(id => document.getElementById(id).textContent='');
-}
-
-// Render pesquisas
-function renderPesquisas() {
-  const grid = document.getElementById('pesquisasGrid');
-  const lista = Pesquisas.all();
-  document.getElementById('statTotalPesq').textContent = lista.length;
-  document.getElementById('statComLink').textContent   = lista.filter(p => p.link).length;
-  document.getElementById('statUltimaPesq').textContent = lista.length ? fmtData(lista[0].criadoEm) : '—';
-  grid.innerHTML = '';
-
-  if (!lista.length) {
-    grid.innerHTML = `<div class="empty-state">
-      <div class="empty-ico"><i class="fa-solid fa-microscope"></i></div>
-      <h3>Nenhuma pesquisa publicada</h3>
-      <p>Adicione a primeira produção científica da LEG!</p>
-      <button class="btn-dash-novo" onclick="abrirFormNovaPesquisa()" style="margin:0 auto;">
-        <i class="fa-solid fa-plus"></i> Nova Pesquisa
-      </button>
-    </div>`;
-    return;
-  }
-
-  lista.forEach((pesq, i) => {
-    const card = document.createElement('div');
-    card.className = 'post-card';
-    card.style.animationDelay = `${i*55}ms`;
-
-    const img = pesq.imagem
-      ? `<img class="post-card-img" src="${esc(pesq.imagem)}" alt="${esc(pesq.titulo)}" loading="lazy" onerror="this.outerHTML='<div class=\\"post-card-img-vazio\\"><i class=\\"fa-solid fa-microscope\\"></i></div>'">`
-      : `<div class="post-card-img-vazio"><i class="fa-solid fa-microscope"></i></div>`;
-
-    card.innerHTML = `${img}
-      <div class="post-card-body">
-        <span class="post-card-pill"><i class="fa-solid fa-microscope"></i> Pesquisa</span>
-        <h3 class="post-card-titulo">${esc(pesq.titulo)}</h3>
-        <p class="post-card-texto" style="font-style:italic;">${esc(pesq.resumo)}</p>
-        ${pesq.autores ? `<div class="post-card-data"><i class="fa-solid fa-user-pen"></i> ${esc(pesq.autores)}</div>` : ''}
-        <div class="post-card-data"><i class="fa-regular fa-clock"></i> ${fmtData(pesq.criadoEm)}</div>
-        <div class="post-card-acoes">
-          <button class="btn-editar" data-id="${pesq.id}"><i class="fa-solid fa-pen"></i> Editar</button>
-          <button class="btn-excluir" data-id="${pesq.id}"><i class="fa-solid fa-trash"></i> Excluir</button>
-        </div>
-      </div>`;
-
-    card.querySelector('.btn-editar').addEventListener('click', () => abrirFormEditarPesquisa(pesq.id));
-    card.querySelector('.btn-excluir').addEventListener('click', () => {
-      postParaExcluir = pesq.id;
-      excluindoPesquisa = true;
-      document.getElementById('modalOverlay').classList.remove('oculto');
-      document.body.style.overflow = 'hidden';
+// RENDER POSTS
+async function renderPosts(){
+  loading('postsGrid');
+  document.getElementById('statPostsAno').textContent=document.getElementById('statTotal').textContent='...';
+  try{
+    const [lista,todos]=await Promise.all([fbPListar(anoAtivo),fbPTodos()]);
+    document.getElementById('statPostsAno').textContent=lista.length;
+    document.getElementById('statTotal').textContent=todos.length;
+    document.getElementById('statUltima').textContent=lista.length?fmtData(lista[0].criadoEm):'—';
+    const grid=document.getElementById('postsGrid');grid.innerHTML='';
+    if(!lista.length){grid.innerHTML='<div class="empty-state"><div class="empty-ico"><i class="fa-solid fa-newspaper"></i></div><h3>Nenhum post em '+anoAtivo+'</h3><p>Crie a primeira publicação!</p></div>';return;}
+    lista.forEach((post,i)=>{
+      const card=document.createElement('div');card.className='post-card';card.style.animationDelay=i*55+'ms';
+      const img=post.imagem?`<img class="post-card-img" src="${esc(post.imagem)}" alt="${esc(post.titulo)}" loading="lazy" onerror="this.outerHTML='<div class=\\"post-card-img-vazio\\">'\' +'<i class=\\"fa-solid fa-image\\"></i></div>'">`
+:'<div class="post-card-img-vazio"><i class="fa-solid fa-image"></i></div>';
+      card.innerHTML=img+'<div class="post-card-body"><span class="post-card-pill"><i class="fa-regular fa-calendar"></i> '+post.ano+'</span><h3 class="post-card-titulo">'+esc(post.titulo)+'</h3><p class="post-card-texto">'+esc(post.texto)+'</p><div class="post-card-data"><i class="fa-regular fa-clock"></i> '+fmtData(post.criadoEm)+'</div><div class="post-card-acoes"><button class="btn-editar"><i class="fa-solid fa-pen"></i> Editar</button><button class="btn-excluir"><i class="fa-solid fa-trash"></i> Excluir</button></div></div>';
+      card.querySelector('.btn-editar').addEventListener('click',()=>abrirFormEditar(post));
+      card.querySelector('.btn-excluir').addEventListener('click',()=>{itemParaExcluir={id:post.id,tipo:'post'};abrirModal();});
+      grid.appendChild(card);
     });
-    grid.appendChild(card);
-  });
+  }catch(err){console.error(err);document.getElementById('postsGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Erro ao carregar</h3></div>';}
 }
 
-// ── INIT ──
-anoAtivo = 2026;
-document.querySelectorAll('.ano-btn').forEach(b => b.classList.toggle('ativo', parseInt(b.dataset.ano) === anoAtivo));
+// FORM PESQUISAS
+function abrirFormNovaPesquisa(){document.getElementById('pesqForm').reset();document.getElementById('pesqId').value='';imgBase64Pesq='';limparPreviewPesq();limparErrosPesq();document.getElementById('formPesqTitulo').innerHTML='Nova <em>Pesquisa</em>';document.getElementById('formPesqSub').textContent='Preencha os dados';document.getElementById('txtSalvarPesq').textContent='Salvar Pesquisa';mostrarViewFormPesquisa();document.getElementById('topbarTitulo').textContent='Nova Pesquisa';setTimeout(()=>document.getElementById('pesqTitulo').focus(),80);}
+function abrirFormEditarPesquisa(pesq){document.getElementById('pesqId').value=pesq.id;document.getElementById('pesqTitulo').value=pesq.titulo;document.getElementById('pesqSubtitulo').value=pesq.subtitulo||'';document.getElementById('pesqAutores').value=pesq.autores||'';document.getElementById('pesqResumo').value=pesq.resumo;document.getElementById('pesqTexto').value=pesq.texto||'';document.getElementById('pesqLink').value=pesq.link||'';document.getElementById('pesqImgUrl').value='';imgBase64Pesq='';limparPreviewPesq();limparErrosPesq();if(pesq.imagem){carregarPreviewPesq(pesq.imagem);if(pesq.imagem.startsWith('http'))document.getElementById('pesqImgUrl').value=pesq.imagem;else imgBase64Pesq=pesq.imagem;}document.getElementById('formPesqTitulo').innerHTML='Editar <em>Pesquisa</em>';document.getElementById('formPesqSub').textContent='Editando: '+pesq.titulo.slice(0,45);document.getElementById('txtSalvarPesq').textContent='Atualizar Pesquisa';mostrarViewFormPesquisa();document.getElementById('topbarTitulo').textContent='Editar Pesquisa';setTimeout(()=>document.getElementById('pesqTitulo').focus(),80);}
+document.getElementById('pesqForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const titulo=document.getElementById('pesqTitulo').value.trim(),subtitulo=document.getElementById('pesqSubtitulo').value.trim(),autores=document.getElementById('pesqAutores').value.trim(),resumo=document.getElementById('pesqResumo').value.trim(),texto=document.getElementById('pesqTexto').value.trim(),link=document.getElementById('pesqLink').value.trim(),urlImg=document.getElementById('pesqImgUrl').value.trim();
+  let ok=true;limparErrosPesq();
+  if(!titulo){erroFP('pesqTitulo','erroPesqTitulo','Título obrigatório');ok=false;}
+  if(!resumo){erroFP('pesqResumo','erroPesqResumo','Resumo obrigatório');ok=false;}
+  if(!ok)return;
+  const imagem=imgBase64Pesq||urlImg||'',id=document.getElementById('pesqId').value;
+  const btnSalvar=document.querySelector('#viewFormPesquisa .btn-salvar');btnLoad(btnSalvar,'Salvando...');
+  try{
+    if(id){await fbQAtualizar(id,{titulo,subtitulo,autores,resumo,texto,link,imagem});toast('✏️ Pesquisa atualizada!','success');}
+    else{await fbQCriar({titulo,subtitulo,autores,resumo,texto,link,imagem});toast('✅ Pesquisa publicada!','success');}
+    mostrarViewPesquisas();
+  }catch(err){console.error(err);toast('Erro ao salvar.','error');btnReset(btnSalvar);}
+});
+function erroFP(i,e,m){document.getElementById(i).classList.add('erro');document.getElementById(e).textContent=m;document.getElementById(i).addEventListener('input',()=>{document.getElementById(i).classList.remove('erro');document.getElementById(e).textContent='';},{once:true});}
+function limparErrosPesq(){['pesqTitulo','pesqResumo'].forEach(i=>document.getElementById(i).classList.remove('erro'));['erroPesqTitulo','erroPesqResumo'].forEach(i=>document.getElementById(i).textContent='');}
+
+// RENDER PESQUISAS
+async function renderPesquisas(){
+  loading('pesquisasGrid');
+  document.getElementById('statTotalPesq').textContent=document.getElementById('statComLink').textContent='...';
+  try{
+    const lista=await fbQListar();
+    document.getElementById('statTotalPesq').textContent=lista.length;
+    document.getElementById('statComLink').textContent=lista.filter(p=>p.link).length;
+    document.getElementById('statUltimaPesq').textContent=lista.length?fmtData(lista[0].criadoEm):'—';
+    const grid=document.getElementById('pesquisasGrid');grid.innerHTML='';
+    if(!lista.length){grid.innerHTML='<div class="empty-state"><div class="empty-ico"><i class="fa-solid fa-microscope"></i></div><h3>Nenhuma pesquisa publicada</h3></div>';return;}
+    lista.forEach((pesq,i)=>{
+      const card=document.createElement('div');card.className='post-card';card.style.animationDelay=i*55+'ms';
+      const img=pesq.imagem?`<img class="post-card-img" src="${esc(pesq.imagem)}" alt="${esc(pesq.titulo)}" loading="lazy">`
+:'<div class="post-card-img-vazio"><i class="fa-solid fa-microscope"></i></div>';
+      card.innerHTML=img+'<div class="post-card-body"><span class="post-card-pill"><i class="fa-solid fa-microscope"></i> Pesquisa</span><h3 class="post-card-titulo">'+esc(pesq.titulo)+'</h3><p class="post-card-texto" style="font-style:italic">'+esc(pesq.resumo)+'</p>'+(pesq.autores?'<div class="post-card-data"><i class="fa-solid fa-user-pen"></i> '+esc(pesq.autores)+'</div>':'')+'<div class="post-card-data"><i class="fa-regular fa-clock"></i> '+fmtData(pesq.criadoEm)+'</div><div class="post-card-acoes"><button class="btn-editar"><i class="fa-solid fa-pen"></i> Editar</button><button class="btn-excluir"><i class="fa-solid fa-trash"></i> Excluir</button></div></div>';
+      card.querySelector('.btn-editar').addEventListener('click',()=>abrirFormEditarPesquisa(pesq));
+      card.querySelector('.btn-excluir').addEventListener('click',()=>{itemParaExcluir={id:pesq.id,tipo:'pesquisa'};abrirModal();});
+      grid.appendChild(card);
+    });
+  }catch(err){console.error(err);document.getElementById('pesquisasGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Erro ao carregar</h3></div>';}
+}
+
+// MODAL
+let itemParaExcluir=null;
+function abrirModal(){ document.getElementById('modalOverlay').classList.remove('oculto'); document.body.style.overflow='hidden'; }
+function fecharModal(){ document.getElementById('modalOverlay').classList.add('oculto'); document.body.style.overflow=''; itemParaExcluir=null; const btn=document.getElementById('modalConfirmar'); btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-trash"></i> Excluir'; }
+document.getElementById('modalCancelar').addEventListener('click',fecharModal);
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))fecharModal();});
+document.getElementById('modalConfirmar').addEventListener('click',async()=>{
+  if(!itemParaExcluir)return;
+  const btn=document.getElementById('modalConfirmar');btnLoad(btn,'Excluindo...');
+  try{
+    if(itemParaExcluir.tipo==='pesquisa'){await fbQExcluir(itemParaExcluir.id);fecharModal();renderPesquisas();toast('Pesquisa removida','aviso');}
+    else{await fbPExcluir(itemParaExcluir.id);fecharModal();renderPosts();toast('Post removido','aviso');}
+  }catch(err){console.error(err);toast('Erro ao excluir.','error');btnReset(btn);}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('modalOverlay').classList.contains('oculto'))fecharModal();});
+
+// INIT
 atualizarAnoUI();
 mostrarViewPosts();
-</script>
-</body>
+</script></body>
 </html>

@@ -696,7 +696,7 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getFirestore, collection, getDocs, query, orderBy }
+    import { getFirestore, collection, getDocs }
       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
     const FB = {
@@ -737,9 +737,9 @@
       grid.innerHTML = '<div class="posts-vazio" style="grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;color:var(--cinza-400);display:block;margin-bottom:16px;"></i><p style="color:var(--cinza-400)">Carregando...</p></div>';
 
       try {
-        const q = query(collection(db, 'posts'), orderBy('criadoEm', 'desc'));
+        const q = collection(db, 'posts');
         const snap = await getDocs(q);
-        const posts = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.ano==ano);
+        const posts = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{ const ta=a.criadoEm?.toMillis?.()||a.criadoEm||0; const tb=b.criadoEm?.toMillis?.()||b.criadoEm||0; return tb-ta; }).filter(p=>p.ano==ano).sort((a,b)=>{ const ta=a.criadoEm?.toMillis?.()||a.criadoEm||0; const tb=b.criadoEm?.toMillis?.()||b.criadoEm||0; return tb-ta; });
         grid.innerHTML = '';
 
         if (!posts.length) {
@@ -771,9 +771,9 @@
       grid.innerHTML = '<div class="pesquisas-vazio" style="grid-column:1/-1"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;color:var(--cinza-400);display:block;margin-bottom:16px;"></i><p style="color:var(--cinza-400)">Carregando...</p></div>';
 
       try {
-        const q = query(collection(db, 'pesquisas'), orderBy('criadoEm', 'desc'));
+        const q = collection(db, 'pesquisas');
         const snap = await getDocs(q);
-        const lista = snap.docs.map(d=>({id:d.id,...d.data()}));
+        const lista = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{ const ta=a.criadoEm?.toMillis?.()||a.criadoEm||0; const tb=b.criadoEm?.toMillis?.()||b.criadoEm||0; return tb-ta; });
         grid.innerHTML = '';
 
         if (!lista.length) {
