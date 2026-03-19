@@ -924,6 +924,14 @@
         <i class="fa-solid fa-plus"></i> Novo Post
       </button>
 
+      <span class="nav-sep" style="margin-top:8px;">Pesquisas</span>
+      <button class="nav-item" data-view="pesquisas">
+        <i class="fa-solid fa-microscope"></i> Pesquisas
+      </button>
+      <button class="nav-item" data-view="nova-pesquisa" id="btnNovaPesquisa">
+        <i class="fa-solid fa-flask"></i> Nova Pesquisa
+      </button>
+
       <span class="nav-sep" style="margin-top:8px;">Site</span>
       <a href="index.html" class="nav-item" target="_blank">
         <i class="fa-solid fa-globe"></i> Ver site
@@ -1085,6 +1093,113 @@
         </div>
       </section>
 
+      <!-- VIEW PESQUISAS -->
+      <section class="view oculto" id="viewPesquisas">
+        <div class="view-head">
+          <div>
+            <div class="view-head-eyebrow"><i class="fa-solid fa-microscope"></i> Gestão</div>
+            <h2>Pesquisas <em>Científicas</em></h2>
+            <p>Gerencie as produções científicas e trabalhos da LEG</p>
+          </div>
+          <button class="btn-dash-novo" id="btnNovaPesquisaHead">
+            <i class="fa-solid fa-plus"></i> Nova Pesquisa
+          </button>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-ico vinho"><i class="fa-solid fa-microscope"></i></div>
+            <div><div class="stat-num" id="statTotalPesq">0</div><div class="stat-lbl">Total publicadas</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico ouro"><i class="fa-solid fa-link"></i></div>
+            <div><div class="stat-num" id="statComLink">0</div><div class="stat-lbl">Com link externo</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico cinza"><i class="fa-regular fa-clock"></i></div>
+            <div><div class="stat-num" style="font-size:1rem;line-height:1.4;" id="statUltimaPesq">—</div><div class="stat-lbl">Última publicação</div></div>
+          </div>
+        </div>
+        <div class="posts-grid" id="pesquisasGrid"></div>
+      </section>
+
+      <!-- VIEW FORM PESQUISA -->
+      <section class="view oculto" id="viewFormPesquisa">
+        <div class="view-head">
+          <div>
+            <div class="view-head-eyebrow"><i class="fa-solid fa-flask"></i> Pesquisa Científica</div>
+            <h2 id="formPesqTitulo">Nova <em>Pesquisa</em></h2>
+            <p id="formPesqSub">Preencha os dados da produção científica</p>
+          </div>
+          <button class="btn-cancelar" id="btnVoltarPesq">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+          </button>
+        </div>
+        <div class="form-card">
+          <form id="pesqForm" novalidate>
+            <input type="hidden" id="pesqId">
+            <div class="f-grupo">
+              <label class="f-label" for="pesqTitulo"><i class="fa-solid fa-heading"></i> Título *</label>
+              <input type="text" id="pesqTitulo" class="f-input" placeholder="Título da pesquisa..." maxlength="200">
+              <span class="f-erro" id="erroPesqTitulo"></span>
+            </div>
+            <div class="f-grupo">
+              <label class="f-label" for="pesqSubtitulo"><i class="fa-solid fa-minus"></i> Subtítulo</label>
+              <input type="text" id="pesqSubtitulo" class="f-input" placeholder="Subtítulo opcional..." maxlength="200">
+            </div>
+            <div class="f-grupo">
+              <label class="f-label" for="pesqAutores"><i class="fa-solid fa-user-pen"></i> Autores</label>
+              <input type="text" id="pesqAutores" class="f-input" placeholder="Ex: Silva, J. A.; Santos, M. R.">
+            </div>
+            <div class="f-grupo">
+              <label class="f-label" for="pesqResumo"><i class="fa-solid fa-quote-left"></i> Resumo (Abstract) *</label>
+              <textarea id="pesqResumo" class="f-textarea" rows="4" placeholder="Resumo da pesquisa..."></textarea>
+              <span class="f-erro" id="erroPesqResumo"></span>
+            </div>
+            <div class="f-grupo">
+              <label class="f-label" for="pesqTexto"><i class="fa-solid fa-align-left"></i> Texto completo / Descrição adicional</label>
+              <textarea id="pesqTexto" class="f-textarea" rows="4" placeholder="Conteúdo adicional, metodologia, conclusões..."></textarea>
+            </div>
+            <div class="f-grupo">
+              <label class="f-label" for="pesqLink"><i class="fa-solid fa-link"></i> Link / DOI externo</label>
+              <input type="url" id="pesqLink" class="f-input" placeholder="https://doi.org/... ou link do repositório">
+            </div>
+            <div class="dois-col">
+              <div class="f-grupo">
+                <label class="f-label"><i class="fa-solid fa-image"></i> Imagem de capa (upload)</label>
+                <div class="upload-zone" id="uploadZonePesq">
+                  <input type="file" id="imgUploadPesq" accept="image/*" class="file-input">
+                  <div class="upload-ph" id="uploadPhPesq">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Arraste ou clique para enviar</span>
+                    <small>PNG, JPG, WEBP — máx. 5MB</small>
+                  </div>
+                  <img id="imgPreviewPesq" class="img-preview oculto" alt="Preview">
+                  <button type="button" class="btn-remover-img oculto" id="btnRemoverImgPesq">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="f-grupo">
+                <label class="f-label" for="pesqImgUrl"><i class="fa-solid fa-link"></i> Ou URL da imagem</label>
+                <input type="url" id="pesqImgUrl" class="f-input" placeholder="https://...">
+                <button type="button" class="btn-url-prev" id="btnPrevUrlPesq">
+                  <i class="fa-solid fa-eye"></i> Ver preview
+                </button>
+              </div>
+            </div>
+            <div class="form-acoes">
+              <button type="button" class="btn-cancelar" id="btnCancelarPesqForm">
+                <i class="fa-solid fa-xmark"></i> Cancelar
+              </button>
+              <button type="submit" class="btn-salvar">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span id="txtSalvarPesq">Salvar Pesquisa</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
     </main>
   </div>
 </div>
@@ -1111,64 +1226,62 @@
 </div>
 
 <script type="module">
-'use strict';
-
+// ── FIREBASE ──
 import { initializeApp }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection, doc, addDoc, updateDoc,
          deleteDoc, getDocs, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const FB = {
+const db = getFirestore(initializeApp({
   apiKey:"AIzaSyCerNmqmhQ96h2ljzgmzL71FFcVPlEfH5E",
   authDomain:"leg-furg.firebaseapp.com",
   projectId:"leg-furg",
   storageBucket:"leg-furg.firebasestorage.app",
   messagingSenderId:"763827146370",
   appId:"1:763827146370:web:36431aea52963ec0816e9b"
-};
-const app = initializeApp(FB);
-const db  = getFirestore(app);
+}));
 
-// SESSAO
-const CHAVE_SESSAO = 'legfurg_sessao';
-function getSessao() { try { const r=localStorage.getItem(CHAVE_SESSAO)||sessionStorage.getItem(CHAVE_SESSAO); return r?JSON.parse(r):null; } catch{return null;} }
+// ── SESSÃO ──
+const CHAVE = 'legfurg_sessao';
+function getSessao(){ try{ const r=localStorage.getItem(CHAVE)||sessionStorage.getItem(CHAVE); return r?JSON.parse(r):null; }catch{return null;} }
 const sessao = getSessao();
-if (!sessao) window.location.href = 'admin-login.html';
-const nomeEl = document.getElementById('userNome');
-if (nomeEl && sessao) nomeEl.textContent = sessao.email.split('@')[0];
+if(!sessao) window.location.href='admin-login.html';
+const nomeEl=document.getElementById('userNome');
+if(nomeEl&&sessao) nomeEl.textContent=sessao.email.split('@')[0];
 
-let anoAtivo = 2026;
+// ── UTILS ──
+let anoAtivo=2026;
+function esc(s){ const d=document.createElement('div'); d.appendChild(document.createTextNode(String(s))); return d.innerHTML; }
+function fmtData(ts){ if(!ts) return '--'; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'}); }
+function tsMs(ts){ if(!ts) return 0; if(ts.toMillis) return ts.toMillis(); if(ts.seconds) return ts.seconds*1000; return Number(ts)||0; }
+function sortDesc(arr){ return arr.sort((a,b)=>tsMs(b.criadoEm)-tsMs(a.criadoEm)); }
+function toast(msg,tipo='success'){
+  const el=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  const icos={success:'fa-circle-check',error:'fa-circle-xmark',aviso:'fa-triangle-exclamation'};
+  document.getElementById('toastIco').className='fa-solid '+(icos[tipo]||'fa-circle-check');
+  el.className='toast '+tipo+' show';
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+function loading(id){ const g=document.getElementById(id); if(g) g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-spinner fa-spin"></i></div><p>Carregando...</p></div>'; }
+function btnLoad(btn,txt){ if(!btn)return; btn._orig=btn.innerHTML; btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> '+txt; }
+function btnReset(btn){ if(!btn)return; btn.disabled=false; btn.innerHTML=btn._orig||btn.innerHTML; }
 
-// UTILS
-function esc(s) { const d=document.createElement('div'); d.appendChild(document.createTextNode(String(s))); return d.innerHTML; }
-function fmtData(ts) { if(!ts) return '--'; const d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'}); }
-function toast(msg,tipo='success') { const el=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; const icos={success:'fa-circle-check',error:'fa-circle-xmark',aviso:'fa-triangle-exclamation'}; document.getElementById('toastIco').className='fa-solid '+(icos[tipo]||'fa-circle-check'); el.className='toast '+tipo+' show'; setTimeout(()=>el.classList.remove('show'),3500); }
-function loading(gridId) { const g=document.getElementById(gridId); if(g) g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-spinner fa-spin"></i></div><p>Carregando...</p></div>'; }
-function btnLoad(btn,txt) { btn.disabled=true; btn._orig=btn.innerHTML; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> '+txt; }
-function btnReset(btn)    { btn.disabled=false; btn.innerHTML=btn._orig||btn.innerHTML; }
+// ── FIREBASE HELPERS ──
+async function fbGetAll(col){ const s=await getDocs(collection(db,col)); return sortDesc(s.docs.map(d=>({id:d.id,...d.data()}))); }
+async function fbAdd(col,data){ return await addDoc(collection(db,col),{...data,criadoEm:serverTimestamp(),atualizadoEm:serverTimestamp()}); }
+async function fbUpdate(col,id,data){ return await updateDoc(doc(db,col,id),{...data,atualizadoEm:serverTimestamp()}); }
+async function fbDelete(col,id){ return await deleteDoc(doc(db,col,id)); }
 
-// FIREBASE POSTS
-async function fbPCriar(d)    { return await addDoc(collection(db,'posts'),{titulo:d.titulo,texto:d.texto,imagem:d.imagem||'',ano:d.ano,criadoEm:serverTimestamp(),atualizadoEm:serverTimestamp()}); }
-async function fbPAtualizar(id,d) { return await updateDoc(doc(db,'posts',id),{titulo:d.titulo,texto:d.texto,imagem:d.imagem,ano:d.ano,atualizadoEm:serverTimestamp()}); }
-async function fbPExcluir(id) { return await deleteDoc(doc(db,'posts',id)); }
-async function fbPListar(ano) { const s=await getDocs(collection(db,'posts')); return s.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.ano==ano).sort((a,b)=>{const ta=a.criadoEm?.toMillis?.()??0,tb=b.criadoEm?.toMillis?.()??0;return tb-ta;}); }
-async function fbPTodos()     { const s=await getDocs(collection(db,'posts')); return s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{const ta=a.criadoEm?.toMillis?.()??0,tb=b.criadoEm?.toMillis?.()??0;return tb-ta;}); }
-
-// FIREBASE PESQUISAS
-async function fbQCriar(d)    { return await addDoc(collection(db,'pesquisas'),{titulo:d.titulo,subtitulo:d.subtitulo||'',autores:d.autores||'',resumo:d.resumo,texto:d.texto||'',link:d.link||'',imagem:d.imagem||'',criadoEm:serverTimestamp(),atualizadoEm:serverTimestamp()}); }
-async function fbQAtualizar(id,d) { return await updateDoc(doc(db,'pesquisas',id),{titulo:d.titulo,subtitulo:d.subtitulo||'',autores:d.autores||'',resumo:d.resumo,texto:d.texto||'',link:d.link||'',imagem:d.imagem,atualizadoEm:serverTimestamp()}); }
-async function fbQExcluir(id) { return await deleteDoc(doc(db,'pesquisas',id)); }
-async function fbQListar()    { const s=await getDocs(collection(db,'pesquisas')); return s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{const ta=a.criadoEm?.toMillis?.()??0,tb=b.criadoEm?.toMillis?.()??0;return tb-ta;}); }
-
-// SIDEBAR
-const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay');
-function abrirSidebar()  { sidebar.classList.add('aberta');  overlay.classList.add('show');  document.body.style.overflow='hidden'; }
-function fecharSidebar() { sidebar.classList.remove('aberta'); overlay.classList.remove('show'); document.body.style.overflow=''; }
+// ── SIDEBAR ──
+const sidebar=document.getElementById('sidebar'), sidebarOverlay=document.getElementById('sidebarOverlay');
+function abrirSidebar(){ sidebar.classList.add('aberta'); sidebarOverlay.classList.add('show'); document.body.style.overflow='hidden'; }
+function fecharSidebar(){ sidebar.classList.remove('aberta'); sidebarOverlay.classList.remove('show'); document.body.style.overflow=''; }
 document.getElementById('menuToggle').addEventListener('click',abrirSidebar);
 document.getElementById('fecharSidebar').addEventListener('click',fecharSidebar);
-overlay.addEventListener('click',fecharSidebar);
+sidebarOverlay.addEventListener('click',fecharSidebar);
 
-// ANO
+// ── ANO ──
 document.querySelectorAll('.ano-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     anoAtivo=parseInt(btn.dataset.ano);
@@ -1176,183 +1289,298 @@ document.querySelectorAll('.ano-btn').forEach(btn=>{
     atualizarAnoUI(); mostrarViewPosts(); fecharSidebar();
   });
 });
-function atualizarAnoUI() {
-  document.getElementById('topbarTitulo').textContent='Posts · '+anoAtivo;
+function atualizarAnoUI(){
+  document.getElementById('topbarTitulo').textContent='Posts \u00B7 '+anoAtivo;
   document.getElementById('topbarAnoPill').textContent=anoAtivo;
   document.getElementById('tituloListagem').innerHTML='Posts de <em>'+anoAtivo+'</em>';
   sincRadioAno(anoAtivo);
 }
-function sincRadioAno(ano) {
-  document.getElementById('radio25').checked=(ano==2025);
-  document.getElementById('radio26').checked=(ano==2026);
-  document.getElementById('labelAno25').classList.toggle('sel',ano==2025);
-  document.getElementById('labelAno26').classList.toggle('sel',ano==2026);
+function sincRadioAno(ano){
+  const r25=document.getElementById('radio25'), r26=document.getElementById('radio26');
+  const l25=document.getElementById('labelAno25'), l26=document.getElementById('labelAno26');
+  if(r25) r25.checked=(ano==2025); if(r26) r26.checked=(ano==2026);
+  if(l25) l25.classList.toggle('sel',ano==2025); if(l26) l26.classList.toggle('sel',ano==2026);
 }
-document.querySelectorAll('input[name="postAno"]').forEach(r=>{ r.addEventListener('change',()=>{ document.getElementById('labelAno25').classList.toggle('sel',r.value=='2025'); document.getElementById('labelAno26').classList.toggle('sel',r.value=='2026'); }); });
+document.querySelectorAll('input[name="postAno"]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    document.getElementById('labelAno25').classList.toggle('sel',r.value=='2025');
+    document.getElementById('labelAno26').classList.toggle('sel',r.value=='2026');
+  });
+});
 
-// NAV
+// ── VIEWS ──
+const TODAS_VIEWS=['viewPosts','viewForm','viewPesquisas','viewFormPesquisa'];
+function showOnly(viewId){
+  TODAS_VIEWS.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('oculto', id!==viewId);
+  });
+}
+function ativarNav(viewKey){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view===viewKey));
+}
+
+function mostrarViewPosts(){
+  showOnly('viewPosts'); ativarNav('posts'); atualizarAnoUI(); renderPosts();
+}
+function mostrarViewForm(){
+  showOnly('viewForm'); ativarNav('novo');
+  document.getElementById('topbarTitulo').textContent=document.getElementById('postId').value?'Editar Post':'Novo Post';
+}
+function mostrarViewPesquisas(){
+  showOnly('viewPesquisas'); ativarNav('pesquisas');
+  document.getElementById('topbarTitulo').textContent='Pesquisas Cient\u00EDficas';
+  document.getElementById('topbarAnoPill').textContent='LEG';
+  renderPesquisas();
+}
+function mostrarViewFormPesquisa(){
+  showOnly('viewFormPesquisa'); ativarNav('nova-pesquisa');
+}
+
+// ── NAV LINKS ──
 document.querySelectorAll('.nav-item[data-view]').forEach(item=>{
   item.addEventListener('click',()=>{
     const v=item.dataset.view;
-    if(v==='novo')abrirFormNovo();
-    else if(v==='pesquisas')mostrarViewPesquisas();
-    else if(v==='nova-pesquisa')abrirFormNovaPesquisa();
-    else mostrarViewPosts();
+    if(v==='novo')           abrirFormNovo();
+    else if(v==='pesquisas') mostrarViewPesquisas();
+    else if(v==='nova-pesquisa') abrirFormNovaPesquisa();
+    else                     mostrarViewPosts();
     fecharSidebar();
   });
 });
 
-// LOGOUT
-function logout(){ localStorage.removeItem(CHAVE_SESSAO); sessionStorage.removeItem(CHAVE_SESSAO); toast('Sessão encerrada. Até logo!','aviso'); setTimeout(()=>window.location.href='admin-login.html',900); }
+// ── LOGOUT ──
+function logout(){ localStorage.removeItem(CHAVE); sessionStorage.removeItem(CHAVE); toast('Sess\u00E3o encerrada!','aviso'); setTimeout(()=>window.location.href='admin-login.html',900); }
 document.getElementById('btnLogout').addEventListener('click',logout);
 document.getElementById('topbarLogout').addEventListener('click',logout);
-['topbarNovo','btnNovoPosts'].forEach(id=>document.getElementById(id)?.addEventListener('click',abrirFormNovo));
-document.getElementById('btnNovaPesquisa')?.addEventListener('click',abrirFormNovaPesquisa);
-['btnVoltar','btnCancelarForm'].forEach(id=>document.getElementById(id)?.addEventListener('click',mostrarViewPosts));
-['btnVoltarPesq','btnCancelarPesqForm'].forEach(id=>document.getElementById(id)?.addEventListener('click',mostrarViewPesquisas));
 
-// UPLOAD POSTS
+// ── BOTÕES NOVO ──
+document.getElementById('topbarNovo').addEventListener('click',abrirFormNovo);
+document.getElementById('btnNovoPosts').addEventListener('click',abrirFormNovo);
+document.getElementById('btnNovaPesquisa').addEventListener('click',abrirFormNovaPesquisa);
+document.getElementById('btnNovaPesquisaHead').addEventListener('click',abrirFormNovaPesquisa);
+document.getElementById('btnVoltar').addEventListener('click',mostrarViewPosts);
+document.getElementById('btnCancelarForm').addEventListener('click',mostrarViewPosts);
+document.getElementById('btnVoltarPesq').addEventListener('click',mostrarViewPesquisas);
+document.getElementById('btnCancelarPesqForm').addEventListener('click',mostrarViewPesquisas);
+
+// ── UPLOAD POSTS ──
 let imgBase64='';
-const uploadZone=document.getElementById('uploadZone'),fileInput=document.getElementById('imgUpload'),imgPrev=document.getElementById('imgPreview'),uploadPh=document.getElementById('uploadPh'),btnRemImg=document.getElementById('btnRemoverImg');
-uploadZone.addEventListener('click',e=>{if(e.target===btnRemImg||btnRemImg.contains(e.target))return;fileInput.click();});
-fileInput.addEventListener('change',e=>{if(e.target.files[0])processarImg(e.target.files[0]);});
-uploadZone.addEventListener('dragover',e=>{e.preventDefault();uploadZone.classList.add('drag');});
+const uploadZone=document.getElementById('uploadZone'),
+      fileInput =document.getElementById('imgUpload'),
+      imgPrev   =document.getElementById('imgPreview'),
+      uploadPh  =document.getElementById('uploadPh'),
+      btnRemImg =document.getElementById('btnRemoverImg');
+uploadZone.addEventListener('click',e=>{ if(e.target===btnRemImg||btnRemImg.contains(e.target))return; fileInput.click(); });
+fileInput.addEventListener('change',e=>{ if(e.target.files[0]) processarImg(e.target.files[0]); });
+uploadZone.addEventListener('dragover',e=>{ e.preventDefault(); uploadZone.classList.add('drag'); });
 uploadZone.addEventListener('dragleave',()=>uploadZone.classList.remove('drag'));
-uploadZone.addEventListener('drop',e=>{e.preventDefault();uploadZone.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processarImg(f);});
-btnRemImg.addEventListener('click',e=>{e.stopPropagation();limparPreview();});
-document.getElementById('btnPrevUrl').addEventListener('click',()=>{const u=document.getElementById('postImgUrl').value.trim();if(!u){toast('Insira uma URL primeiro','aviso');return;}carregarPreview(u);imgBase64='';});
-function processarImg(file){if(file.size>5*1024*1024){toast('Imagem muito grande (máx. 5MB)','error');return;}const r=new FileReader();r.onload=ev=>{imgBase64=ev.target.result;carregarPreview(ev.target.result);document.getElementById('postImgUrl').value='';};r.readAsDataURL(file);}
-function carregarPreview(src){imgPrev.src=src;imgPrev.onload=()=>{uploadPh.classList.add('oculto');imgPrev.classList.remove('oculto');btnRemImg.classList.remove('oculto');};imgPrev.onerror=()=>{toast('Não foi possível carregar','error');limparPreview();};}
-function limparPreview(){imgPrev.src='';imgPrev.classList.add('oculto');uploadPh.classList.remove('oculto');btnRemImg.classList.add('oculto');fileInput.value='';imgBase64='';document.getElementById('postImgUrl').value='';}
+uploadZone.addEventListener('drop',e=>{ e.preventDefault(); uploadZone.classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f&&f.type.startsWith('image/')) processarImg(f); });
+btnRemImg.addEventListener('click',e=>{ e.stopPropagation(); limparPreview(); });
+document.getElementById('btnPrevUrl').addEventListener('click',()=>{ const u=document.getElementById('postImgUrl').value.trim(); if(!u){toast('Insira uma URL primeiro','aviso');return;} preview(u,'post'); imgBase64=''; });
+function processarImg(file){ if(file.size>5*1024*1024){toast('Imagem muito grande (m\u00E1x. 5MB)','error');return;} const r=new FileReader(); r.onload=ev=>{ imgBase64=ev.target.result; preview(ev.target.result,'post'); document.getElementById('postImgUrl').value=''; }; r.readAsDataURL(file); }
+function preview(src,tipo){
+  const img=tipo==='post'?imgPrev:imgPrevPesq, ph=tipo==='post'?uploadPh:uploadPhPesq, btn=tipo==='post'?btnRemImg:btnRemImgPesq;
+  img.src=src; img.onload=()=>{ ph.classList.add('oculto'); img.classList.remove('oculto'); btn.classList.remove('oculto'); }; img.onerror=()=>{ toast('N\u00E3o foi poss\u00EDvel carregar','error'); limparPreview(); };
+}
+function limparPreview(){ imgPrev.src=''; imgPrev.classList.add('oculto'); uploadPh.classList.remove('oculto'); btnRemImg.classList.add('oculto'); fileInput.value=''; imgBase64=''; document.getElementById('postImgUrl').value=''; }
 
-// UPLOAD PESQUISAS
+// ── UPLOAD PESQUISAS ──
 let imgBase64Pesq='';
-const uploadZonePesq=document.getElementById('uploadZonePesq'),fileInputPesq=document.getElementById('imgUploadPesq'),imgPrevPesq=document.getElementById('imgPreviewPesq'),uploadPhPesq=document.getElementById('uploadPhPesq'),btnRemImgPesq=document.getElementById('btnRemoverImgPesq');
-uploadZonePesq.addEventListener('click',e=>{if(e.target===btnRemImgPesq||btnRemImgPesq.contains(e.target))return;fileInputPesq.click();});
-fileInputPesq.addEventListener('change',e=>{if(e.target.files[0])processarImgPesq(e.target.files[0]);});
-uploadZonePesq.addEventListener('dragover',e=>{e.preventDefault();uploadZonePesq.classList.add('drag');});
+const uploadZonePesq=document.getElementById('uploadZonePesq'),
+      fileInputPesq =document.getElementById('imgUploadPesq'),
+      imgPrevPesq   =document.getElementById('imgPreviewPesq'),
+      uploadPhPesq  =document.getElementById('uploadPhPesq'),
+      btnRemImgPesq =document.getElementById('btnRemoverImgPesq');
+uploadZonePesq.addEventListener('click',e=>{ if(e.target===btnRemImgPesq||btnRemImgPesq.contains(e.target))return; fileInputPesq.click(); });
+fileInputPesq.addEventListener('change',e=>{ if(e.target.files[0]) processarImgPesq(e.target.files[0]); });
+uploadZonePesq.addEventListener('dragover',e=>{ e.preventDefault(); uploadZonePesq.classList.add('drag'); });
 uploadZonePesq.addEventListener('dragleave',()=>uploadZonePesq.classList.remove('drag'));
-uploadZonePesq.addEventListener('drop',e=>{e.preventDefault();uploadZonePesq.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processarImgPesq(f);});
-btnRemImgPesq.addEventListener('click',e=>{e.stopPropagation();limparPreviewPesq();});
-document.getElementById('btnPrevUrlPesq').addEventListener('click',()=>{const u=document.getElementById('pesqImgUrl').value.trim();if(!u){toast('Insira uma URL primeiro','aviso');return;}carregarPreviewPesq(u);imgBase64Pesq='';});
-function processarImgPesq(file){if(file.size>5*1024*1024){toast('Imagem muito grande','error');return;}const r=new FileReader();r.onload=ev=>{imgBase64Pesq=ev.target.result;carregarPreviewPesq(ev.target.result);document.getElementById('pesqImgUrl').value='';};r.readAsDataURL(file);}
-function carregarPreviewPesq(src){imgPrevPesq.src=src;imgPrevPesq.onload=()=>{uploadPhPesq.classList.add('oculto');imgPrevPesq.classList.remove('oculto');btnRemImgPesq.classList.remove('oculto');};imgPrevPesq.onerror=()=>{toast('Não foi possível carregar','error');limparPreviewPesq();};}
-function limparPreviewPesq(){imgPrevPesq.src='';imgPrevPesq.classList.add('oculto');uploadPhPesq.classList.remove('oculto');btnRemImgPesq.classList.add('oculto');fileInputPesq.value='';imgBase64Pesq='';document.getElementById('pesqImgUrl').value='';}
+uploadZonePesq.addEventListener('drop',e=>{ e.preventDefault(); uploadZonePesq.classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f&&f.type.startsWith('image/')) processarImgPesq(f); });
+btnRemImgPesq.addEventListener('click',e=>{ e.stopPropagation(); limparPreviewPesq(); });
+document.getElementById('btnPrevUrlPesq').addEventListener('click',()=>{ const u=document.getElementById('pesqImgUrl').value.trim(); if(!u){toast('Insira uma URL primeiro','aviso');return;} preview(u,'pesq'); imgBase64Pesq=''; });
+function processarImgPesq(file){ if(file.size>5*1024*1024){toast('Imagem muito grande','error');return;} const r=new FileReader(); r.onload=ev=>{ imgBase64Pesq=ev.target.result; preview(ev.target.result,'pesq'); document.getElementById('pesqImgUrl').value=''; }; r.readAsDataURL(file); }
+function limparPreviewPesq(){ imgPrevPesq.src=''; imgPrevPesq.classList.add('oculto'); uploadPhPesq.classList.remove('oculto'); btnRemImgPesq.classList.add('oculto'); fileInputPesq.value=''; imgBase64Pesq=''; document.getElementById('pesqImgUrl').value=''; }
 
-// VIEWS
-const VIEWS=['viewPosts','viewForm','viewPesquisas','viewFormPesquisa'];
-function showOnly(id){ VIEWS.forEach(v=>{ const el=document.getElementById(v); if(el)el.classList.toggle('oculto',v!==id); }); }
-function mostrarViewPosts()   { showOnly('viewPosts');   document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='posts')); atualizarAnoUI(); renderPosts(); }
-function mostrarViewForm()    { showOnly('viewForm');    document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='novo')); document.getElementById('topbarTitulo').textContent=document.getElementById('postId').value?'Editar Post':'Novo Post'; }
-function mostrarViewPesquisas(){ showOnly('viewPesquisas'); document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='pesquisas')); document.getElementById('topbarTitulo').textContent='Pesquisas Científicas'; document.getElementById('topbarAnoPill').textContent='LEG'; renderPesquisas(); }
-function mostrarViewFormPesquisa(){ showOnly('viewFormPesquisa'); document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('ativo',n.dataset.view==='nova-pesquisa')); }
+// ── FORM POSTS ──
+function abrirFormNovo(){
+  document.getElementById('postForm').reset();
+  document.getElementById('postId').value='';
+  imgBase64=''; limparPreview(); limparErros();
+  document.getElementById('formTitulo').innerHTML='Novo <em>Post</em>';
+  document.getElementById('formSub').textContent='Preencha os dados da publica\u00E7\u00E3o';
+  document.getElementById('txtSalvar').textContent='Salvar Post';
+  sincRadioAno(anoAtivo);
+  mostrarViewForm();
+  setTimeout(()=>document.getElementById('postTitulo').focus(),80);
+}
+function abrirFormEditar(post){
+  document.getElementById('postId').value=post.id;
+  document.getElementById('postTitulo').value=post.titulo;
+  document.getElementById('postTexto').value=post.texto;
+  document.getElementById('postImgUrl').value='';
+  imgBase64=''; limparPreview(); limparErros();
+  if(post.imagem){ preview(post.imagem,'post'); if(post.imagem.startsWith('http')) document.getElementById('postImgUrl').value=post.imagem; else imgBase64=post.imagem; }
+  sincRadioAno(post.ano||anoAtivo);
+  document.getElementById('formTitulo').innerHTML='Editar <em>Post</em>';
+  document.getElementById('formSub').textContent='Editando: '+post.titulo.slice(0,45);
+  document.getElementById('txtSalvar').textContent='Atualizar Post';
+  mostrarViewForm();
+  setTimeout(()=>document.getElementById('postTitulo').focus(),80);
+}
+function erroF(i,e,m){ document.getElementById(i).classList.add('erro'); document.getElementById(e).textContent=m; document.getElementById(i).addEventListener('input',()=>{ document.getElementById(i).classList.remove('erro'); document.getElementById(e).textContent=''; },{once:true}); }
+function limparErros(){ ['postTitulo','postTexto'].forEach(i=>document.getElementById(i).classList.remove('erro')); ['erroTitulo','erroTexto'].forEach(i=>document.getElementById(i).textContent=''); }
 
-// FORM POSTS
-function abrirFormNovo(){document.getElementById('postForm').reset();document.getElementById('postId').value='';imgBase64='';limparPreview();limparErros();document.getElementById('formTitulo').innerHTML='Novo <em>Post</em>';document.getElementById('formSub').textContent='Preencha os dados da publicação';document.getElementById('txtSalvar').textContent='Salvar Post';sincRadioAno(anoAtivo);mostrarViewForm();setTimeout(()=>document.getElementById('postTitulo').focus(),80);}
-function abrirFormEditar(post){document.getElementById('postId').value=post.id;document.getElementById('postTitulo').value=post.titulo;document.getElementById('postTexto').value=post.texto;document.getElementById('postImgUrl').value='';imgBase64='';limparPreview();limparErros();if(post.imagem){carregarPreview(post.imagem);if(post.imagem.startsWith('http'))document.getElementById('postImgUrl').value=post.imagem;else imgBase64=post.imagem;}sincRadioAno(post.ano||anoAtivo);document.getElementById('formTitulo').innerHTML='Editar <em>Post</em>';document.getElementById('formSub').textContent='Editando: '+post.titulo.slice(0,45);document.getElementById('txtSalvar').textContent='Atualizar Post';mostrarViewForm();setTimeout(()=>document.getElementById('postTitulo').focus(),80);}
-document.getElementById('postForm').addEventListener('submit',async e=>{
+document.getElementById('postForm').addEventListener('submit', async e=>{
   e.preventDefault();
-  const titulo=document.getElementById('postTitulo').value.trim(),texto=document.getElementById('postTexto').value.trim(),url=document.getElementById('postImgUrl').value.trim(),ano=parseInt(document.querySelector('input[name="postAno"]:checked').value);
-  let ok=true;limparErros();
-  if(!titulo||titulo.length<3){erroF('postTitulo','erroTitulo','Título obrigatório (mín. 3 caracteres)');ok=false;}
-  if(!texto||texto.length<8){erroF('postTexto','erroTexto','Descrição obrigatória (mín. 8 caracteres)');ok=false;}
-  if(!ok)return;
-  const imagem=imgBase64||url||'',id=document.getElementById('postId').value;
-  const btnSalvar=document.querySelector('#viewForm .btn-salvar');btnLoad(btnSalvar,'Salvando...');
+  const titulo=document.getElementById('postTitulo').value.trim();
+  const texto =document.getElementById('postTexto').value.trim();
+  const url   =document.getElementById('postImgUrl').value.trim();
+  const ano   =parseInt(document.querySelector('input[name="postAno"]:checked').value);
+  let ok=true; limparErros();
+  if(!titulo||titulo.length<3){ erroF('postTitulo','erroTitulo','T\u00EDtulo obrigat\u00F3rio (m\u00EDn. 3 caracteres)'); ok=false; }
+  if(!texto||texto.length<8){   erroF('postTexto','erroTexto','Descri\u00E7\u00E3o obrigat\u00F3ria (m\u00EDn. 8 caracteres)'); ok=false; }
+  if(!ok) return;
+  const imagem=imgBase64||url||'';
+  const id=document.getElementById('postId').value;
+  const btn=document.querySelector('#viewForm .btn-salvar');
+  btnLoad(btn,'Salvando...');
   try{
-    if(id){await fbPAtualizar(id,{titulo,texto,imagem,ano});toast('✏️ Post atualizado!','success');}
-    else{await fbPCriar({titulo,texto,imagem,ano});toast('✅ Post criado para '+ano+'!','success');}
-    anoAtivo=ano;document.querySelectorAll('.ano-btn').forEach(b=>b.classList.toggle('ativo',parseInt(b.dataset.ano)===anoAtivo));mostrarViewPosts();
-  }catch(err){console.error(err);toast('Erro ao salvar.','error');btnReset(btnSalvar);}
+    if(id){ await fbUpdate('posts',id,{titulo,texto,imagem,ano}); toast('\u270F\uFE0F Post atualizado!','success'); }
+    else  { await fbAdd('posts',{titulo,texto,imagem,ano});       toast('\u2705 Post criado para '+ano+'!','success'); }
+    anoAtivo=ano;
+    document.querySelectorAll('.ano-btn').forEach(b=>b.classList.toggle('ativo',parseInt(b.dataset.ano)===anoAtivo));
+    mostrarViewPosts();
+  }catch(err){ console.error(err); toast('Erro: '+err.message,'error'); btnReset(btn); }
 });
-function erroF(i,e,m){document.getElementById(i).classList.add('erro');document.getElementById(e).textContent=m;document.getElementById(i).addEventListener('input',()=>{document.getElementById(i).classList.remove('erro');document.getElementById(e).textContent='';},{once:true});}
-function limparErros(){['postTitulo','postTexto'].forEach(i=>document.getElementById(i).classList.remove('erro'));['erroTitulo','erroTexto'].forEach(i=>document.getElementById(i).textContent='');}
 
-// RENDER POSTS
+// ── RENDER POSTS ──
 async function renderPosts(){
   loading('postsGrid');
   document.getElementById('statPostsAno').textContent=document.getElementById('statTotal').textContent='...';
   try{
-    const [lista,todos]=await Promise.all([fbPListar(anoAtivo),fbPTodos()]);
+    const todos=await fbGetAll('posts');
+    const lista=todos.filter(p=>p.ano==anoAtivo);
     document.getElementById('statPostsAno').textContent=lista.length;
     document.getElementById('statTotal').textContent=todos.length;
-    document.getElementById('statUltima').textContent=lista.length?fmtData(lista[0].criadoEm):'—';
-    const grid=document.getElementById('postsGrid');grid.innerHTML='';
-    if(!lista.length){grid.innerHTML='<div class="empty-state"><div class="empty-ico"><i class="fa-solid fa-newspaper"></i></div><h3>Nenhum post em '+anoAtivo+'</h3><p>Crie a primeira publicação!</p></div>';return;}
+    document.getElementById('statUltima').textContent=lista.length?fmtData(lista[0].criadoEm):'\u2014';
+    const grid=document.getElementById('postsGrid'); grid.innerHTML='';
+    if(!lista.length){ grid.innerHTML='<div class="empty-state"><div class="empty-ico"><i class="fa-solid fa-newspaper"></i></div><h3>Nenhum post em '+anoAtivo+'</h3><p>Crie a primeira publica\u00E7\u00E3o!</p></div>'; return; }
     lista.forEach((post,i)=>{
-      const card=document.createElement('div');card.className='post-card';card.style.animationDelay=i*55+'ms';
-      const img=post.imagem?`<img class="post-card-img" src="${esc(post.imagem)}" alt="${esc(post.titulo)}" loading="lazy" onerror="this.outerHTML='<div class=\\"post-card-img-vazio\\">'\' +'<i class=\\"fa-solid fa-image\\"></i></div>'">`
-:'<div class="post-card-img-vazio"><i class="fa-solid fa-image"></i></div>';
+      const card=document.createElement('div'); card.className='post-card'; card.style.animationDelay=i*55+'ms';
+      const img=post.imagem?'<img class="post-card-img" src="'+esc(post.imagem)+'" alt="'+esc(post.titulo)+'" loading="lazy">':'<div class="post-card-img-vazio"><i class="fa-solid fa-image"></i></div>';
       card.innerHTML=img+'<div class="post-card-body"><span class="post-card-pill"><i class="fa-regular fa-calendar"></i> '+post.ano+'</span><h3 class="post-card-titulo">'+esc(post.titulo)+'</h3><p class="post-card-texto">'+esc(post.texto)+'</p><div class="post-card-data"><i class="fa-regular fa-clock"></i> '+fmtData(post.criadoEm)+'</div><div class="post-card-acoes"><button class="btn-editar"><i class="fa-solid fa-pen"></i> Editar</button><button class="btn-excluir"><i class="fa-solid fa-trash"></i> Excluir</button></div></div>';
       card.querySelector('.btn-editar').addEventListener('click',()=>abrirFormEditar(post));
-      card.querySelector('.btn-excluir').addEventListener('click',()=>{itemParaExcluir={id:post.id,tipo:'post'};abrirModal();});
+      card.querySelector('.btn-excluir').addEventListener('click',()=>{ itemParaExcluir={id:post.id,col:'posts'}; abrirModal(); });
       grid.appendChild(card);
     });
-  }catch(err){console.error(err);document.getElementById('postsGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Erro ao carregar</h3></div>';}
+  }catch(err){ console.error(err); document.getElementById('postsGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Erro ao carregar</h3><p>'+err.message+'</p></div>'; }
 }
 
-// FORM PESQUISAS
-function abrirFormNovaPesquisa(){document.getElementById('pesqForm').reset();document.getElementById('pesqId').value='';imgBase64Pesq='';limparPreviewPesq();limparErrosPesq();document.getElementById('formPesqTitulo').innerHTML='Nova <em>Pesquisa</em>';document.getElementById('formPesqSub').textContent='Preencha os dados';document.getElementById('txtSalvarPesq').textContent='Salvar Pesquisa';mostrarViewFormPesquisa();document.getElementById('topbarTitulo').textContent='Nova Pesquisa';setTimeout(()=>document.getElementById('pesqTitulo').focus(),80);}
-function abrirFormEditarPesquisa(pesq){document.getElementById('pesqId').value=pesq.id;document.getElementById('pesqTitulo').value=pesq.titulo;document.getElementById('pesqSubtitulo').value=pesq.subtitulo||'';document.getElementById('pesqAutores').value=pesq.autores||'';document.getElementById('pesqResumo').value=pesq.resumo;document.getElementById('pesqTexto').value=pesq.texto||'';document.getElementById('pesqLink').value=pesq.link||'';document.getElementById('pesqImgUrl').value='';imgBase64Pesq='';limparPreviewPesq();limparErrosPesq();if(pesq.imagem){carregarPreviewPesq(pesq.imagem);if(pesq.imagem.startsWith('http'))document.getElementById('pesqImgUrl').value=pesq.imagem;else imgBase64Pesq=pesq.imagem;}document.getElementById('formPesqTitulo').innerHTML='Editar <em>Pesquisa</em>';document.getElementById('formPesqSub').textContent='Editando: '+pesq.titulo.slice(0,45);document.getElementById('txtSalvarPesq').textContent='Atualizar Pesquisa';mostrarViewFormPesquisa();document.getElementById('topbarTitulo').textContent='Editar Pesquisa';setTimeout(()=>document.getElementById('pesqTitulo').focus(),80);}
-document.getElementById('pesqForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const titulo=document.getElementById('pesqTitulo').value.trim(),subtitulo=document.getElementById('pesqSubtitulo').value.trim(),autores=document.getElementById('pesqAutores').value.trim(),resumo=document.getElementById('pesqResumo').value.trim(),texto=document.getElementById('pesqTexto').value.trim(),link=document.getElementById('pesqLink').value.trim(),urlImg=document.getElementById('pesqImgUrl').value.trim();
-  let ok=true;limparErrosPesq();
-  if(!titulo){erroFP('pesqTitulo','erroPesqTitulo','Título obrigatório');ok=false;}
-  if(!resumo){erroFP('pesqResumo','erroPesqResumo','Resumo obrigatório');ok=false;}
-  if(!ok)return;
-  const imagem=imgBase64Pesq||urlImg||'',id=document.getElementById('pesqId').value;
-  const btnSalvar=document.querySelector('#viewFormPesquisa .btn-salvar');btnLoad(btnSalvar,'Salvando...');
-  try{
-    if(id){await fbQAtualizar(id,{titulo,subtitulo,autores,resumo,texto,link,imagem});toast('✏️ Pesquisa atualizada!','success');}
-    else{await fbQCriar({titulo,subtitulo,autores,resumo,texto,link,imagem});toast('✅ Pesquisa publicada!','success');}
-    mostrarViewPesquisas();
-  }catch(err){console.error(err);toast('Erro ao salvar.','error');btnReset(btnSalvar);}
-});
-function erroFP(i,e,m){document.getElementById(i).classList.add('erro');document.getElementById(e).textContent=m;document.getElementById(i).addEventListener('input',()=>{document.getElementById(i).classList.remove('erro');document.getElementById(e).textContent='';},{once:true});}
-function limparErrosPesq(){['pesqTitulo','pesqResumo'].forEach(i=>document.getElementById(i).classList.remove('erro'));['erroPesqTitulo','erroPesqResumo'].forEach(i=>document.getElementById(i).textContent='');}
+// ── FORM PESQUISAS ──
+function abrirFormNovaPesquisa(){
+  document.getElementById('pesqForm').reset();
+  document.getElementById('pesqId').value='';
+  imgBase64Pesq=''; limparPreviewPesq(); limparErrosPesq();
+  document.getElementById('formPesqTitulo').innerHTML='Nova <em>Pesquisa</em>';
+  document.getElementById('formPesqSub').textContent='Preencha os dados da produ\u00E7\u00E3o cient\u00EDfica';
+  document.getElementById('txtSalvarPesq').textContent='Salvar Pesquisa';
+  mostrarViewFormPesquisa();
+  document.getElementById('topbarTitulo').textContent='Nova Pesquisa';
+  setTimeout(()=>document.getElementById('pesqTitulo').focus(),80);
+}
+function abrirFormEditarPesquisa(pesq){
+  document.getElementById('pesqId').value=pesq.id;
+  document.getElementById('pesqTitulo').value=pesq.titulo;
+  document.getElementById('pesqSubtitulo').value=pesq.subtitulo||'';
+  document.getElementById('pesqAutores').value=pesq.autores||'';
+  document.getElementById('pesqResumo').value=pesq.resumo;
+  document.getElementById('pesqTexto').value=pesq.texto||'';
+  document.getElementById('pesqLink').value=pesq.link||'';
+  document.getElementById('pesqImgUrl').value='';
+  imgBase64Pesq=''; limparPreviewPesq(); limparErrosPesq();
+  if(pesq.imagem){ preview(pesq.imagem,'pesq'); if(pesq.imagem.startsWith('http')) document.getElementById('pesqImgUrl').value=pesq.imagem; else imgBase64Pesq=pesq.imagem; }
+  document.getElementById('formPesqTitulo').innerHTML='Editar <em>Pesquisa</em>';
+  document.getElementById('formPesqSub').textContent='Editando: '+pesq.titulo.slice(0,45);
+  document.getElementById('txtSalvarPesq').textContent='Atualizar Pesquisa';
+  mostrarViewFormPesquisa();
+  document.getElementById('topbarTitulo').textContent='Editar Pesquisa';
+  setTimeout(()=>document.getElementById('pesqTitulo').focus(),80);
+}
+function erroFP(i,e,m){ document.getElementById(i).classList.add('erro'); document.getElementById(e).textContent=m; document.getElementById(i).addEventListener('input',()=>{ document.getElementById(i).classList.remove('erro'); document.getElementById(e).textContent=''; },{once:true}); }
+function limparErrosPesq(){ ['pesqTitulo','pesqResumo'].forEach(i=>document.getElementById(i).classList.remove('erro')); ['erroPesqTitulo','erroPesqResumo'].forEach(i=>document.getElementById(i).textContent=''); }
 
-// RENDER PESQUISAS
+document.getElementById('pesqForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const titulo   =document.getElementById('pesqTitulo').value.trim();
+  const subtitulo=document.getElementById('pesqSubtitulo').value.trim();
+  const autores  =document.getElementById('pesqAutores').value.trim();
+  const resumo   =document.getElementById('pesqResumo').value.trim();
+  const texto    =document.getElementById('pesqTexto').value.trim();
+  const link     =document.getElementById('pesqLink').value.trim();
+  const urlImg   =document.getElementById('pesqImgUrl').value.trim();
+  let ok=true; limparErrosPesq();
+  if(!titulo){ erroFP('pesqTitulo','erroPesqTitulo','T\u00EDtulo obrigat\u00F3rio'); ok=false; }
+  if(!resumo){ erroFP('pesqResumo','erroPesqResumo','Resumo obrigat\u00F3rio'); ok=false; }
+  if(!ok) return;
+  const imagem=imgBase64Pesq||urlImg||'';
+  const id=document.getElementById('pesqId').value;
+  const btn=document.querySelector('#viewFormPesquisa .btn-salvar');
+  btnLoad(btn,'Salvando...');
+  try{
+    if(id){ await fbUpdate('pesquisas',id,{titulo,subtitulo,autores,resumo,texto,link,imagem}); toast('\u270F\uFE0F Pesquisa atualizada!','success'); }
+    else  { await fbAdd('pesquisas',{titulo,subtitulo,autores,resumo,texto,link,imagem});       toast('\u2705 Pesquisa publicada!','success'); }
+    mostrarViewPesquisas();
+  }catch(err){ console.error(err); toast('Erro: '+err.message,'error'); btnReset(btn); }
+});
+
+// ── RENDER PESQUISAS ──
 async function renderPesquisas(){
   loading('pesquisasGrid');
   document.getElementById('statTotalPesq').textContent=document.getElementById('statComLink').textContent='...';
   try{
-    const lista=await fbQListar();
+    const lista=await fbGetAll('pesquisas');
     document.getElementById('statTotalPesq').textContent=lista.length;
     document.getElementById('statComLink').textContent=lista.filter(p=>p.link).length;
-    document.getElementById('statUltimaPesq').textContent=lista.length?fmtData(lista[0].criadoEm):'—';
-    const grid=document.getElementById('pesquisasGrid');grid.innerHTML='';
-    if(!lista.length){grid.innerHTML='<div class="empty-state"><div class="empty-ico"><i class="fa-solid fa-microscope"></i></div><h3>Nenhuma pesquisa publicada</h3></div>';return;}
+    document.getElementById('statUltimaPesq').textContent=lista.length?fmtData(lista[0].criadoEm):'\u2014';
+    const grid=document.getElementById('pesquisasGrid'); grid.innerHTML='';
+    if(!lista.length){ grid.innerHTML='<div class="empty-state"><div class="empty-ico"><i class="fa-solid fa-microscope"></i></div><h3>Nenhuma pesquisa publicada</h3><p>Adicione a primeira produ\u00E7\u00E3o cient\u00EDfica!</p></div>'; return; }
     lista.forEach((pesq,i)=>{
-      const card=document.createElement('div');card.className='post-card';card.style.animationDelay=i*55+'ms';
-      const img=pesq.imagem?`<img class="post-card-img" src="${esc(pesq.imagem)}" alt="${esc(pesq.titulo)}" loading="lazy">`
-:'<div class="post-card-img-vazio"><i class="fa-solid fa-microscope"></i></div>';
+      const card=document.createElement('div'); card.className='post-card'; card.style.animationDelay=i*55+'ms';
+      const img=pesq.imagem?'<img class="post-card-img" src="'+esc(pesq.imagem)+'" alt="'+esc(pesq.titulo)+'" loading="lazy">':'<div class="post-card-img-vazio"><i class="fa-solid fa-microscope"></i></div>';
       card.innerHTML=img+'<div class="post-card-body"><span class="post-card-pill"><i class="fa-solid fa-microscope"></i> Pesquisa</span><h3 class="post-card-titulo">'+esc(pesq.titulo)+'</h3><p class="post-card-texto" style="font-style:italic">'+esc(pesq.resumo)+'</p>'+(pesq.autores?'<div class="post-card-data"><i class="fa-solid fa-user-pen"></i> '+esc(pesq.autores)+'</div>':'')+'<div class="post-card-data"><i class="fa-regular fa-clock"></i> '+fmtData(pesq.criadoEm)+'</div><div class="post-card-acoes"><button class="btn-editar"><i class="fa-solid fa-pen"></i> Editar</button><button class="btn-excluir"><i class="fa-solid fa-trash"></i> Excluir</button></div></div>';
       card.querySelector('.btn-editar').addEventListener('click',()=>abrirFormEditarPesquisa(pesq));
-      card.querySelector('.btn-excluir').addEventListener('click',()=>{itemParaExcluir={id:pesq.id,tipo:'pesquisa'};abrirModal();});
+      card.querySelector('.btn-excluir').addEventListener('click',()=>{ itemParaExcluir={id:pesq.id,col:'pesquisas'}; abrirModal(); });
       grid.appendChild(card);
     });
-  }catch(err){console.error(err);document.getElementById('pesquisasGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Erro ao carregar</h3></div>';}
+  }catch(err){ console.error(err); document.getElementById('pesquisasGrid').innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-ico"><i class="fa-solid fa-triangle-exclamation"></i></div><h3>Erro ao carregar</h3><p>'+err.message+'</p></div>'; }
 }
 
-// MODAL
+// ── MODAL ──
 let itemParaExcluir=null;
 function abrirModal(){ document.getElementById('modalOverlay').classList.remove('oculto'); document.body.style.overflow='hidden'; }
-function fecharModal(){ document.getElementById('modalOverlay').classList.add('oculto'); document.body.style.overflow=''; itemParaExcluir=null; const btn=document.getElementById('modalConfirmar'); btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-trash"></i> Excluir'; }
+function fecharModal(){
+  document.getElementById('modalOverlay').classList.add('oculto'); document.body.style.overflow=''; itemParaExcluir=null;
+  const btn=document.getElementById('modalConfirmar'); btn.disabled=false; btn.innerHTML='<i class="fa-solid fa-trash"></i> Excluir';
+}
 document.getElementById('modalCancelar').addEventListener('click',fecharModal);
-document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))fecharModal();});
-document.getElementById('modalConfirmar').addEventListener('click',async()=>{
-  if(!itemParaExcluir)return;
-  const btn=document.getElementById('modalConfirmar');btnLoad(btn,'Excluindo...');
+document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('modalOverlay')) fecharModal(); });
+document.getElementById('modalConfirmar').addEventListener('click', async ()=>{
+  if(!itemParaExcluir) return;
+  const btn=document.getElementById('modalConfirmar');
+  btnLoad(btn,'Excluindo...');
   try{
-    if(itemParaExcluir.tipo==='pesquisa'){await fbQExcluir(itemParaExcluir.id);fecharModal();renderPesquisas();toast('Pesquisa removida','aviso');}
-    else{await fbPExcluir(itemParaExcluir.id);fecharModal();renderPosts();toast('Post removido','aviso');}
-  }catch(err){console.error(err);toast('Erro ao excluir.','error');btnReset(btn);}
+    await fbDelete(itemParaExcluir.col, itemParaExcluir.id);
+    fecharModal();
+    if(itemParaExcluir.col==='pesquisas'){ renderPesquisas(); toast('Pesquisa removida','aviso'); }
+    else{ renderPosts(); toast('Post removido','aviso'); }
+  }catch(err){ console.error(err); toast('Erro ao excluir: '+err.message,'error'); btnReset(btn); }
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('modalOverlay').classList.contains('oculto'))fecharModal();});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!document.getElementById('modalOverlay').classList.contains('oculto')) fecharModal(); });
 
-// INIT
+// ── INIT ──
 atualizarAnoUI();
 mostrarViewPosts();
-</script></body>
+</script>
+</body>
 </html>
